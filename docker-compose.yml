@@ -11,10 +11,8 @@ services:
       - DB_USER=postgres
       - DB_NAME=postgres
       - DB_PASS=123123
-
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
-
     depends_on:
       - database
 
@@ -28,6 +26,7 @@ services:
       - pgdata:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
+
   frontend:
     build:
       context: ./frontend
@@ -38,6 +37,8 @@ services:
         source: ./frontend
         target: /srv/app
       - /srv/app/node_modules
+    environment:
+      - API_URL=localhost:8000
     tty: true
     command: >
       sh -c "npm run dev"
