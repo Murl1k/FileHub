@@ -1,0 +1,49 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/backend
+    environment:
+      - DB_HOST=database
+      - DB_USER=postgres
+      - DB_NAME=postgres
+      - DB_PASS=123123
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - database
+
+  database:
+    image: postgres:15.3-alpine3.18
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123123
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - 5173:5173
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /srv/app
+      - /srv/app/node_modules
+    environment:
+      - API_URL=localhost:8000
+    tty: true
+    command: >
+      sh -c "npm run dev"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
