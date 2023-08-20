@@ -2,4 +2,5 @@ Django==4.2.4
 psycopg2-binary==2.9.5
 Pillow==9.4.0
 django-cors-headers==3.14.0
+djoser==2.2.0
 
