@@ -19,7 +19,7 @@ from django.urls import path, include
 
 
 api_urlpatterns = [
-    path('', include('djoser.urls'))
+    path('users/', include('users.urls'))
 ]
 
 urlpatterns = [

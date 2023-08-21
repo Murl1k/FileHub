@@ -1,8 +1,14 @@
 from django.urls import include, path
+from rest_framework.routers import DefaultRouter
+from djoser import views
 
 app_name = 'users'
 
+router = DefaultRouter()
+router.register('', views.UserViewSet)
+
 
 urlpatterns = [
-    path('', include('djoser.urls'))
-]
+    path('auth', include('djoser.urls.authtoken')),
+] + router.urls
+

@@ -1,0 +1,190 @@
+openapi: 3.0.3
+info:
+  title: FileHub
+  version: 1.0.0
+  description: File Sharing platform API docs
+servers:
+  - url: http://127.0.0.1:8000/api/v1/
+
+security:
+  - TokenAuth: []
+
+components:
+  securitySchemes:
+    TokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token {token}
+
+paths:
+  /users/:
+    get:
+      summary: List users
+      operationId: user-list
+      responses:
+        '200':
+          description: Users listed successfully
+
+  /users/me/:
+    get:
+      summary: Get current user's details
+      operationId: user-me
+      responses:
+        '200':
+          description: User details retrieved successfully
+
+  /users/resend_activation/:
+    post:
+      summary: Resend activation email
+      operationId: user-resend-activation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+      responses:
+        '204':
+          description: Activation email resent successfully
+
+  /users/reset_password/:
+    post:
+      summary: Request a password reset
+      operationId: user-reset-password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+      responses:
+        '204':
+          description: Password reset request successful
+
+  /users/reset_password_confirm/:
+    post:
+      summary: Confirm password reset
+      operationId: user-reset-password-confirm
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                uid:
+                  type: string
+                  example: <uid>
+                token:
+                  type: string
+                  example: <token>
+                new_password:
+                  type: string
+                  example: new_secret_password
+      responses:
+        '204':
+          description: Password reset confirmed successfully
+
+  /users/reset_username/:
+    post:
+      summary: Request a username reset
+      operationId: user-reset-username
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+      responses:
+        '204':
+          description: Username reset request successful
+
+  /users/reset_username_confirm/:
+    post:
+      summary: Confirm username reset
+      operationId: user-reset-username-confirm
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                uid:
+                  type: string
+                  example: <uid>
+                token:
+                  type: string
+                  example: <token>
+                new_username:
+                  type: string
+                  example: new_username
+      responses:
+        '204':
+          description: Username reset confirmed successfully
+
+  /users/set_password/:
+    post:
+      summary: Set user's password
+      operationId: user-set-password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                new_password:
+                  type: string
+                  example: new_secret_password
+      responses:
+        '204':
+          description: Password set successfully
+
+  /users/set_username/:
+    post:
+      summary: Set user's username
+      operationId: user-set-username
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                new_username:
+                  type: string
+                  example: new_username
+      responses:
+        '204':
+          description: Username set successfully
+
+  /users/{id}/:
+    get:
+      summary: Retrieve user details by ID
+      operationId: user-detail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User details retrieved successfully
+
+  /:
+    get:
+      summary: API Root
+      operationId: api-root
+      responses:
+        '200':
+          description: API root retrieved successfully
+
+x-cors-enabled: true
