@@ -19,7 +19,8 @@ from django.urls import path, include
 
 
 api_urlpatterns = [
-    path('users/', include('users.urls'))
+    path('users/', include('users.urls')),
+    path('auth/', include('djoser.urls.authtoken')),
 ]
 
 urlpatterns = [

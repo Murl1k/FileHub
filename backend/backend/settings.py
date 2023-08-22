@@ -96,6 +96,26 @@ DATABASES = {
     }
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
+
+DJOSER = {
+    'SERIALIZERS': {
+        'user_create': 'users.serializers.CustomUserCreateSerializer',
+    },
+    'SET_PASSWORD_RETYPE': True,
+    'LOGIN_FIELD': 'username',
+    'REQUIRED_FIELDS': ['username', 'password'],
+    'PERMISSIONS': {
+        'user': ['rest_framework.permissions.IsAuthenticated'],
+    },
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
