@@ -7,7 +7,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="FileHub",
         default_version='v1',
-        description="Test description",
+        description="File Sharing platform",
         license=openapi.License(name="MIT License"),
     ),
     public=True,

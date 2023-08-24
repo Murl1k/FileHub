@@ -15,6 +15,7 @@ services:
       sh -c "python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - database
+      - redis
 
   database:
     image: postgres:15.3-alpine3.18
@@ -26,6 +27,10 @@ services:
       - pgdata:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
+
+  redis:
+    image: redis:7.2.0-alpine
+    hostname: redis
 
   frontend:
     build:
@@ -44,6 +49,7 @@ services:
       sh -c "npm run dev"
     depends_on:
       - backend
+
 
 volumes:
   pgdata:
