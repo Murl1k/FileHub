@@ -16,6 +16,7 @@ services:
     depends_on:
       - database
       - redis
+      - minio
 
   database:
     image: postgres:15.3-alpine3.18
@@ -50,6 +51,18 @@ services:
     depends_on:
       - backend
 
+  minio:
+    image: quay.io/minio/minio
+    command: server /data --console-address ":9090"
+    restart: always
+    ports:
+      - 9000:9000
+      - 9090:9090
+    volumes:
+      - ~/minio/data:/data
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=TestPassword
 
 volumes:
   pgdata:
