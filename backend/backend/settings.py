@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
+from typing import List, Tuple
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'drf_yasg',  # OPENAPI docs
+    'django_minio_backend',
 
     'users'
 ]
@@ -102,7 +105,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-
 # DJOSER SETUP
 DJOSER = {
     'SERIALIZERS': {
@@ -149,7 +151,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # Caching
 CACHES = {
     'default': {
@@ -157,3 +158,18 @@ CACHES = {
         'LOCATION': 'redis://redis:6379/1',
     }
 }
+
+# MINIO
+
+MINIO_ENDPOINT = os.environ.get('MINIO_ENDPOINT')
+MINIO_REGION = os.environ.get('MINIO_REGION')
+MINIO_ACCESS_KEY = os.environ.get('MINIO_ACCESS_KEY')
+MINIO_SECRET_KEY = os.environ.get('MINIO_SECRET_KEY')
+MINIO_USE_HTTPS = True
+MINIO_URL_EXPIRY_HOURS = timedelta(days=1)
+MINIO_PRIVATE_BUCKETS = [
+    os.environ.get('MINIO_BUCKET'),
+]
+MINIO_POLICY_HOOKS: List[Tuple[str, dict]] = []
+MINIO_MEDIA_FILES_BUCKET = os.environ.get('MINIO_BUCKET')
+

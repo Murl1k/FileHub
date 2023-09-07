@@ -11,6 +11,11 @@ services:
       - DB_USER=postgres
       - DB_NAME=postgres
       - DB_PASS=123123
+      - MINIO_ACCESS_KEY=Xoor6735OhqmskqwOQMK
+      - MINIO_SECRET_KEY=GzpUaz5KpgZ7FZxck0eixcOYfCvVWPTzQEbhod04
+      - MINIO_ENDPOINT=http://127.0.0.1:9090/api/v1/service-account-credentials
+      - MINIO_BUCKET=test
+      - MINIO_REGION=us-east-1
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
     depends_on:
