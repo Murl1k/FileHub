@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
-    'drf_yasg',  # OPENAPI docs
-    'django_minio_backend',
+    'drf_yasg',
+    'django_minio_backend.apps.DjangoMinioBackendConfig',
 
     'users'
 ]
@@ -151,6 +151,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Auth model
+AUTH_USER_MODEL = 'users.CustomUser'
+
 # Caching
 CACHES = {
     'default': {
@@ -162,14 +165,11 @@ CACHES = {
 # MINIO
 
 MINIO_ENDPOINT = os.environ.get('MINIO_ENDPOINT')
-MINIO_REGION = os.environ.get('MINIO_REGION')
 MINIO_ACCESS_KEY = os.environ.get('MINIO_ACCESS_KEY')
 MINIO_SECRET_KEY = os.environ.get('MINIO_SECRET_KEY')
-MINIO_USE_HTTPS = True
-MINIO_URL_EXPIRY_HOURS = timedelta(days=1)
+MINIO_USE_HTTPS = False
+MINIO_CONSISTENCY_CHECK_ON_START = True
 MINIO_PRIVATE_BUCKETS = [
-    os.environ.get('MINIO_BUCKET'),
+    os.environ.get('MINIO_BUCKET')
 ]
 MINIO_POLICY_HOOKS: List[Tuple[str, dict]] = []
-MINIO_MEDIA_FILES_BUCKET = os.environ.get('MINIO_BUCKET')
-

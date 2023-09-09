@@ -14,7 +14,7 @@ class CustomUserViewSet(UserViewSet):
     def get_permissions(self):
         if self.action == 'count_all':
             return []
-        return self.get_permissions()
+        return super().get_permissions()
 
     @swagger_auto_schema(operation_description='Counts all users (updates every 60 seconds)',
                          responses={
