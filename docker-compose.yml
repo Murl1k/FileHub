@@ -14,6 +14,7 @@ services:
       - MINIO_ACCESS_KEY=Xoor6735OhqmskqwOQMK
       - MINIO_SECRET_KEY=GzpUaz5KpgZ7FZxck0eixcOYfCvVWPTzQEbhod04
       - MINIO_ENDPOINT=172.21.0.4:9000
+      - MINIO_EXTERNAL_ENDPOINT=127.0.0.1:9000
       - MINIO_BUCKET=test
       - MINIO_REGION=eu-west-1
     command: >

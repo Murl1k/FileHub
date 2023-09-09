@@ -1,8 +1,6 @@
 from djoser.views import UserViewSet
-
 from drf_yasg.openapi import Schema, TYPE_OBJECT, TYPE_NUMBER
 from drf_yasg.utils import swagger_auto_schema
-
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
