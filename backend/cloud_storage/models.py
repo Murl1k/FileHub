@@ -19,3 +19,6 @@ class CloudStorage(TimeStampedModel):
 
     class Meta:
         ordering = ('updated_at',)
+
+    def __str__(self):
+        return f"{self.owner} storage"
