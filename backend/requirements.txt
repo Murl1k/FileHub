@@ -7,3 +7,4 @@ djangorestframework==3.14.0
 drf-yasg==1.21.7
 django-redis==5.3.0
 django-minio-backend==3.5.0
+shortuuid==1.0.11

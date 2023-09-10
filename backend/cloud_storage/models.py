@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
-from tools.abstract_models import TimeStampedModel
 from django.db import models
+
+from tools.abstract_models import TimeStampedModel, ShortUUIDModel
 
 User = get_user_model()
 
@@ -22,3 +23,22 @@ class CloudStorage(TimeStampedModel):
 
     def __str__(self):
         return f"{self.owner} storage"
+
+
+class Folder(ShortUUIDModel, TimeStampedModel):
+    """
+    Folder model
+
+    title - folder's title
+    parent_folder - parent folder can be blank
+    storage - CloudStorage
+    size - used size in bytes. It will be updated on every File creation.
+    """
+
+    title = models.CharField(max_length=256)
+    parent_folder = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
+    storage = models.ForeignKey(CloudStorage, related_name='folders', on_delete=models.CASCADE)
+    size = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.storage.owner} folder ({self.id})"
