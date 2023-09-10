@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_minio_backend.apps.DjangoMinioBackendConfig',
 
-    'users'
+    'users',
+    'cloud_storage'
 ]
 
 MIDDLEWARE = [

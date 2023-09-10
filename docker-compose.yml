@@ -60,7 +60,6 @@ services:
   minio:
     image: minio/minio
     command: server /data --console-address ":9090"
-    restart: always
     ports:
       - 9090:9090
       - 9000:9000
@@ -69,6 +68,7 @@ services:
     environment:
       - MINIO_ROOT_USER=admin
       - MINIO_ROOT_PASSWORD=TestPassword
+    restart: unless-stopped
 
 volumes:
   pgdata:
