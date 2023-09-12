@@ -21,6 +21,7 @@ from .yasg import doc_urlpatterns
 
 api_urlpatterns = [
     path('users/', include('users.urls')),
+    path('cloud_storage/', include('cloud_storage.urls')),
     path('auth/', include('djoser.urls.authtoken')),
 ]
 
