@@ -20,7 +20,7 @@ class FolderCreateEditSerializer(serializers.ModelSerializer):
         if value is None:
             return value
 
-        # Checking if the user is the storage owner
+        # Checking if the user is the folder's storage owner
         if request.user != value.storage.owner:
             raise serializers.ValidationError("You can't use other people's folders")
 
