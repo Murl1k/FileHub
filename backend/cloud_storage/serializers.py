@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
-from .models import Folder, CloudStorage
+from .models import Folder, CloudStorage, File
+
+
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('id', 'created_at', 'updated_at', 'folder', 'storage')
+        model = File
 
 
 class FolderSerializer(serializers.ModelSerializer):
