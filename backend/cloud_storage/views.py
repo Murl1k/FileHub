@@ -3,17 +3,18 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Folder
 from .permissions import IsStorageOwner
 from .serializers import FolderSerializer, FolderCreateEditSerializer, FileSerializer
-from .services import get_child_folders, get_child_files
+from .services import get_child_folders, get_child_files, get_root_folders
 
 
 class FolderViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsStorageOwner]
 
     def get_queryset(self):
-        return Folder.objects.filter(storage__owner=self.request.user)
+        # getting root folders in the storage
+        storage = self.request.user.cloud_storage
+        return get_root_folders(storage)
 
     def get_serializer_class(self):
         if self.action in ('create', 'partial_update', 'update'):
