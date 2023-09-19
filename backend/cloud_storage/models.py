@@ -14,11 +14,11 @@ class CloudStorage(TimeStampedModel):
     Cloud storage (main root) for every user. Created when the user registers.
 
     owner (User) - owner of the storage
-    used_size - used size in bytes. It will be updated on every File creation.
+    used_size - used size in bytes. It will be updated on every File update.
 
     """
 
-    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='cloud_storage')
     used_size = models.IntegerField(verbose_name='Used size in bytes', default=0)
 
     class Meta:
