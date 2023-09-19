@@ -18,7 +18,7 @@ class CloudStorage(TimeStampedModel):
 
     """
 
-    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='cloud_storage')
     used_size = models.IntegerField(verbose_name='Used size in bytes', default=0)
 
     class Meta:
