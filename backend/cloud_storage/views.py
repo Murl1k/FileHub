@@ -1,11 +1,15 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from .models import Folder
 from .permissions import IsStorageOwner
-from .serializers import FolderSerializer, FolderCreateEditSerializer, FileSerializer
-from .services import get_child_folders, get_child_files, get_root_folders
+from .serializers import FolderSerializer, FolderCreateEditSerializer, FileSerializer, FileCreateSerializer, \
+    FileEditSerializer
+from .services import get_child_folders, get_child_files, get_root_folders, get_root_files
 
 
 class FolderViewSet(viewsets.ModelViewSet):
@@ -35,13 +39,42 @@ class FolderViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
-    @action(detail=True, methods=['get'])
-    def child_files(self, request, pk):
-        """Get files in this folder"""
 
-        folder = self.get_object()
-        child_files = get_child_files(folder)
+class FileViewSet(viewsets.ModelViewSet):
+    """File viewset"""
+    permission_classes = [IsAuthenticated, IsStorageOwner]
 
-        serializer = self.get_serializer_class()(child_files, many=True)
+    def get_queryset(self):
+        cloud_storage = self.request.user.cloud_storage
+        query_params = self.request.query_params
 
-        return Response(serializer.data)
+        folder_id = query_params.get('folder')
+
+        if folder_id:
+            try:
+                folder = Folder.objects.get(id=folder_id)
+            except ObjectDoesNotExist:
+                raise NotFound(detail='Invalid Folder')
+
+            # Checking if requester user is a folder owner
+            if folder.storage.owner != self.request.user:
+                raise PermissionDenied(detail='You are not available to watch this folder')
+
+            return get_child_files(folder)
+
+        return get_root_files(cloud_storage)
+
+    def list(self, request, *args, **kwargs):
+        """Displays files in the root directory of the storage by default
+
+        Available query_params: folder
+        """
+        return super().list(self, request, *args, **kwargs)
+
+    def get_serializer_class(self):
+        if self.action in ('partial_update', 'update'):
+            return FileEditSerializer
+        elif self.action in ('create',):
+            return FileCreateSerializer
+
+        return FileSerializer
