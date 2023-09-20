@@ -5,7 +5,19 @@ from .models import Folder, CloudStorage, File
 
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ('id', 'created_at', 'updated_at', 'folder', 'storage')
+        fields = '__all__'
+        model = File
+
+
+class FileCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('folder', 'file')
+        model = File
+
+
+class FileEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('folder',)
         model = File
 
 
