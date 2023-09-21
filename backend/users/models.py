@@ -23,7 +23,7 @@ class CustomUser(AbstractUser):
 
     def delete(self, *args, **kwargs):
         """
-        Delete must be overridden because the inherited delete method does not call `self.image.delete()`.
+        Delete must be overridden because the inherited delete method does not call `self.avatar.delete()`.
         """
         self.avatar.delete()
         super(CustomUser, self).delete(*args, **kwargs)
