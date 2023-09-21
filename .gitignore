@@ -12,4 +12,4 @@ frontend/build
 **/.idea/
 
 # enviroment
-.env
+*.env
