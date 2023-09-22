@@ -4,6 +4,7 @@ from .models import CloudStorage, Folder
 
 
 class ValidateFolderSerializerMixin:
+    """Mixin validates folder in serializer"""
     def validate_folder(self, value):
         request = self.get_request_obj()
 
