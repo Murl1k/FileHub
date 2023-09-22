@@ -13,6 +13,7 @@ from .services import get_child_folders, get_child_files, get_root_folders, get_
 
 
 class FolderViewSet(viewsets.ModelViewSet):
+    """Folder ViewSet"""
     permission_classes = [IsAuthenticated, IsStorageOwner]
 
     def get_queryset(self):
