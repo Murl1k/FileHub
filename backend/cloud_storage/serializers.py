@@ -1,18 +1,44 @@
 from rest_framework import serializers
 
 from .models import Folder, CloudStorage, File
+from .mixins import ValidateFolderSerializerMixin
 
 
-class FileSerializer(serializers.ModelSerializer):
+class FileCharacteristicsSerializer(serializers.Serializer):
+    """Characteristics for FileField"""
+    name = serializers.SerializerMethodField()
+    size = serializers.IntegerField()
+    path = serializers.CharField(source='file.name')
+    url = serializers.CharField()
+
+    def get_name(self, instance):
+        # getting file name because the default one looks like "folder/inner_folder/file.exe"
+        return instance.name.split('/')[-1]
+
+
+class FileSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
+    file = FileCharacteristicsSerializer(read_only=True)
+
     class Meta:
-        fields = '__all__'
+        fields = ('folder', 'file', 'created_at', 'updated_at')
         model = File
 
 
-class FileCreateSerializer(serializers.ModelSerializer):
+class FileCreateSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
     class Meta:
         fields = ('folder', 'file')
         model = File
+
+    def create(self, validated_data):
+        request = self.get_request_obj()
+        storage, created = CloudStorage.objects.get_or_create(owner=request.user)
+
+        validated_data['storage'] = storage
+
+        return File.objects.create(**validated_data)
+
+    def to_representation(self, instance):
+        return FileSerializer(instance, context=self.context).data
 
 
 class FileEditSerializer(serializers.ModelSerializer):
@@ -27,26 +53,17 @@ class FolderSerializer(serializers.ModelSerializer):
         model = Folder
 
 
-class FolderCreateEditSerializer(serializers.ModelSerializer):
+class FolderCreateEditSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
     class Meta:
         fields = ('title', 'parent_folder')
         model = Folder
 
     def validate_parent_folder(self, value):
-        request = self.get_request_obj()
-
-        if value is None:
-            return value
-
-        # Checking if the user is the folder's storage owner
-        if request.user != value.storage.owner:
-            raise serializers.ValidationError("You can't use other people's folders")
-
-        return value
+        return self.validate_folder(value)
 
     def create(self, validated_data):
         request = self.get_request_obj()
-        storage = CloudStorage.objects.get(owner=request.user)
+        storage, created = CloudStorage.objects.get_or_create(owner=request.user)
 
         validated_data['storage'] = storage
 
@@ -54,6 +71,3 @@ class FolderCreateEditSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return FolderSerializer(instance, context=self.context).data
-
-    def get_request_obj(self):
-        return self.context.get('request')
