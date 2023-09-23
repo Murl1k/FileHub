@@ -35,7 +35,7 @@ class FolderViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def child_folders(self, request, pk):
-        """Get folder's child items (folders, files)"""
+        """Get folder's child folders"""
 
         folder = self.get_object()
         child_folders = get_child_folders(folder)
