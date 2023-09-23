@@ -56,7 +56,6 @@ class FileViewSet(viewsets.ModelViewSet):
             return cloud_storage.files
 
         query_params = self.request.query_params
-
         folder_id = query_params.get('folder')
 
         if folder_id:
