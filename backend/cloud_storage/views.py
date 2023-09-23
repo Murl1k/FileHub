@@ -17,9 +17,13 @@ class FolderViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsStorageOwner]
 
     def get_queryset(self):
-        # getting root folders in the storage
         storage = self.request.user.cloud_storage
-        return get_root_folders(storage)
+
+        if self.action == 'list':
+            # getting root folders in the storage
+            return get_root_folders(storage)
+
+        return storage.folders
 
     def get_serializer_class(self):
         if self.action in ('create', 'partial_update', 'update'):
@@ -47,6 +51,10 @@ class FileViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         cloud_storage = self.request.user.cloud_storage
+
+        if self.action != 'list':
+            return cloud_storage.files
+
         query_params = self.request.query_params
 
         folder_id = query_params.get('folder')
