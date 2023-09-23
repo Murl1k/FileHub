@@ -72,9 +72,44 @@ class File(TimeStampedModel, ShortUUIDModel):
     file = models.FileField(upload_to=get_file_path, storage=MinioBackend(bucket_name=os.environ.get('MINIO_BUCKET')))
 
     def delete(self, *args, **kwargs):
-        """
-        Delete must be overridden because the inherited delete method does not call `self.file.delete()`.
-        """
+        # deleting file from minio storage
         self.file.delete()
+
         super(File, self).delete(*args, **kwargs)
 
+        # updating size fields on Folder and Storage
+        self.__update_folder_size()
+        self.__update_storage_used_size()
+
+    def save(self, *args, **kwargs):
+        is_adding = self._state.adding
+
+        super().save(*args, **kwargs)
+
+        self.__update_folder_size()
+        # if object is just created, we need to update cloud storage used size
+        if is_adding:
+            self.__update_storage_used_size()
+
+    def __update_folder_size(self):
+        """
+        Counts and updates folder size
+        """
+
+        # changing folder size
+        if self.folder:
+            self.folder.size = self._count_size_in_queryset(File.objects.filter(folder=self.folder))
+            self.folder.save()
+
+    def __update_storage_used_size(self):
+        """
+        Counts size of the storage and updates it
+        """
+        # changing storage used_size
+        self.storage.used_size = self._count_size_in_queryset(File.objects.filter(storage=self.storage))
+        self.storage.save()
+
+    @staticmethod
+    def _count_size_in_queryset(queryset) -> int:
+        """ Counts size of all files in queryset"""
+        return sum([file.file.size for file in queryset])
