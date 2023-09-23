@@ -20,7 +20,7 @@ class FileSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin)
     file = FileCharacteristicsSerializer(read_only=True)
 
     class Meta:
-        fields = ('folder', 'file', 'created_at', 'updated_at')
+        fields = ('id', 'folder', 'file', 'created_at', 'updated_at')
         model = File
 
 
@@ -41,10 +41,13 @@ class FileCreateSerializer(serializers.ModelSerializer, ValidateFolderSerializer
         return FileSerializer(instance, context=self.context).data
 
 
-class FileEditSerializer(serializers.ModelSerializer):
+class FileEditSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
     class Meta:
         fields = ('folder',)
         model = File
+
+    def to_representation(self, instance):
+        return FileSerializer(instance, context=self.context).data
 
 
 class FolderSerializer(serializers.ModelSerializer):
