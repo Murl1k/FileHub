@@ -38,6 +38,29 @@ services:
     image: redis:7.2.0-alpine
     hostname: redis
 
+  worker:
+    build:
+      context: ./backend
+    hostname: worker
+    entrypoint: celery
+    command: -A celery_app.app worker --loglevel=info
+    volumes:
+      - ./backend:/backend
+    links:
+      - redis
+    depends_on:
+      - backend
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=database
+      - DB_USER=postgres
+      - DB_NAME=postgres
+      - DB_PASS=123123
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_EXTERNAL_ENDPOINT=127.0.0.1:9000
+      - MINIO_REGION=eu-west-1
+
   frontend:
     build:
       context: ./frontend

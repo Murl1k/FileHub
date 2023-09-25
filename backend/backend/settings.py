@@ -155,6 +155,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Auth model
 AUTH_USER_MODEL = 'users.CustomUser'
 
+
+# celery worker
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+
 # Caching
 CACHES = {
     'default': {
