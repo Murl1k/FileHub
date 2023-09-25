@@ -1,7 +1,5 @@
 from rest_framework.exceptions import PermissionDenied
 
-from .models import CloudStorage, Folder
-
 
 class ValidateFolderSerializerMixin:
     """Mixin validates folder in serializer"""
