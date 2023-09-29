@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'djoser',
     'drf_yasg',
     'django_minio_backend.apps.DjangoMinioBackendConfig',
+    'django_mptt_admin',
 
     'users',
     'cloud_storage'
@@ -154,7 +155,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Auth model
 AUTH_USER_MODEL = 'users.CustomUser'
-
 
 # celery worker
 CELERY_BROKER_URL = 'redis://redis:6379/0'

@@ -46,16 +46,6 @@ class FileEditSerializer(serializers.ModelSerializer, ValidateFolderSerializerMi
         fields = ('folder',)
         model = File
 
-    def update(self, instance, validated_data):
-        old_folder = instance.folder
-        new_instance = super().update(instance, validated_data)
-
-        # updating old folder size
-        if old_folder:
-            old_folder.update_size()
-
-        return new_instance
-
     def to_representation(self, instance):
         return FileSerializer(instance, context=self.context).data
 

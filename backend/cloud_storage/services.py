@@ -1,21 +1,41 @@
-from .models import Folder, File, CloudStorage
+from mptt.utils import get_cached_trees
+
+from .models import Folder
 
 
-def get_child_folders(folder: Folder):
-    """Gets child folders of a given folder"""
-    return Folder.objects.filter(parent_folder=folder)
+def update_ancestors_size_between_two_folders(folder1: Folder, folder2: Folder):
+    """Updates size of all ancestors between two folders"""
+    # getting the highest folder (which lvl is lower)
+    if folder1.level < folder2.level:
+        lowest_folder, highest_folder = folder2, folder1
+    else:
+        lowest_folder, highest_folder = folder1, folder2
+
+    common_parent = find_common_parent(lowest_folder, highest_folder)
+
+    # updating every folder in the tree from the lowest one to the common parent
+    while lowest_folder:
+        lowest_folder.count_and_update_size()
+        lowest_folder = lowest_folder.parent_folder
+
+        if lowest_folder == common_parent:
+            break
 
 
-def get_child_files(folder: Folder):
-    """Gets child files of a given folder"""
-    return File.objects.filter(folder=folder)
+def update_ancestors_folders_size(folder: Folder):
+    """Updates the size of all ancestors """
+    while folder:
+        folder.count_and_update_size()
+        folder = folder.parent_folder
 
 
-def get_root_folders(cloud_storage: CloudStorage):
-    """Gets root folders of the storage"""
-    return Folder.objects.filter(folder=None, storage=cloud_storage)
+def find_common_parent(lowest_folder: Folder, highest_folder: Folder):
+    """Finds first common parent of two folders. If there is not, it will return None"""
+    tree = get_cached_trees((highest_folder, lowest_folder))
 
+    if not tree:
+        return None
 
-def get_root_files(cloud_storage: CloudStorage):
-    """Gets files in main directory of the storage"""
-    return File.objects.filter(folder=None, storage=cloud_storage)
+    common_ancestor = tree[0]
+
+    return common_ancestor

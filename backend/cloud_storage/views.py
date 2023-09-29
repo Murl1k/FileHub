@@ -9,7 +9,6 @@ from .models import Folder
 from .permissions import IsStorageOwner
 from .serializers import FolderSerializer, FolderCreateEditSerializer, FileSerializer, FileCreateSerializer, \
     FileEditSerializer
-from .services import get_child_folders, get_child_files, get_root_folders, get_root_files
 
 
 class FolderViewSet(viewsets.ModelViewSet):
@@ -21,7 +20,7 @@ class FolderViewSet(viewsets.ModelViewSet):
 
         if self.action == 'list':
             # getting root folders in the storage
-            return get_root_folders(storage)
+            return storage.get_root_folders()
 
         return storage.folders
 
@@ -38,7 +37,7 @@ class FolderViewSet(viewsets.ModelViewSet):
         """Get folder's child folders"""
 
         folder = self.get_object()
-        child_folders = get_child_folders(folder)
+        child_folders = folder.children
 
         serializer = self.get_serializer_class()(child_folders, many=True)
 
@@ -68,9 +67,9 @@ class FileViewSet(viewsets.ModelViewSet):
             if folder.storage.owner != self.request.user:
                 raise PermissionDenied(detail='You are not available to watch this folder')
 
-            return get_child_files(folder)
+            return folder.files
 
-        return get_root_files(cloud_storage)
+        return cloud_storage.get_root_files()
 
     def list(self, request, *args, **kwargs):
         """Displays files in the root directory of the storage by default

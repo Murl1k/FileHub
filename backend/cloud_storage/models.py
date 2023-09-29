@@ -3,9 +3,9 @@ import os
 from django.contrib.auth import get_user_model
 from django.db import models
 from django_minio_backend import MinioBackend
+from mptt.models import TreeForeignKey, MPTTModel
 
 from tools.abstract_models import TimeStampedModel, ShortUUIDModel
-from tools.utils import count_size_in_queryset
 
 User = get_user_model()
 
@@ -32,11 +32,20 @@ class CloudStorage(TimeStampedModel):
         """
         Counts used size of the storage and updates it
         """
-        self.used_size = count_size_in_queryset(File.objects.filter(storage=self))
+
+        self.used_size = sum([file.file.size for file in File.objects.filter(storage=self)])
         self.save()
 
+    def get_root_folders(self):
+        """gets the main folders of the storage"""
+        return Folder.objects.filter(parent_folder=None, storage=self)
 
-class Folder(ShortUUIDModel, TimeStampedModel):
+    def get_root_files(self):
+        """Gets files in the main directory of the storage"""
+        return File.objects.filter(folder=None, storage=self)
+
+
+class Folder(MPTTModel, ShortUUIDModel, TimeStampedModel):
     """
     Folder model
 
@@ -47,17 +56,68 @@ class Folder(ShortUUIDModel, TimeStampedModel):
     """
 
     title = models.CharField(max_length=256)
-    parent_folder = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
+    parent_folder = TreeForeignKey('self', on_delete=models.CASCADE, blank=True, null=True,
+                                   related_name='children')
     storage = models.ForeignKey(CloudStorage, related_name='folders', on_delete=models.CASCADE)
     size = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.storage.owner} folder ({self.id})"
+        return f"{self.level} Folder in {self.storage.owner} storage ({self.id}). Size: {self.size}"
 
-    def update_size(self):
+    class MPTTMeta:
+        order_insertion_by = ['title']
+        parent_attr = 'parent_folder'
+
+    def count_and_update_size(self):
         """Updating folder size."""
-        self.size = count_size_in_queryset(File.objects.filter(folder=self))
+
+        # folder size = files size + child folders size
+        self.size = self.__count_child_files_size() + self.__count_child_folders_size()
         self.save()
+
+    def save(self, *args, **kwargs):
+        """Overriding save method to recount the size field if the parent_folder is changed"""
+        # if folder just created we need to update only parent folders
+        if self._state.adding:
+            super().save(*args, *kwargs)
+            from .services import update_ancestors_folders_size
+
+            update_ancestors_folders_size(self.parent_folder)
+
+        # getting old instance of the folder
+        old_instance = Folder.objects.get(id=self.id)
+        super().save(*args, *kwargs)
+
+        # if parent_folder didn't change, we don't need to change another folder's size, so just don't do anything
+        if self.parent_folder == old_instance.parent_folder:
+            return
+
+        # if there is two folders, we need to update all ancestors folders until the common one
+        if old_instance.parent_folder and self.parent_folder:
+            from .services import update_ancestors_size_between_two_folders
+
+            update_ancestors_size_between_two_folders(old_instance.parent_folder, self.parent_folder)
+
+        # if there is only one folder, we can update only these folders
+        elif old_instance.parent_folder or self.parent_folder:
+            from .services import update_ancestors_folders_size
+
+            update_ancestors_folders_size(self.parent_folder or old_instance.parent_folder)
+
+    def delete(self, *args, **kwargs):
+        from .services import update_ancestors_folders_size
+
+        folder = self.parent_folder
+        self.delete(*args, **kwargs)
+        update_ancestors_folders_size(folder)
+
+    def __count_child_folders_size(self) -> int:
+        """Counts size of child folders"""
+        return sum([folder.size for folder in Folder.objects.filter(parent_folder=self)])
+
+    def __count_child_files_size(self) -> int:
+        """counts size of child files"""
+        return sum([file.file.size for file in File.objects.filter(folder=self)])
 
 
 def get_file_path(instance, filename):
@@ -90,8 +150,7 @@ class File(TimeStampedModel, ShortUUIDModel):
 
         super(File, self).delete(*args, **kwargs)
 
-        # updating size fields on Folder and Storage
-        self.folder.update_size()
+        # updating storage size after file delete
         self.storage.update_used_size()
 
     def save(self, *args, **kwargs):
@@ -99,8 +158,6 @@ class File(TimeStampedModel, ShortUUIDModel):
 
         super().save(*args, **kwargs)
 
-        # updating folder size
-        self.folder.update_size()
         # if an object is just created, we need to update cloud storage used size.
         if is_adding:
             self.storage.update_used_size()
