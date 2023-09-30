@@ -77,6 +77,8 @@ class Folder(MPTTModel, ShortUUIDModel, TimeStampedModel):
 
     def save(self, *args, **kwargs):
         """Overriding save method to recount the size field if the parent_folder is changed"""
+        from .tasks import update_folders_size
+
         # if folder just created we don't need to do anything else
         if self._state.adding:
             super().save(*args, *kwargs)
@@ -91,22 +93,18 @@ class Folder(MPTTModel, ShortUUIDModel, TimeStampedModel):
 
         # if there are two folders, we need to update all ancestors folders until the common one
         if old_instance.parent_folder and self.parent_folder:
-            from .services import update_ancestors_size_between_two_folders
+            update_folders_size.delay(old_instance.parent_folder.id, self.parent_folder.id)
 
-            update_ancestors_size_between_two_folders(old_instance.parent_folder, self.parent_folder)
-
-        # if there is only one folder, we can update only ancestors folders
+        # if there is only one folder, we can update only ancestors of the existing folder
         elif old_instance.parent_folder or self.parent_folder:
-            from .services import update_ancestors_folders_size
-
-            update_ancestors_folders_size(self.parent_folder or old_instance.parent_folder)
+            update_folders_size.delay(self.parent_folder.id if self.parent_folder else old_instance.parent_folder.id)
 
     def delete(self, *args, **kwargs):
-        from .services import update_ancestors_folders_size
+        from .tasks import update_folders_size
 
         folder = self.parent_folder
         super().delete(*args, **kwargs)
-        update_ancestors_folders_size(folder)
+        update_folders_size.delay()(folder.id)
 
     def __count_child_folders_size(self) -> int:
         """Counts size of child folders"""
@@ -142,7 +140,7 @@ class File(TimeStampedModel, ShortUUIDModel):
     file = models.FileField(upload_to=get_file_path, storage=MinioBackend(bucket_name=os.environ.get('MINIO_BUCKET')))
 
     def delete(self, *args, **kwargs):
-        from .services import update_ancestors_folders_size
+        from .tasks import update_folders_size
 
         # deleting file from minio storage
         self.file.delete()
@@ -151,9 +149,11 @@ class File(TimeStampedModel, ShortUUIDModel):
 
         # updating storage size after file delete
         self.storage.update_used_size()
-        update_ancestors_folders_size(folder=self.folder)
+        update_folders_size.delay(folder=self.folder)
 
     def save(self, *args, **kwargs):
+        from .tasks import update_folders_size
+
         # if an object is just created, we need to update cloud storage used size.
         if self._state.adding:
             self.storage.update_used_size()
@@ -162,27 +162,21 @@ class File(TimeStampedModel, ShortUUIDModel):
 
             # if there is folder we also need to update all ancestors
             if self.folder:
-                from .services import update_ancestors_folders_size
-
-                update_ancestors_folders_size(self.folder)
+                update_folders_size.delay(self.folder.id)
 
             return
 
         old_instance = File.objects.get(id=self.id)
         super().save(*args, **kwargs)
 
-        # if folder didn't change, we don't need to change another folder's size, so just don't do anything
+        # if the folder didn't change, we don't need to change another folder's size, so just don't do anything
         if self.folder == old_instance.folder:
             return
 
         # if there are two folders, we need to update all ancestors folders until the common one
         if old_instance.folder and self.folder:
-            from .services import update_ancestors_size_between_two_folders
+            update_folders_size.delay(old_instance.folder.id, self.folder.id)
 
-            update_ancestors_size_between_two_folders(old_instance.folder, self.folder)
-
-        # if there is only one folder, we can update only ancestors folders
+        # if there is only one folder, we can update only ancestors of the existing folder
         elif old_instance.folder or self.folder:
-            from .services import update_ancestors_folders_size
-
-            update_ancestors_folders_size(self.folder or old_instance.folder)
+            update_folders_size.delay(self.folder.id if self.folder else old_instance.folder.id)
