@@ -1,11 +1,10 @@
-from django.core.exceptions import ObjectDoesNotExist
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Folder
 from .permissions import IsStorageOwner
 from .serializers import FolderSerializer, FolderCreateEditSerializer, FileSerializer, FileCreateSerializer, \
     FileEditSerializer
@@ -23,6 +22,10 @@ class FolderViewSet(viewsets.ModelViewSet):
             return storage.get_root_folders()
 
         return storage.folders
+
+    def list(self, request, *args, **kwargs):
+        """Displays folders in the root directory of the storage"""
+        return super().list(self, request, *args, **kwargs)
 
     def get_serializer_class(self):
         if self.action in ('create', 'partial_update', 'update'):
@@ -50,32 +53,31 @@ class FileViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         cloud_storage = self.request.user.cloud_storage
+        queryset = cloud_storage.files
 
         if self.action != 'list':
-            return cloud_storage.files
+            return queryset
 
         query_params = self.request.query_params
         folder_id = query_params.get('folder')
 
         if folder_id:
-            try:
-                folder = Folder.objects.get(id=folder_id)
-            except ObjectDoesNotExist:
-                raise NotFound(detail='Invalid Folder')
-
-            # Checking if requester user is a folder owner
-            if folder.storage.owner != self.request.user:
-                raise PermissionDenied(detail='You are not available to watch this folder')
-
-            return folder.files
+            return queryset.filter(folder=folder_id)
 
         return cloud_storage.get_root_files()
 
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                'folder',
+                openapi.IN_QUERY,
+                description="The folder id which files you want to get",
+                type=openapi.TYPE_STRING,
+            ),
+        ],
+    )
     def list(self, request, *args, **kwargs):
-        """Displays files in the root directory of the storage by default
-
-        Available query_params: folder
-        """
+        """Displays files in the root directory of the storage by default"""
         return super().list(self, request, *args, **kwargs)
 
     def get_serializer_class(self):

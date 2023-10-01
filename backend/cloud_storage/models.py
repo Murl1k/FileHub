@@ -62,7 +62,7 @@ class Folder(MPTTModel, ShortUUIDModel, TimeStampedModel):
     size = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.level} Folder in {self.storage.owner} storage ({self.id}). Size: {self.size}"
+        return f"{self.level} Folder in storage ({self.id}). Size: {self.size}"
 
     class MPTTMeta:
         order_insertion_by = ['title']
@@ -77,19 +77,19 @@ class Folder(MPTTModel, ShortUUIDModel, TimeStampedModel):
 
     def save(self, *args, **kwargs):
         """Overriding save method to recount the size field if the parent_folder is changed"""
-        from .tasks import update_folders_size
-
         # if folder just created we don't need to do anything else
         if self._state.adding:
-            super().save(*args, *kwargs)
+            return super().save(*args, **kwargs)
 
         # getting old instance of the folder
         old_instance = Folder.objects.get(id=self.id)
-        super().save(*args, *kwargs)
+        super().save(*args, **kwargs)
 
         # if parent_folder didn't change, we don't need to change another folder's size, so just don't do anything
         if self.parent_folder == old_instance.parent_folder:
             return
+
+        from .tasks import update_folders_size
 
         # if there are two folders, we need to update all ancestors folders until the common one
         if old_instance.parent_folder and self.parent_folder:
