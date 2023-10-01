@@ -46,12 +46,14 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_minio_backend.apps.DjangoMinioBackendConfig',
     'django_mptt_admin',
+    'debug_toolbar',
 
     'users',
     'cloud_storage'
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -184,3 +186,10 @@ MINIO_PRIVATE_BUCKETS = [
 
 MINIO_CONSISTENCY_CHECK_ON_START = True
 MINIO_POLICY_HOOKS: List[Tuple[str, dict]] = []
+
+# django-debug
+if DEBUG:
+    import socket
+
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
