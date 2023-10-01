@@ -4,24 +4,18 @@ from .models import Folder, CloudStorage, File
 from .mixins import ValidateFolderSerializerMixin
 
 
-class FileCharacteristicsSerializer(serializers.Serializer):
-    """Characteristics for FileField"""
+class FileSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
     name = serializers.SerializerMethodField()
-    size = serializers.IntegerField()
-    path = serializers.CharField(source='file.name')
-    url = serializers.CharField()
+    size = serializers.IntegerField(source='file.size')
+    url = serializers.CharField(source='file.url')
+
+    class Meta:
+        fields = ('id', 'folder', 'size', 'name', 'url', 'created_at', 'updated_at')
+        model = File
 
     def get_name(self, instance):
         # getting file name because the default one looks like "folder/inner_folder/file.exe"
-        return instance.name.split('/')[-1]
-
-
-class FileSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
-    file = FileCharacteristicsSerializer(read_only=True)
-
-    class Meta:
-        fields = ('id', 'folder', 'file', 'created_at', 'updated_at')
-        model = File
+        return instance.file.name.split('/')[-1]
 
 
 class FileCreateSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
