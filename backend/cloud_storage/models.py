@@ -133,11 +133,13 @@ class File(TimeStampedModel, ShortUUIDModel):
     folder - folder where file will be stored
     storage - root folder of the file
     file - field for the file
+    is_public - is file public
     """
 
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE, blank=True, null=True, related_name='files')
     storage = models.ForeignKey(CloudStorage, related_name='files', on_delete=models.CASCADE)
     file = models.FileField(upload_to=get_file_path, storage=MinioBackend(bucket_name=os.environ.get('MINIO_BUCKET')))
+    is_public = models.BooleanField(default=False)
 
     def delete(self, *args, **kwargs):
         from .tasks import update_folders_size

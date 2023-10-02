@@ -10,7 +10,7 @@ class FileSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin)
     url = serializers.CharField(source='file.url')
 
     class Meta:
-        fields = ('id', 'folder', 'size', 'name', 'url', 'created_at', 'updated_at')
+        fields = ('id', 'folder', 'size', 'name', 'url', 'created_at', 'updated_at', 'is_public')
         model = File
 
     def get_name(self, instance):
@@ -20,7 +20,7 @@ class FileSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin)
 
 class FileCreateSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
     class Meta:
-        fields = ('folder', 'file')
+        fields = ('folder', 'file', 'is_public')
         model = File
 
     def create(self, validated_data):
@@ -37,7 +37,7 @@ class FileCreateSerializer(serializers.ModelSerializer, ValidateFolderSerializer
 
 class FileEditSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
     class Meta:
-        fields = ('folder',)
+        fields = ('folder', 'is_public')
         model = File
 
     def to_representation(self, instance):
