@@ -5,7 +5,8 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .permissions import IsStorageOwner
+from .models import File
+from .permissions import IsStorageOwner, IsStorageOwnerOrIsFilePublic
 from .serializers import FolderSerializer, FolderCreateEditSerializer, FileSerializer, FileCreateSerializer, \
     FileEditSerializer
 
@@ -49,14 +50,14 @@ class FolderViewSet(viewsets.ModelViewSet):
 
 class FileViewSet(viewsets.ModelViewSet):
     """File viewset"""
-    permission_classes = [IsAuthenticated, IsStorageOwner]
+    permission_classes = [IsAuthenticated, IsStorageOwnerOrIsFilePublic]
 
     def get_queryset(self):
         cloud_storage = self.request.user.cloud_storage
         queryset = cloud_storage.files
 
         if self.action != 'list':
-            return queryset
+            return File.objects.all()
 
         query_params = self.request.query_params
         folder_id = query_params.get('folder')
