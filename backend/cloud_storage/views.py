@@ -1,14 +1,15 @@
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import File
 from .permissions import IsStorageOwner, IsStorageOwnerOrIsFilePublic
-from .serializers import FolderSerializer, FolderCreateEditSerializer, FileSerializer, FileCreateSerializer, \
-    FileEditSerializer
+from .serializers import FolderSerializer, FolderCreateEditSerializer, FolderCopySerializer, FileSerializer, \
+    FileCreateSerializer, FileEditSerializer
+from .tasks import copy_folder_task
 
 
 class FolderViewSet(viewsets.ModelViewSet):
@@ -33,6 +34,8 @@ class FolderViewSet(viewsets.ModelViewSet):
             return FolderCreateEditSerializer
         elif self.action in ('child_files',):
             return FileSerializer
+        elif self.action in ('copy', ):
+            return FolderCopySerializer
 
         return FolderSerializer
 
@@ -46,6 +49,21 @@ class FolderViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer_class()(child_folders, many=True)
 
         return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def copy(self, request, pk):
+        """Copies folder instance to parent_folder"""
+
+        folder = self.get_object()
+        parent_folder_id = request.data.get('parent_folder')
+
+        if parent_folder_id:
+            serializer = self.get_serializer_class()(data=request.data, context={'request': self.request})
+            serializer.is_valid(raise_exception=True)
+
+        copy_folder_task.delay(folder.id, parent_folder_id)
+
+        return Response(status=status.HTTP_202_ACCEPTED)
 
 
 class FileViewSet(viewsets.ModelViewSet):

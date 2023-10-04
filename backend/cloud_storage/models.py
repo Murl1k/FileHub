@@ -89,22 +89,22 @@ class Folder(MPTTModel, ShortUUIDModel, TimeStampedModel):
         if self.parent_folder == old_instance.parent_folder:
             return
 
-        from .tasks import update_folders_size
+        from .tasks import update_folders_size_task
 
         # if there are two folders, we need to update all ancestors folders until the common one
         if old_instance.parent_folder and self.parent_folder:
-            update_folders_size.delay(old_instance.parent_folder.id, self.parent_folder.id)
+            update_folders_size_task.delay(old_instance.parent_folder.id, self.parent_folder.id)
 
         # if there is only one folder, we can update only ancestors of the existing folder
         elif old_instance.parent_folder or self.parent_folder:
-            update_folders_size.delay(self.parent_folder.id if self.parent_folder else old_instance.parent_folder.id)
+            update_folders_size_task.delay(self.parent_folder.id if self.parent_folder else old_instance.parent_folder.id)
 
     def delete(self, *args, **kwargs):
-        from .tasks import update_folders_size
+        from .tasks import update_folders_size_task
 
         folder = self.parent_folder
         super().delete(*args, **kwargs)
-        update_folders_size.delay(folder.id)
+        update_folders_size_task.delay(folder.id)
 
     def __count_child_folders_size(self) -> int:
         """Counts size of child folders"""
@@ -142,19 +142,16 @@ class File(TimeStampedModel, ShortUUIDModel):
     is_public = models.BooleanField(default=False)
 
     def delete(self, *args, **kwargs):
-        from .tasks import update_folders_size
-
-        # deleting file from minio storage
-        self.file.delete()
+        from .tasks import update_folders_size_task
 
         super(File, self).delete(*args, **kwargs)
 
         # updating storage size after file delete
         self.storage.update_used_size()
-        update_folders_size.delay(folder=self.folder.id)
+        update_folders_size_task.delay(folder=self.folder.id)
 
     def save(self, *args, **kwargs):
-        from .tasks import update_folders_size
+        from .tasks import update_folders_size_task
 
         # if an object is just created, we need to update cloud storage used size.
         if self._state.adding:
@@ -164,7 +161,7 @@ class File(TimeStampedModel, ShortUUIDModel):
 
             # if there is folder we also need to update all ancestors
             if self.folder:
-                update_folders_size.delay(self.folder.id)
+                update_folders_size_task.delay(self.folder.id)
 
             return
 
@@ -177,8 +174,8 @@ class File(TimeStampedModel, ShortUUIDModel):
 
         # if there are two folders, we need to update all ancestors folders until the common one
         if old_instance.folder and self.folder:
-            update_folders_size.delay(old_instance.folder.id, self.folder.id)
+            update_folders_size_task.delay(old_instance.folder.id, self.folder.id)
 
         # if there is only one folder, we can update only ancestors of the existing folder
         elif old_instance.folder or self.folder:
-            update_folders_size.delay(self.folder.id if self.folder else old_instance.folder.id)
+            update_folders_size_task.delay(self.folder.id if self.folder else old_instance.folder.id)

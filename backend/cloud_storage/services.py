@@ -1,4 +1,4 @@
-from .models import Folder
+from .models import Folder, File
 
 
 def update_ancestors_size_between_two_folders(folder1: Folder, folder2: Folder):
@@ -42,3 +42,44 @@ def find_first_common_ancestor(lowest_folder: Folder, highest_folder: Folder):
         return list(set(lowest_folder_tree) & set(highest_folder_tree))[0]
     except IndexError:
         return None
+
+
+def clone_folder_files(old_folder: Folder, new_folder: Folder):
+    """Clones every file from the old folder to the new one """
+    File.objects.bulk_create(
+        [
+            File(folder=new_folder,
+                 storage=new_folder.storage,
+                 file=file.file,
+                 ) for file in File.objects.filter(folder=old_folder)
+        ]
+    )
+
+
+def copy_folder(folder_to_copy: Folder, new_parent_folder: Folder = None, __is_main_folder: bool = True):
+    """Recursively copies folder instance with all it descendants such as files and child folders
+
+    folder_to_copy - folder that will be copied with all its descendants
+    new_parent_folder - new folder's parent
+    __is_main_folder - Boolean to track it the first iteration or not.
+
+    """
+
+    children = folder_to_copy.get_children()
+    new_folder = Folder.objects.create(
+        title=folder_to_copy.title,
+        parent_folder=new_parent_folder,
+        storage=new_parent_folder.storage if new_parent_folder else folder_to_copy.storage,
+        size=folder_to_copy.size
+    )
+    clone_folder_files(folder_to_copy, new_folder)
+
+    for child in children:
+        copy_folder(child, new_folder, __is_main_folder=False)
+
+    # after all operations, we need to update ancestors and the storage
+    if __is_main_folder:
+        storage = new_parent_folder.storage if new_parent_folder else folder_to_copy.storage
+
+        update_ancestors_folders_size(folder=new_folder)
+        storage.update_used_size()
