@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from .models import Folder, CloudStorage, File
 from .mixins import ValidateFolderSerializerMixin
+from .models import Folder, CloudStorage, File
 
 
 class FileSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
@@ -68,3 +68,12 @@ class FolderCreateEditSerializer(serializers.ModelSerializer, ValidateFolderSeri
 
     def to_representation(self, instance):
         return FolderSerializer(instance, context=self.context).data
+
+
+class FolderCopySerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
+    class Meta:
+        fields = ('parent_folder', )
+        model = Folder
+
+    def validate_parent_folder(self, value):
+        return self.validate_folder(value)
