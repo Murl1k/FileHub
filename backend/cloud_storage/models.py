@@ -97,7 +97,8 @@ class Folder(MPTTModel, ShortUUIDModel, TimeStampedModel):
 
         # if there is only one folder, we can update only ancestors of the existing folder
         elif old_instance.parent_folder or self.parent_folder:
-            update_folders_size_task.delay(self.parent_folder.id if self.parent_folder else old_instance.parent_folder.id)
+            update_folders_size_task.delay(
+                self.parent_folder.id if self.parent_folder else old_instance.parent_folder.id)
 
     def delete(self, *args, **kwargs):
         from .tasks import update_folders_size_task
@@ -143,6 +144,12 @@ class File(TimeStampedModel, ShortUUIDModel):
 
     def delete(self, *args, **kwargs):
         from .tasks import update_folders_size_task
+
+        file_used_times = File.objects.filter(file=self.file).count()
+
+        # if the file object used in other File instances, it shouldn't be deleted from the storage
+        if file_used_times == 1:
+            self.file.delete()
 
         super(File, self).delete(*args, **kwargs)
 
