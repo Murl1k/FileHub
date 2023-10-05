@@ -56,7 +56,7 @@ def clone_folder_files(old_folder: Folder, new_folder: Folder):
     )
 
 
-def copy_folder(folder_to_copy: Folder, new_parent_folder: Folder = None, __is_main_folder: bool = True):
+def copy_folder_tree(folder_to_copy: Folder, new_parent_folder: Folder = None, __is_main_folder: bool = True):
     """Recursively copies folder instance with all it descendants such as files and child folders
 
     folder_to_copy - folder that will be copied with all its descendants
@@ -75,7 +75,7 @@ def copy_folder(folder_to_copy: Folder, new_parent_folder: Folder = None, __is_m
     clone_folder_files(folder_to_copy, new_folder)
 
     for child in children:
-        copy_folder(child, new_folder, __is_main_folder=False)
+        copy_folder_tree(child, new_folder, __is_main_folder=False)
 
     # after all operations, we need to update ancestors and the storage
     if __is_main_folder:
@@ -83,3 +83,28 @@ def copy_folder(folder_to_copy: Folder, new_parent_folder: Folder = None, __is_m
 
         update_ancestors_folders_size(folder=new_folder)
         storage.update_used_size()
+
+
+def change_folder_files_privacy(folder: Folder, is_public: bool):
+    """changes privacy of all files in folder"""
+    files = File.objects.filter(folder=folder)
+    files.update(is_public=is_public)
+
+
+def change_folder_descendants_privacy(folder: Folder):
+    """Changes is_private field for all descendants of the folder includes itself"""
+
+    descendants = folder.get_descendants(include_self=True)
+    new_privacy_value = not folder.is_public
+
+    for folder in descendants:
+        folder.is_public = new_privacy_value
+        change_folder_files_privacy(folder, is_public=new_privacy_value)
+        folder.save()
+
+
+
+
+
+
+
