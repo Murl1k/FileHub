@@ -9,7 +9,7 @@ from .models import File
 from .permissions import IsStorageOwner, IsStorageOwnerOrIsFilePublic
 from .serializers import FolderSerializer, FolderCreateEditSerializer, FolderCopySerializer, FileSerializer, \
     FileCreateSerializer, FileEditSerializer
-from .tasks import copy_folder_task
+from .tasks import copy_folder_task, change_folder_privacy_task
 
 
 class FolderViewSet(viewsets.ModelViewSet):
@@ -62,6 +62,15 @@ class FolderViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
 
         copy_folder_task.delay(folder.id, parent_folder_id)
+
+        return Response(status=status.HTTP_202_ACCEPTED)
+
+    @action(detail=True, methods=['post'])
+    def change_privacy(self, request, pk):
+        """Changes privacy of the folder and its descendants include files"""
+
+        folder = self.get_object()
+        change_folder_privacy_task.delay(folder.id)
 
         return Response(status=status.HTTP_202_ACCEPTED)
 
