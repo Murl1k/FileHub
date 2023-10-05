@@ -5,8 +5,8 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import File
-from .permissions import IsStorageOwner, IsStorageOwnerOrIsFilePublic
+from .models import File, Folder
+from .permissions import IsStorageOwnerOrIsObjectPublic
 from .serializers import FolderSerializer, FolderCreateEditSerializer, FolderCopySerializer, FileSerializer, \
     FileCreateSerializer, FileEditSerializer
 from .tasks import copy_folder_task, change_folder_privacy_task
@@ -14,7 +14,7 @@ from .tasks import copy_folder_task, change_folder_privacy_task
 
 class FolderViewSet(viewsets.ModelViewSet):
     """Folder ViewSet"""
-    permission_classes = [IsAuthenticated, IsStorageOwner]
+    permission_classes = [IsAuthenticated, IsStorageOwnerOrIsObjectPublic]
 
     def get_queryset(self):
         storage = self.request.user.cloud_storage
@@ -23,7 +23,7 @@ class FolderViewSet(viewsets.ModelViewSet):
             # getting root folders in the storage
             return storage.get_root_folders()
 
-        return storage.folders
+        return Folder.objects.all()
 
     def list(self, request, *args, **kwargs):
         """Displays folders in the root directory of the storage"""
@@ -77,7 +77,7 @@ class FolderViewSet(viewsets.ModelViewSet):
 
 class FileViewSet(viewsets.ModelViewSet):
     """File viewset"""
-    permission_classes = [IsAuthenticated, IsStorageOwnerOrIsFilePublic]
+    permission_classes = [IsAuthenticated, IsStorageOwnerOrIsObjectPublic]
 
     def get_queryset(self):
         cloud_storage = self.request.user.cloud_storage
