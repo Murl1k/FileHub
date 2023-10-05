@@ -1,7 +1,8 @@
 from celery_app import app
 from django.db import transaction
 
-from .services import update_ancestors_size_between_two_folders, update_ancestors_folders_size, copy_folder
+from .services import update_ancestors_size_between_two_folders, update_ancestors_folders_size, copy_folder_tree, \
+    change_folder_descendants_privacy
 from .models import Folder
 
 
@@ -30,6 +31,13 @@ def copy_folder_task(folder_to_copy_id: str, parent_folder_id: str = None):
 
     if parent_folder_id:
         parent_folder = Folder.objects.get(id=parent_folder_id)
-        copy_folder(folder_to_copy, parent_folder)
+        copy_folder_tree(folder_to_copy, parent_folder)
     else:
-        copy_folder(folder_to_copy)
+        copy_folder_tree(folder_to_copy)
+
+
+@app.task()
+@transaction.atomic
+def change_folder_privacy_task(folder_id: str):
+    folder = Folder.objects.get(id=folder_id)
+    change_folder_descendants_privacy(folder)
