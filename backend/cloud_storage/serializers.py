@@ -46,7 +46,7 @@ class FileEditSerializer(serializers.ModelSerializer, ValidateFolderSerializerMi
 
 class FolderSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ('id', 'created_at', 'updated_at', 'title', 'size', 'parent_folder')
+        fields = ('id', 'created_at', 'updated_at', 'title', 'size', 'parent_folder', 'is_public')
         model = Folder
 
 
