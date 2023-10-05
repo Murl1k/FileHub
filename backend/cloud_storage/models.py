@@ -53,6 +53,7 @@ class Folder(MPTTModel, ShortUUIDModel, TimeStampedModel):
     parent_folder - parent folder can be blank
     storage - CloudStorage
     size - used size in bytes. It will be updated on every File save or delete.
+    is_public - is folder public or not
     """
 
     title = models.CharField(max_length=256)
@@ -60,9 +61,10 @@ class Folder(MPTTModel, ShortUUIDModel, TimeStampedModel):
                                    related_name='children')
     storage = models.ForeignKey(CloudStorage, related_name='folders', on_delete=models.CASCADE)
     size = models.IntegerField(default=0)
+    is_public = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.level} Folder in storage ({self.id}). Size: {self.size}"
+        return f"{self.level} Folder ({self.id}). Size: {self.size}"
 
     class MPTTMeta:
         order_insertion_by = ['title']
@@ -141,6 +143,9 @@ class File(TimeStampedModel, ShortUUIDModel):
     storage = models.ForeignKey(CloudStorage, related_name='files', on_delete=models.CASCADE)
     file = models.FileField(upload_to=get_file_path, storage=MinioBackend(bucket_name=os.environ.get('MINIO_BUCKET')))
     is_public = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"is_public={self.is_public} file in {self.folder} folder"
 
     def delete(self, *args, **kwargs):
         from .tasks import update_folders_size_task
