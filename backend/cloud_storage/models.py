@@ -124,10 +124,10 @@ def get_file_path(instance, filename):
     base_url = f"cloud_storage/{instance.storage.owner.username}/"
 
     if hasattr(instance.folder, 'id'):
-        return base_url + f'{instance.folder.id}/{instance.id}'
+        return base_url + f'{instance.folder.id}/{filename}'
 
     # if there is no folder for file, it will be stored in the root directory
-    return base_url + instance.id
+    return base_url + filename
 
 
 class File(TimeStampedModel, ShortUUIDModel):
