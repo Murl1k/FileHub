@@ -20,7 +20,7 @@ class FileSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin)
 
 class FileCreateSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
     class Meta:
-        fields = ('folder', 'file', 'is_public')
+        fields = ('folder', 'file')
         model = File
 
     def create(self, validated_data):
