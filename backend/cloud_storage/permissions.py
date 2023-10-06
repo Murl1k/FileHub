@@ -16,6 +16,6 @@ class IsStorageOwnerOrIsObjectPublic(IsStorageOwner):
     def has_object_permission(self, request, view, obj):
         # allowing object reading if it's the public object
         if request.method in SAFE_METHODS:
-            return obj.is_public
+            return obj.is_public or super().has_object_permission(request, view, obj)
 
         return super().has_object_permission(request, view, obj)
