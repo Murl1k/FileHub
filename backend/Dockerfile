@@ -9,3 +9,4 @@ RUN pip install -r /temp/requirements.txt
 RUN adduser --disabled-password user-backend
 
 EXPOSE 8000
+CMD ["python", "manage.py", "initialize_buckets"]
