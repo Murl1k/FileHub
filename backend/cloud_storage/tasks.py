@@ -2,7 +2,7 @@ from celery_app import app
 from django.db import transaction
 
 from .services import update_ancestors_size_between_two_folders, update_ancestors_folders_size, copy_folder_tree, \
-    change_folder_descendants_privacy
+    change_folder_descendants_privacy, make_zip_from_folder
 from .models import Folder
 
 
@@ -39,5 +39,13 @@ def copy_folder_task(folder_to_copy_id: str, parent_folder_id: str = None):
 @app.task()
 @transaction.atomic
 def change_folder_privacy_task(folder_id: str):
+    """changes privacy for all folders descendants"""
     folder = Folder.objects.get(id=folder_id)
     change_folder_descendants_privacy(folder)
+
+
+@app.task()
+def get_zip_from_folder_task(folder_id: str):
+    """makes zip archive from folder"""
+    folder = Folder.objects.get(id=folder_id)
+    return make_zip_from_folder(folder)
