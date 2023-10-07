@@ -1,4 +1,15 @@
+import os
+import zipfile
+import io
+import logging
+
+from django_minio_backend import MinioBackend
+
 from .models import Folder, File
+
+
+logger = logging.getLogger('main')
+FILES_STORAGE = MinioBackend(bucket_name=os.environ.get('MINIO_BUCKET'))
 
 
 def update_ancestors_size_between_two_folders(folder1: Folder, folder2: Folder):
@@ -103,8 +114,38 @@ def change_folder_descendants_privacy(folder: Folder):
         folder.save()
 
 
+def make_zip_from_folder(folder: Folder) -> bytes:
+    """makes zip file for the folder, returns zip file in bytes"""
+    zip_buffer = io.BytesIO()
+
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as archive:
+        add_folder_tree_with_files_into_zip(folder, archive)
+
+    return zip_buffer.getvalue()
 
 
+def add_folder_tree_with_files_into_zip(folder: Folder, archive: zipfile.ZipFile, path: str = ''):
+    """
+    Recursive adds folder with all it files and descendants into given archive.
+
+    folder - Folder object
+    archive - zip archive zipfile.ZipFile
+    path - path in 'folder/folder1/folder2/' format
+    """
+
+    children = folder.get_children()
+    folder_name = folder.title
+    add_files_into_zip(folder, archive, path)
+
+    for child_folder in children:
+        add_folder_tree_with_files_into_zip(
+            child_folder, archive, path + folder_name + '/'
+        )
 
 
-
+def add_files_into_zip(folder: Folder, archive: zipfile.ZipFile, path: str):
+    """Adds all folder files into given archive"""
+    for file in folder.files.all():
+        file_name = file.file.name.split('/')[-1]
+        minio_file = FILES_STORAGE.open(file.file.name)
+        archive.writestr(path + file_name, minio_file.read())
