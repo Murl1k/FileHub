@@ -9,8 +9,8 @@ from rest_framework.response import Response
 from .models import File, Folder
 from .permissions import IsStorageOwnerOrIsObjectPublic
 from .serializers import FolderSerializer, FolderCreateEditSerializer, FolderCopySerializer, FileSerializer, \
-    FileCreateSerializer, FileEditSerializer
-from .tasks import copy_folder_task, change_folder_privacy_task, get_zip_from_folder_task
+    FileCreateSerializer, FileEditSerializer, FileCopySerializer
+from .tasks import copy_folder_task, change_folder_privacy_task, get_zip_from_folder_task, copy_file_task
 
 
 class FolderViewSet(viewsets.ModelViewSet):
@@ -130,5 +130,23 @@ class FileViewSet(viewsets.ModelViewSet):
             return FileEditSerializer
         elif self.action in ('create',):
             return FileCreateSerializer
+        elif self.action in ('copy', ):
+            return FileCopySerializer
 
         return FileSerializer
+
+    @action(detail=True, methods=['post'])
+    def copy(self, request, pk):
+        """Creates task to copy file into given folder"""
+
+        file = self.get_object()
+        new_folder_id = request.data.get('folder')
+
+        if new_folder_id:
+            serializer = self.get_serializer_class()(data=request.data, context={'request': self.request})
+            serializer.is_valid(raise_exception=True)
+
+        copy_file_task.delay(file.id, new_folder_id)
+
+        return Response(status=status.HTTP_202_ACCEPTED)
+

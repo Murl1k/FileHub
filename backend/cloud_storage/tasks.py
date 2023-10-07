@@ -3,7 +3,7 @@ from django.db import transaction
 
 from .services import update_ancestors_size_between_two_folders, update_ancestors_folders_size, copy_folder_tree, \
     change_folder_descendants_privacy, make_zip_from_folder
-from .models import Folder
+from .models import Folder, File
 
 
 @app.task()
@@ -49,3 +49,19 @@ def get_zip_from_folder_task(folder_id: str):
     """makes zip archive from folder"""
     folder = Folder.objects.get(id=folder_id)
     return make_zip_from_folder(folder)
+
+
+@app.task()
+@transaction.atomic
+def copy_file_task(file_id: str, new_folder_id: str):
+    """copies file into given folder"""
+    file = File.objects.get(id=file_id)
+
+    if new_folder_id:
+        folder = Folder.objects.get(id=new_folder_id)
+    else:
+        folder = file.folder
+
+    copied_file = File(folder=folder, file=file.file, storage=file.storage)
+    copied_file.save()
+

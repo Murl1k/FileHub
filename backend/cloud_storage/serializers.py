@@ -44,6 +44,12 @@ class FileEditSerializer(serializers.ModelSerializer, ValidateFolderSerializerMi
         return FileSerializer(instance, context=self.context).data
 
 
+class FileCopySerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
+    class Meta:
+        fields = ('folder', )
+        model = File
+
+
 class FolderSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('id', 'created_at', 'updated_at', 'title', 'size', 'parent_folder', 'is_public')
