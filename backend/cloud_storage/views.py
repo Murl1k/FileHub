@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
@@ -9,7 +10,7 @@ from .models import File, Folder
 from .permissions import IsStorageOwnerOrIsObjectPublic
 from .serializers import FolderSerializer, FolderCreateEditSerializer, FolderCopySerializer, FileSerializer, \
     FileCreateSerializer, FileEditSerializer
-from .tasks import copy_folder_task, change_folder_privacy_task
+from .tasks import copy_folder_task, change_folder_privacy_task, get_zip_from_folder_task
 
 
 class FolderViewSet(viewsets.ModelViewSet):
@@ -34,7 +35,7 @@ class FolderViewSet(viewsets.ModelViewSet):
             return FolderCreateEditSerializer
         elif self.action in ('child_files',):
             return FileSerializer
-        elif self.action in ('copy', ):
+        elif self.action in ('copy',):
             return FolderCopySerializer
 
         return FolderSerializer
@@ -67,12 +68,28 @@ class FolderViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def change_privacy(self, request, pk):
-        """Changes privacy of the folder and its descendants include files"""
+        """Runs task to change the privacy of the folder, and its descendants include files."""
 
-        folder = self.get_object()
-        change_folder_privacy_task.delay(folder.id)
+        change_folder_privacy_task.delay(pk)
 
         return Response(status=status.HTTP_202_ACCEPTED)
+
+    @action(detail=True, methods=['get'])
+    def download_as_zip(self, request, pk):
+        """
+        Runs task to get folder as a zip and waits until it ends.
+        After it dones, returns response with zip attachment
+        """
+
+        folder = self.get_object()
+        task = get_zip_from_folder_task.delay(folder.pk)
+        task.ready()
+        zip_file = task.get()
+
+        response = HttpResponse(zip_file, content_type='application/zip')
+        response['Content-Disposition'] = f'attachment; filename="{folder.title}.zip"'
+
+        return response
 
 
 class FileViewSet(viewsets.ModelViewSet):
