@@ -1,20 +1,19 @@
+import io
 import os
 import zipfile
-import io
-import logging
 
 from django_minio_backend import MinioBackend
 
 from .models import Folder, File
 
-
-logger = logging.getLogger('main')
 FILES_STORAGE = MinioBackend(bucket_name=os.environ.get('MINIO_BUCKET'))
 
 
 def update_ancestors_size_between_two_folders(folder1: Folder, folder2: Folder):
     """Updates the size of the ancestors between two folders until the common ancestor.
     This is more optimized than just updating each ancestor in the hierarchy.
+
+    This is used when we move folder or file between two folders
     """
     # getting the highest folder (which lvl is lower)
     if folder1.level < folder2.level:
@@ -36,7 +35,10 @@ def update_ancestors_size_between_two_folders(folder1: Folder, folder2: Folder):
 
 
 def update_ancestors_folders_size(folder: Folder):
-    """Updates the size of all ancestors """
+    """Updates the size of all ancestors
+
+    Used when we create or copy the folder
+    """
     ancestors = folder.get_ancestors(include_self=True, ascending=True)
 
     for folder in ancestors:
