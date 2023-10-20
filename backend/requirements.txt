@@ -12,3 +12,4 @@ celery[redis]==5.2.7
 django-mptt==0.14.0
 django-mptt-admin==2.5.1
 django-debug-toolbar==4.1.0
+django-jazzmin==2.6.0
