@@ -1,0 +1,32 @@
+@import '../../app/assets/styles/vars';
+
+.page {
+  display: grid;
+  height: 100vh;
+  place-items: center;
+}
+
+.auth {
+  background: $primary;
+  border-radius: 6px;
+  padding: 40px;
+  display: grid;
+  place-items: center;
+
+  h3 {
+    margin-bottom: 10px;
+    color: #fff;
+  }
+}
+
+.form {
+  display: grid;
+  gap: 20px;
+
+  button {
+    width: 100%;
+    background: #fff;
+    border-radius: 6px;
+    padding: 10px 24px;
+  }
+}

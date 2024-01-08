@@ -1,0 +1,58 @@
+@import '../../../app/assets/styles/vars';
+
+.item, .itemFooter {
+  transition: background-color .2s ease-in-out;
+}
+
+.item {
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 24px;
+  user-select: none;
+
+  &:hover {
+    background-color: $gray;
+
+    .itemFooter {
+      background-color: #e0e0e0;
+    }
+  }
+
+  h4 {
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 14px;
+    color: #8a8989;
+  }
+}
+
+.itemHeadline {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+
+  div {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    span {
+      display: block;
+      border-radius: 50%;
+      width: 4px;
+      height: 4px;
+      background: #c7c3c3;
+    }
+  }
+}
+
+.itemFooter {
+  background: #f0f0f0;
+  border-radius: 0 0 24px 24px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+}

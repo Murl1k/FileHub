@@ -1,0 +1,38 @@
+@import 'vars';
+
+@font-face {
+  font-family: Gladiora;
+  src: url("../fonts/gladiora.ttf");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Gladiora;
+
+  &:after, &:before {
+    box-sizing: border-box;
+  }
+}
+
+body {
+  background: $background;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
+li {
+  list-style: none;
+  color: #fff;
+}
+
+button {
+  outline: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
