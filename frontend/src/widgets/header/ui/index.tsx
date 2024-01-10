@@ -1,7 +1,23 @@
 import styles from "./styles.module.scss";
 import Button from "../../../shared/UIKit/button";
+import {useState} from "react";
+import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
+import {fetchLogout} from "../../../shared/api/auth/auth.action.ts";
+import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
+import {selectIsAuth} from "../../../shared/api/auth/auth.slice.ts";
 
 const Header = () => {
+
+    const isAuth = useAppSelector(selectIsAuth)
+    const [isOpen, setIsOpen] = useState(false)
+    const dispatch = useAppDispatch()
+
+    const logout = () => {
+        dispatch(fetchLogout())
+
+        setIsOpen(false)
+    }
+
     return (
         <header className={styles.header}>
             <div className={styles.addBtn}>
@@ -68,9 +84,14 @@ const Header = () => {
                         </g>
                     </svg>
                 </Button>
-                <Button>
+                <Button onClick={() => setIsOpen(!isOpen)}>
                     <img src="" alt=""/>
                 </Button>
+                {isAuth && isOpen &&
+                    <div style={{padding: '20px', background: "fff", position: "fixed", right: '0', top: '60px'}}>
+                        <button onClick={logout}>Logout</button>
+                    </div>
+                }
             </div>
         </header>
     );

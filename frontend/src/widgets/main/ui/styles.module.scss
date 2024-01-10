@@ -1,12 +1,5 @@
 @import '../../../app/assets/styles/vars';
 
-.main {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  top: $header-height;
-}
-
 .storageHeadline {
   display: flex;
   align-items: center;

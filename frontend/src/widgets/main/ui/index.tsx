@@ -94,7 +94,7 @@ const Main = () => {
     const [isGrid, setIsGrid] = useState(true)
 
     return (
-        <main className={styles.main}>
+        <>
             <div className={view ? `${styles.container} ${styles.active}` : styles.container}>
                 <div className={styles.storageHeadline}>
                     <div>
@@ -139,8 +139,9 @@ const Main = () => {
                 </div>
                 {isGrid ?
                     <div className={styles.grid}>
-                        {items.map(item => (
+                        {items.map((item, i) => (
                             <GridItem
+                                key={i}
                                 style={view ? {border: '2px solid #583DA1'} : {}}
                                 onClick={() => setView(!view)}
                                 item={item}
@@ -160,8 +161,9 @@ const Main = () => {
                                 <h4>Type</h4>
                             </div>
                         </div>
-                        {items.map(item => (
+                        {items.map((item, i) => (
                             <ListItem
+                                key={i}
                                 onClick={() => setView(!view)}
                                 item={item}
                             />
@@ -170,7 +172,7 @@ const Main = () => {
                 }
             </div>
             <File view={view}/>
-        </main>
+        </>
     );
 };
 

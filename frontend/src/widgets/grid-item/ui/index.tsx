@@ -20,7 +20,7 @@ const GridItem: FC<IGridItem> = ({item, ...props}) => {
                                 fill="#583DA1"></path>
                         </g>
                     </svg>
-                    <div>
+                    <div style={{height: 'max-content'}}>
                         <span></span>
                         <span></span>
                         <span></span>

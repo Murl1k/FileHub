@@ -1,7 +1,7 @@
 const Shared = () => {
     return (
         <div>
-
+            
         </div>
     );
 };
