@@ -1,5 +1,4 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import {Layout} from "../widgets/layout";
 import Home from "../pages/home";
 import Shared from "../pages/shared";
 import AllFiles from "../pages/all-files";
@@ -9,16 +8,19 @@ import DeletedFiles from "../pages/deleted-files";
 import Help from "../pages/help";
 import SignUp from "../pages/sign-up";
 import SignIn from "../pages/sign-in";
+import Profile from "../pages/profile";
+import Settings from "../pages/settings";
+import {Layout} from "../widgets/layout";
 import {useAppDispatch} from "../shared/lib/hooks/useAppDispatch.ts";
 import {useEffect} from "react";
-import {fetchLoginMe} from "../shared/api/auth/auth.action.ts";
+import {fetchLoginMe} from "../features/auth/model/auth.action.ts";
 
 const Router = () => {
 
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(fetchLoginMe())
+        localStorage.getItem('token') && dispatch(fetchLoginMe())
     }, [dispatch])
 
     return (
@@ -32,6 +34,8 @@ const Router = () => {
                     <Route path='/private-files' element={<PrivateFiles/>}/>
                     <Route path='/deleted-files' element={<DeletedFiles/>}/>
                     <Route path='/help' element={<Help/>}/>
+                    <Route path='/profile' element={<Profile/>}/>
+                    <Route path='/profile/settings' element={<Settings/>}/>
                 </Route>
                 <Route path='/auth/register' element={<SignUp/>}/>
                 <Route path='/auth/login' element={<SignIn/>}/>

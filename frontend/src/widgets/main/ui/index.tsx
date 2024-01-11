@@ -156,7 +156,7 @@ const Main = () => {
                             borderBottom: '2px solid #583DA1'
                         }}>
                             <h4>Name</h4>
-                            <div style={{display: 'flex', gap: '30px'}}>
+                            <div style={{display: 'flex', gap: '40px'}}>
                                 <h4>Size</h4>
                                 <h4>Type</h4>
                             </div>

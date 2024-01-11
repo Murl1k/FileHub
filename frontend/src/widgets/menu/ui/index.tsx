@@ -1,7 +1,34 @@
 import styles from "./styles.module.scss";
+import {
+    deleteIcon,
+    favoritesIcon,
+    fileIcon,
+    folderIcon,
+    helpIcon,
+    logoutIcon,
+    privateIcon,
+    sharedIcon
+} from '../../../app/assets/images/'
 import {Link, NavLink} from "react-router-dom";
+import {fetchLogout} from "../../../features/auth/model/auth.action.ts";
+import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
+import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
+import {selectIsAuth} from "../../../features/auth/model/auth.slice.ts";
 
 const Menu = () => {
+
+    const dispatch = useAppDispatch()
+
+    const isAuth = useAppSelector(selectIsAuth)
+
+    const logout = () => {
+        if (!isAuth) {
+            return alert('You are not authorized')
+        }
+
+        dispatch(fetchLogout())
+    }
+
     return (
         <aside className={styles.nav}>
             <Link style={{marginLeft: '20px',}} to='/'>
@@ -10,111 +37,37 @@ const Menu = () => {
             <ul>
                 <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/'>
                     <li>
-                        <svg width="30" height="30" viewBox="0 0 23 23" fill="none"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <path
-                                    d="M2 7c0-1.4 0-2.1.272-2.635a2.5 2.5 0 0 1 1.093-1.093C3.9 3 4.6 3 6 3h1.431c.94 0 1.409 0 1.835.13a3 3 0 0 1 1.033.552c.345.283.605.674 1.126 1.455L12 6h6c1.4 0 2.1 0 2.635.272a2.5 2.5 0 0 1 1.092 1.093C22 7.9 22 8.6 22 10v5c0 1.4 0 2.1-.273 2.635a2.5 2.5 0 0 1-1.092 1.092C20.1 19 19.4 19 18 19H6c-1.4 0-2.1 0-2.635-.273a2.5 2.5 0 0 1-1.093-1.092C2 17.1 2 16.4 2 15V7z"
-                                    fill="gray"></path>
-                            </g>
-                        </svg>
+                        <img src={folderIcon} alt="folder"/>
                         <p>My Cloud</p>
                     </li>
                 </NavLink>
                 <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/shared'>
                     <li>
-                        <svg width="30" height="30" fill="#808080" version="1.1" id="Capa_1"
-                             xmlns="http://www.w3.org/2000/svg"
-                             viewBox="0 0 40 40"
-                             transform="matrix(-1, 0, 0, 1, 0, 0)">
-                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <g>
-                                    <path
-                                        d="M16.189,23.437H19v7.729C17.632,30.193,16.377,27.316,16.189,23.437z M10.964,23.437c0.345,3.135,2.291,5.787,4.998,7.137 c-1.001-1.789-1.647-4.271-1.771-7.137H10.964z M16.189,21.437H19v-7.729C17.632,14.683,16.377,17.56,16.189,21.437z M10.964,21.437h3.228c0.123-2.862,0.771-5.347,1.771-7.136C13.255,15.65,11.309,18.302,10.964,21.437z M21,31.168 c1.368-0.976,2.623-3.853,2.811-7.729H21V31.168z M24.038,14.301c1.001,1.789,1.647,4.272,1.771,7.136h3.229 C28.691,18.302,26.745,15.65,24.038,14.301z M40,8.718v22.563c0,2.762-2.238,5-5,5H5c-2.762,0-5-2.238-5-5v-18.75 c0-2.761,2.238-5,5-5h17.578c0.533-2.188,2.506-3.813,4.857-3.813h7.562C37.762,3.718,40,5.958,40,8.718z M31.094,22.437 c0-6.117-4.977-11.094-11.094-11.094S8.906,16.32,8.906,22.437c0,6.116,4.977,11.096,11.094,11.096S31.094,28.556,31.094,22.437z M21,13.708v7.729h2.811C23.623,17.56,22.368,14.683,21,13.708z M24.038,30.573c2.707-1.349,4.653-4,4.998-7.136h-3.228 C25.688,26.301,25.039,28.784,24.038,30.573z"></path>
-                                </g>
-                            </g>
-                        </svg>
+                        <img src={sharedIcon} alt="shared"/>
                         <p>Shared</p>
                     </li>
                 </NavLink>
                 <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/all-files'>
                     <li>
-                        <svg width="30" height="30" viewBox="-3 0 30 34" version="1.1"
-                             xmlns="http://www.w3.org/2000/svg"
-                             fill="#808080" stroke="#808080">
-                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier"><title>file-document</title>
-                                <defs></defs>
-                                <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                                    <g id="Icon-Set-Filled"
-                                       transform="translate(-156.000000, -101.000000)" fill="#808080">
-                                        <path
-                                            d="M176,109 C174.896,109 174,108.104 174,107 L174,103 L180,109 L176,109 L176,109 Z M174,101 L174,101.028 C173.872,101.028 160,101 160,101 C157.791,101 156,102.791 156,105 L156,129 C156,131.209 157.791,133 160,133 L178,133 C180.209,133 182,131.209 182,129 L182,111 L182,109 L174,101 L174,101 Z"
-                                            id="file-document"></path>
-                                    </g>
-                                </g>
-                            </g>
-                        </svg>
+                        <img src={fileIcon} alt="file"/>
                         <p>All files</p>
                     </li>
                 </NavLink>
                 <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/favorites'>
                     <li>
-                        <svg width="30" height="30" viewBox="0 0 24 28" fill="none"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <path
-                                    d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"
-                                    fill="#808080"></path>
-                            </g>
-                        </svg>
+                        <img src={favoritesIcon} alt="favorites"/>
                         <p>Favorites</p>
                     </li>
                 </NavLink>
                 <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/private-files'>
                     <li>
-                        <svg width="30" height="30" fill="#808080" version="1.1" id="Capa_1"
-                             xmlns="http://www.w3.org/2000/svg"
-                             viewBox="0 0 47 47"
-                             stroke="#808080">
-                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <g>
-                                    <g>
-                                        <path
-                                            d="M23.499,19.755c-1.512,0-2.742,1.233-2.742,2.748v2.676h5.485v-2.676C26.242,20.988,25.012,19.755,23.499,19.755z"></path>
-                                        <path
-                                            d="M41.777,13.448H27.156v-2.089c0-2.873-2.352-5.222-5.223-5.222H5.222C2.351,6.137,0,8.486,0,11.359v24.284 c0,2.873,2.351,5.221,5.222,5.221h16.711h19.844c2.871,0,5.223-2.348,5.223-5.221V18.67C47,15.798,44.648,13.448,41.777,13.448z M31.334,34.2c0,1.132-0.93,2.061-2.062,2.061H17.729c-1.133,0-2.063-0.928-2.063-2.061v-6.959c0-1.134,0.929-2.062,2.063-2.062 h0.278v-2.676c0-3.03,2.464-5.495,5.492-5.495c3.028,0,5.493,2.465,5.493,5.495v2.676h0.279c1.133,0,2.063,0.928,2.063,2.062 L31.334,34.2L31.334,34.2z"></path>
-                                    </g>
-                                </g>
-                            </g>
-                        </svg>
+                        <img src={privateIcon} alt="private"/>
                         <p>Private files</p>
                     </li>
                 </NavLink>
                 <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/deleted-files'>
                     <li>
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <path
-                                    d="M3 6.38597C3 5.90152 3.34538 5.50879 3.77143 5.50879L6.43567 5.50832C6.96502 5.49306 7.43202 5.11033 7.61214 4.54412C7.61688 4.52923 7.62232 4.51087 7.64185 4.44424L7.75665 4.05256C7.8269 3.81241 7.8881 3.60318 7.97375 3.41617C8.31209 2.67736 8.93808 2.16432 9.66147 2.03297C9.84457 1.99972 10.0385 1.99986 10.2611 2.00002H13.7391C13.9617 1.99986 14.1556 1.99972 14.3387 2.03297C15.0621 2.16432 15.6881 2.67736 16.0264 3.41617C16.1121 3.60318 16.1733 3.81241 16.2435 4.05256L16.3583 4.44424C16.3778 4.51087 16.3833 4.52923 16.388 4.54412C16.5682 5.11033 17.1278 5.49353 17.6571 5.50879H20.2286C20.6546 5.50879 21 5.90152 21 6.38597C21 6.87043 20.6546 7.26316 20.2286 7.26316H3.77143C3.34538 7.26316 3 6.87043 3 6.38597Z"
-                                    fill="#808080"></path>
-                                <path fillRule="evenodd" clipRule="evenodd"
-                                      d="M11.5956 22.0001H12.4044C15.1871 22.0001 16.5785 22.0001 17.4831 21.1142C18.3878 20.2283 18.4803 18.7751 18.6654 15.8686L18.9321 11.6807C19.0326 10.1037 19.0828 9.31524 18.6289 8.81558C18.1751 8.31592 17.4087 8.31592 15.876 8.31592H8.12404C6.59127 8.31592 5.82488 8.31592 5.37105 8.81558C4.91722 9.31524 4.96744 10.1037 5.06788 11.6807L5.33459 15.8686C5.5197 18.7751 5.61225 20.2283 6.51689 21.1142C7.42153 22.0001 8.81289 22.0001 11.5956 22.0001ZM10.2463 12.1886C10.2051 11.7548 9.83753 11.4382 9.42537 11.4816C9.01321 11.525 8.71251 11.9119 8.75372 12.3457L9.25372 17.6089C9.29494 18.0427 9.66247 18.3593 10.0746 18.3159C10.4868 18.2725 10.7875 17.8856 10.7463 17.4518L10.2463 12.1886ZM14.5746 11.4816C14.9868 11.525 15.2875 11.9119 15.2463 12.3457L14.7463 17.6089C14.7051 18.0427 14.3375 18.3593 13.9254 18.3159C13.5132 18.2725 13.2125 17.8856 13.2537 17.4518L13.7537 12.1886C13.7949 11.7548 14.1625 11.4382 14.5746 11.4816Z"
-                                      fill="#808080"></path>
-                            </g>
-                        </svg>
+                        <img src={deleteIcon} alt="delete"/>
                         <p>Deleted files</p>
                     </li>
                 </NavLink>
@@ -122,44 +75,14 @@ const Menu = () => {
             <ul>
                 <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/help'>
                     <li>
-                        <svg width="30" height="30" viewBox="0 0 24 24" version="1.1"
-                             xmlns="http://www.w3.org/2000/svg"
-                             fill="#808080" stroke="#808080">
-                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier"><title>message_3_fill</title>
-                                <g id="页面-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                                    <g id="Contact" transform="translate(-816.000000, -48.000000)">
-                                        <g id="message_3_fill" transform="translate(816.000000, 48.000000)">
-                                            <path
-                                                d="M2,6 C2,4.34315 3.34315,3 5,3 L19,3 C20.6569,3 22,4.34315 22,6 L22,16 C22,17.6569 20.6569,19 19,19 L7.33333,19 L4,21.5 C3.17596,22.118 2,21.5301 2,20.5 L2,6 Z M7,9 C7,8.44772 7.44772,8 8,8 L16,8 C16.5523,8 17,8.44772 17,9 C17,9.55228 16.5523,10 16,10 L8,10 C7.44772,10 7,9.55228 7,9 Z M8,12 C7.44772,12 7,12.4477 7,13 C7,13.5523 7.44772,14 8,14 L11,14 C11.5523,14 12,13.5523 12,13 C12,12.4477 11.5523,12 11,12 L8,12 Z"
-                                                id="形状" fill="#808080"></path>
-                                        </g>
-                                    </g>
-                                </g>
-                            </g>
-                        </svg>
+                        <img src={helpIcon} alt="help"/>
                         <p>Help & Support</p>
                     </li>
                 </NavLink>
-                <Link to='/'>
-                    <li>
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <path
-                                    d="M16.8 2H14.2C11 2 9 4 9 7.2V11.25H15.25C15.66 11.25 16 11.59 16 12C16 12.41 15.66 12.75 15.25 12.75H9V16.8C9 20 11 22 14.2 22H16.79C19.99 22 21.99 20 21.99 16.8V7.2C22 4 20 2 16.8 2Z"
-                                    fill="#808080"></path>
-                                <path
-                                    d="M4.56141 11.2498L6.63141 9.17984C6.78141 9.02984 6.85141 8.83984 6.85141 8.64984C6.85141 8.45984 6.78141 8.25984 6.63141 8.11984C6.34141 7.82984 5.86141 7.82984 5.57141 8.11984L2.22141 11.4698C1.93141 11.7598 1.93141 12.2398 2.22141 12.5298L5.57141 15.8798C5.86141 16.1698 6.34141 16.1698 6.63141 15.8798C6.92141 15.5898 6.92141 15.1098 6.63141 14.8198L4.56141 12.7498H9.00141V11.2498H4.56141Z"
-                                    fill="#808080"></path>
-                            </g>
-                        </svg>
-                        <p>Log out</p>
-                    </li>
-                </Link>
+                <li style={{cursor: 'pointer'}} onClick={logout}>
+                    <img src={logoutIcon} alt="logout"/>
+                    <p>Log out</p>
+                </li>
             </ul>
         </aside>
     );

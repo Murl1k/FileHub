@@ -1,7 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {fetchLogin, fetchLoginMe, fetchLogout, fetchRegister} from "./auth.action.ts";
-import {IUser} from "../../types";
-import {RootState} from "../store/store.ts";
+import {fetchLogin, fetchLoginMe, fetchLogout, fetchRegister, fetchSetUsername} from "./auth.action.ts";
+import {IUser} from "../../../shared/types";
+import {RootState} from "../../../shared/api/store";
 
 interface IInitialState {
     data: IUser | null
@@ -34,7 +34,7 @@ export const authSlice = createSlice({
             .addCase(fetchLogin.pending, state => {
                 state.isLoading = true
             })
-            .addCase(fetchLogin.fulfilled, (state, action) => {
+            .addCase(fetchLogin.fulfilled, state => {
                 state.isLoading = false
                 state.data = null
             })
@@ -63,9 +63,21 @@ export const authSlice = createSlice({
             .addCase(fetchLogout.rejected, state => {
                 state.error = 'error'
             })
+            .addCase(fetchSetUsername.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(fetchSetUsername.fulfilled, (state, action) => {
+                if (!state.data) {
+                    return
+                }
+
+                state.isLoading = false
+                state.data.username = action.meta.arg.new_username
+            })
+            .addCase(fetchSetUsername.rejected, state => {
+                state.error = 'error'
+            })
     }
 })
 
 export const selectIsAuth = (state: RootState) => Boolean(state.auth.data)
-
-export default authSlice.reducer

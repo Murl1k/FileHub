@@ -1,0 +1,33 @@
+.breadcrumbs {
+  margin-bottom: 20px;
+
+  ul {
+    display: flex;
+  }
+}
+
+.crumb {
+  color: #8B96A5;
+
+  &:first-child {
+    a {
+      color: #8B96A5;
+    }
+  }
+
+  &:not(:last-child)::after {
+    display: inline-block;
+    margin: 0 0.5rem;
+    content: "-->";
+    color: #8B96A5;
+    position: relative;
+    bottom: 2px;
+  }
+
+  a {
+    text-transform: capitalize;
+    color: #1c1c1c;
+    font-weight: 600;
+    font-size: 1.5em;
+  }
+}

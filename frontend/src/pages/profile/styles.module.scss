@@ -1,0 +1,76 @@
+@import '../../app/assets/styles/vars';
+
+.profile {
+  padding: 40px;
+  width: 100%;
+
+  h2 {
+    margin-bottom: 20px;
+  }
+}
+
+.card {
+  display: grid;
+  gap: 40px;
+  justify-items: center;
+
+  span {
+    border: 1px solid $secondary;
+    background: #fff;
+    border-radius: 50%;
+    padding: 20px;
+    height: 150px;
+    width: 150px;
+    display: grid;
+    place-items: center;
+
+    img {
+      height: 50px;
+      width: 50px;
+    }
+  }
+
+  label {
+    width: 100%;
+
+    h4 {
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 100%;
+      background: #fff;
+    }
+  }
+}
+
+.cardBtns {
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+
+  button {
+    border-radius: 6px;
+    padding: 10px 40px;
+  }
+
+  a {
+    &:first-child {
+      button {
+        color: $primary;
+        font-weight: 600;
+        border: 1px solid $gray;
+        background: #fff;
+      }
+    }
+
+    &:last-child {
+      button {
+        color: #fff;
+        font-weight: 600;
+        background: $primary;
+      }
+    }
+  }
+}

@@ -18,6 +18,10 @@
     background-color: #fff;
   }
 
+  img {
+    filter: brightness(0) saturate(100%) invert(24%) sepia(46%) saturate(2167%) hue-rotate(234deg) brightness(91%) contrast(90%);
+  }
+
   p {
     color: $secondary;
     font-weight: 600;
@@ -26,6 +30,6 @@
   div {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
   }
 }
