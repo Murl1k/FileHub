@@ -39,6 +39,30 @@ export const fetchLoginMe = createAsyncThunk(
     }
 )
 
+export const fetchUpdateMyAccount = createAsyncThunk(
+    'auth/fetchUpdateMyAccount',
+    async (params: { email: string }, {rejectWithValue}) => {
+        try {
+            const res = await axiosInstance.patch('/users/me/', params)
+            return res.data
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const fetchDeleteMyAccount = createAsyncThunk(
+    'auth/fetchDeleteMyAccount',
+    async (params: { current_password: string }) => {
+        try {
+            const res = await axiosInstance.delete('/users/me/', params)
+            return res.data
+        } catch (err) {
+            console.log(err)
+        }
+    }
+)
+
 export const fetchLogout = createAsyncThunk(
     'auth/fetchLogout',
     async () => {

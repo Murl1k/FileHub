@@ -1,11 +1,5 @@
 @import '../../../app/assets/styles/vars';
 
-.page {
-  display: grid;
-  height: 100vh;
-  place-items: center;
-}
-
 .auth {
   background: $primary;
   border-radius: 6px;

@@ -2,96 +2,23 @@ import styles from "./styles.module.scss";
 import {GridItem} from "../../grid-item";
 import {ListItem} from "../../list-item";
 import {File} from "../../file";
-import {useState} from "react";
-
-export interface IItem {
-    title: string
-    files: number
-    size: number
-}
-
-const items: IItem[] = [
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    },
-    {
-        title: "UI / UX design",
-        files: 5,
-        size: 21.5
-    }
-]
+import {useEffect, useState} from "react";
+import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
+import {fetchGetFolders} from "../../../shared/api/folder/folder.action.ts";
+import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 
 const Main = () => {
 
+    const dispatch = useAppDispatch()
+
+    const {data} = useAppSelector(state => state.folder)
+
     const [view, setView] = useState(false)
     const [isGrid, setIsGrid] = useState(true)
+
+    useEffect(() => {
+        localStorage.getItem('token') && dispatch(fetchGetFolders())
+    }, [dispatch])
 
     return (
         <>
@@ -139,7 +66,7 @@ const Main = () => {
                 </div>
                 {isGrid ?
                     <div className={styles.grid}>
-                        {items.map((item, i) => (
+                        {data.map((item, i) => (
                             <GridItem
                                 key={i}
                                 style={view ? {border: '2px solid #583DA1'} : {}}
@@ -161,7 +88,7 @@ const Main = () => {
                                 <h4>Type</h4>
                             </div>
                         </div>
-                        {items.map((item, i) => (
+                        {data.map((item, i) => (
                             <ListItem
                                 key={i}
                                 onClick={() => setView(!view)}

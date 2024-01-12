@@ -34,25 +34,23 @@ const Login = () => {
     }
 
     return (
-        <div className={styles.page}>
-            <div className={styles.auth}>
-                <h3>SIGN IN</h3>
-                <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-                    <input
-                        {...register('username', {required: true})}
-                        placeholder='Name'
-                        type="text"
-                    />
-                    <input
-                        {...register('password', {required: true})}
-                        placeholder='Password'
-                        type="password"
-                    />
-                    <button type='submit'>
-                        Continue
-                    </button>
-                </form>
-            </div>
+        <div className={styles.auth}>
+            <h3>SIGN IN</h3>
+            <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+                <input
+                    {...register('username', {required: true})}
+                    placeholder='Name'
+                    type="text"
+                />
+                <input
+                    {...register('password', {required: true})}
+                    placeholder='Password'
+                    type="password"
+                />
+                <button type='submit'>
+                    Continue
+                </button>
+            </form>
         </div>
     );
 };

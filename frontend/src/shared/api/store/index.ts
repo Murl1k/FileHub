@@ -1,8 +1,10 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import {authSlice} from "../../../features/auth/model/auth.slice.ts";
+import {folderSlice} from "../folder/folder.slice.ts";
 
 const rootReducer = combineReducers({
-    auth: authSlice.reducer
+    auth: authSlice.reducer,
+    folder: folderSlice.reducer
 })
 
 export const store = configureStore({

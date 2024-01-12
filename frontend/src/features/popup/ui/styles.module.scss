@@ -1,0 +1,41 @@
+@import '../../../app/assets/styles/vars';
+
+.popup {
+  position: fixed;
+  z-index: 3;
+  backdrop-filter: blur(2px);
+  height: 100vh;
+  width: calc(100% - $nav-width);
+  display: grid;
+  place-items: center;
+
+  form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 24px;
+    border: 1px solid $gray;
+    display: grid;
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    input {
+      border: 1px solid $gray;
+      padding: 10px;
+      border-radius: 12px;
+
+      &:not(:last-child) {
+        margin-bottom: 20px;
+      }
+    }
+
+    button {
+      background: $primary;
+      padding: 10px;
+      color: #fff;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+  }
+}

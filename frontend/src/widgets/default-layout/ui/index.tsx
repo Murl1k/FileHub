@@ -3,7 +3,7 @@ import {Header} from "../../header";
 import {Outlet} from "react-router-dom";
 import '../../../app/assets/styles/style.scss'
 
-const Layout = () => {
+const DefaultLayout = () => {
     return (
         <div style={{display: 'flex'}}>
             <Menu/>
@@ -17,4 +17,4 @@ const Layout = () => {
     );
 };
 
-export default Layout;
+export default DefaultLayout;

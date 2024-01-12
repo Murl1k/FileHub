@@ -1,10 +1,18 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {fetchLogin, fetchLoginMe, fetchLogout, fetchRegister, fetchSetUsername} from "./auth.action.ts";
-import {IUser} from "../../../shared/types";
+import {
+    fetchDeleteMyAccount,
+    fetchLogin,
+    fetchLoginMe,
+    fetchLogout,
+    fetchRegister,
+    fetchSetUsername,
+    fetchUpdateMyAccount
+} from "./auth.action.ts";
+import {IUserData} from "../../../shared/types";
 import {RootState} from "../../../shared/api/store";
 
 interface IInitialState {
-    data: IUser | null
+    data: IUserData | null
     isLoading: boolean
     error: string
 }
@@ -49,6 +57,30 @@ export const authSlice = createSlice({
                 state.data = action.payload
             })
             .addCase(fetchLoginMe.rejected, state => {
+                state.error = 'error'
+            })
+            .addCase(fetchDeleteMyAccount.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(fetchDeleteMyAccount.fulfilled, state => {
+                state.isLoading = false
+                state.data = null
+            })
+            .addCase(fetchDeleteMyAccount.rejected, state => {
+                state.error = 'error'
+            })
+            .addCase(fetchUpdateMyAccount.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(fetchUpdateMyAccount.fulfilled, (state, action) => {
+                if (!state.data) {
+                    return
+                }
+
+                state.isLoading = false
+                state.data.email = action.payload.email
+            })
+            .addCase(fetchUpdateMyAccount.rejected, state => {
                 state.error = 'error'
             })
             .addCase(fetchLogout.pending, state => {

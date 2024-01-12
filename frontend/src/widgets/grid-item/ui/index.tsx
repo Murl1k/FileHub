@@ -1,10 +1,10 @@
 import styles from "./styles.module.scss";
 import {folderIcon} from '../../../app/assets/images'
 import {FC, HTMLAttributes} from "react";
-import {IItem} from "../../main/ui";
+import {IFolderData} from "../../../shared/types/folder.interface.ts";
 
 interface IGridItem extends HTMLAttributes<HTMLDivElement> {
-    item: IItem
+    item: IFolderData
 }
 
 const GridItem: FC<IGridItem> = ({item, ...props}) => {
@@ -20,7 +20,7 @@ const GridItem: FC<IGridItem> = ({item, ...props}) => {
                     </div>
                 </div>
                 <h4>{item.title}</h4>
-                <p>{item.files} files</p>
+                <p>last updated at<br/>{new Date(item.updated_at).toLocaleString()}</p>
             </div>
             <div className={styles.itemFooter}>
                 <h5>{item.size} Mb</h5>

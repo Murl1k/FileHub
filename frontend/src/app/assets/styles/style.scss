@@ -37,9 +37,19 @@ button {
   cursor: pointer;
 }
 
+input {
+  outline: none;
+}
+
 .main {
   display: flex;
   justify-content: space-between;
   position: relative;
   top: $header-height;
+}
+
+.page {
+  display: grid;
+  height: 100vh;
+  place-items: center;
 }

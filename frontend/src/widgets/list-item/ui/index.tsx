@@ -1,10 +1,10 @@
 import styles from "./styles.module.scss";
 import {FC, HTMLAttributes} from "react";
-import {IItem} from "../../main/ui";
 import {folderIcon} from "../../../app/assets/images";
+import {IFolderData} from "../../../shared/types/folder.interface.ts";
 
 interface IListItem extends HTMLAttributes<HTMLDivElement> {
-    item: IItem
+    item: IFolderData
 }
 
 const ListItem: FC<IListItem> = ({item, ...props}) => {

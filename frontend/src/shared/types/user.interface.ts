@@ -4,6 +4,10 @@ export interface IUser {
     email?: string
 }
 
+export interface IUserData extends Omit<IUser, 'password'> {
+    id: number
+}
+
 export interface IChangePassword {
     new_password: string,
     re_new_password: string,
