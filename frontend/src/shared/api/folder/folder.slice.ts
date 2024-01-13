@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {IFolderData} from "../../types/folder.interface.ts";
 import {fetchAddFolder, fetchGetFolders} from "./folder.action.ts";
+import {IFolderData} from "../../types";
 
 interface IInitialState {
     data: IFolderData[]

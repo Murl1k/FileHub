@@ -1,0 +1,41 @@
+@import '../../../app/assets/styles/vars';
+
+.notAuth {
+  display: grid;
+  width: 100%;
+  height: calc(100vh - $header-height);
+  justify-items: center;
+  align-content: center;
+
+  span {
+    font-size: 64px;
+  }
+}
+
+.btns {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+
+  button {
+    padding: 10px 40px;
+    border-radius: 24px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 24px;
+  }
+
+  a {
+    &:first-child {
+      button {
+        background: $secondary;
+      }
+    }
+
+    &:last-child {
+      button {
+        background: $primary;
+      }
+    }
+  }
+}

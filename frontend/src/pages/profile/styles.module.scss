@@ -8,10 +8,6 @@
     &:first-child {
       margin-bottom: 20px;
     }
-
-    &:not(:first-child) {
-      margin: 20px 0;
-    }
   }
 }
 

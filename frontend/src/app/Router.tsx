@@ -17,10 +17,17 @@ import {DefaultLayout} from "../widgets/default-layout";
 import {PageLayout} from "../widgets/page-layout";
 import {useAppDispatch} from "../shared/lib/hooks/useAppDispatch.ts";
 import {fetchLoginMe} from "../features/auth/model/auth.action.ts";
+import UploadFiles from "../pages/upload-files";
+import NotFound from "../pages/not-found";
+import {NotAuth} from "../widgets/not-auth";
+import {useAppSelector} from "../shared/lib/hooks/useAppSelector.ts";
+import {selectIsAuth} from "../features/auth/model/auth.slice.ts";
 
 const Router = () => {
 
     const dispatch = useAppDispatch()
+
+    const isAuth = useAppSelector(selectIsAuth)
 
     useEffect(() => {
         localStorage.getItem('token') && dispatch(fetchLoginMe())
@@ -30,6 +37,30 @@ const Router = () => {
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<DefaultLayout/>}>
+                    {!isAuth ?
+                        <>
+                            <Route index element={<NotAuth/>}/>
+                            <Route path='/shared' element={<NotAuth/>}/>
+                            <Route path='/all-files' element={<NotAuth/>}/>
+                            <Route path='/favorites' element={<NotAuth/>}/>
+                            <Route path='/private-files' element={<NotAuth/>}/>
+                            <Route path='/deleted-files' element={<NotAuth/>}/>
+                            <Route path='/help' element={<NotAuth/>}/>
+                            <Route path='/profile' element={<NotAuth/>}/>
+                            <Route path='/profile/settings' element={<NotAuth/>}/>
+                        </> :
+                        <>
+                            <Route index element={<Home/>}/>
+                            <Route path='/shared' element={<Shared/>}/>
+                            <Route path='/all-files' element={<AllFiles/>}/>
+                            <Route path='/favorites' element={<Favorites/>}/>
+                            <Route path='/private-files' element={<PrivateFiles/>}/>
+                            <Route path='/deleted-files' element={<DeletedFiles/>}/>
+                            <Route path='/help' element={<Help/>}/>
+                            <Route path='/profile' element={<Profile/>}/>
+                            <Route path='/profile/settings' element={<Settings/>}/>
+                        </>
+                    }
                     <Route index element={<Home/>}/>
                     <Route path='/shared' element={<Shared/>}/>
                     <Route path='/all-files' element={<AllFiles/>}/>
@@ -45,6 +76,8 @@ const Router = () => {
                     <Route path='/auth/login' element={<SignIn/>}/>
                     <Route path='/security/change-password' element={<ChangePassword/>}/>
                     <Route path='/security/change-username' element={<ChangeUsername/>}/>
+                    <Route path='/upload-files' element={<UploadFiles/>}/>
+                    <Route path='*' element={<NotFound/>}/>
                 </Route>
             </Routes>
         </BrowserRouter>

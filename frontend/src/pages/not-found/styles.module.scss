@@ -1,0 +1,40 @@
+@import '../../app/assets/styles/vars';
+
+.notFound {
+  display: grid;
+  justify-items: center;
+
+  span {
+    display: inline-block;
+    font-size: 280px;
+    height: max-content;
+    width: max-content;
+  }
+
+  div {
+    display: grid;
+    justify-items: center;
+
+    p {
+      &:first-child {
+        color: #444444;
+        font-size: 96px;
+      }
+
+      &:last-child {
+        color: #999;
+        font-size: 48px;
+      }
+    }
+  }
+
+  button {
+    margin-top: 20px;
+    border-radius: 12px;
+    font-size: 32px;
+    font-weight: 600;
+    background: $primary;
+    color: #fff;
+    padding: 20px 40px;
+  }
+}

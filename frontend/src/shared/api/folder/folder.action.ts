@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import axiosInstance from "../axiosInstance.ts";
-import {IFolder} from "../../types/folder.interface.ts";
+import {IFolder} from "../../types";
 
 export const fetchAddFolder = createAsyncThunk(
     'folder/fetchAddFolder',

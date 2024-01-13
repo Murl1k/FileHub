@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
 import {folderIcon} from '../../../app/assets/images'
 import {FC, HTMLAttributes} from "react";
-import {IFolderData} from "../../../shared/types/folder.interface.ts";
+import {IFolderData} from "../../../shared/types";
 
 interface IGridItem extends HTMLAttributes<HTMLDivElement> {
     item: IFolderData

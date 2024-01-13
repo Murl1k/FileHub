@@ -3,8 +3,8 @@ import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {Dispatch, FC, SetStateAction, useRef} from "react";
 import {useOutsideClick} from "../../../shared/lib/hooks/useClickOutside.ts";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {IFolder} from "../../../shared/types/folder.interface.ts";
 import {fetchAddFolder} from "../../../shared/api/folder/folder.action.ts";
+import {IFolder} from "../../../shared/types";
 
 const Popup: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>> }> = ({state, stateAction}) => {
 

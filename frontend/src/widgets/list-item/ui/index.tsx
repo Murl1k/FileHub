@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
 import {FC, HTMLAttributes} from "react";
 import {folderIcon} from "../../../app/assets/images";
-import {IFolderData} from "../../../shared/types/folder.interface.ts";
+import {IFolderData} from "../../../shared/types";
 
 interface IListItem extends HTMLAttributes<HTMLDivElement> {
     item: IFolderData

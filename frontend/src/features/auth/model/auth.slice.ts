@@ -9,18 +9,20 @@ import {
     fetchUpdateMyAccount
 } from "./auth.action.ts";
 import {IUserData} from "../../../shared/types";
-import {RootState} from "../../../shared/api/store";
+import {RootState} from "@reduxjs/toolkit/query";
 
 interface IInitialState {
     data: IUserData | null
     isLoading: boolean
     error: string
+    status: string
 }
 
 const initialState: IInitialState = {
     data: null,
     isLoading: true,
-    error: ''
+    error: '',
+    status: ''
 }
 
 export const authSlice = createSlice({
@@ -51,13 +53,17 @@ export const authSlice = createSlice({
             })
             .addCase(fetchLoginMe.pending, state => {
                 state.isLoading = true
+                state.status = 'loading'
             })
             .addCase(fetchLoginMe.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.data = action.payload
+                state.status = 'loaded'
             })
             .addCase(fetchLoginMe.rejected, state => {
+                state.isLoading = false
                 state.error = 'error'
+                state.status = 'error'
             })
             .addCase(fetchDeleteMyAccount.pending, state => {
                 state.isLoading = true
