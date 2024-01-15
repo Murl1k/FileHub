@@ -1,3 +1,4 @@
-import Popup from "./ui";
+import Folder from "./ui/folder";
+import Files from "./ui/files";
 
-export {Popup}
+export {Folder, Files}

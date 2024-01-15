@@ -1,4 +1,5 @@
 import styles from '../styles.module.scss'
+import {avatarIcon} from "../../../../app/assets/images";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
@@ -48,6 +49,7 @@ const Register = () => {
 
     return (
         <div className={styles.auth}>
+            <img src={avatarIcon} alt="avatar"/>
             <h3>SIGN UP</h3>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
                 <input
@@ -66,7 +68,7 @@ const Register = () => {
                     type="password"
                 />
                 <button type='submit'>
-                    Continue
+                    SIGN UP
                 </button>
             </form>
         </div>

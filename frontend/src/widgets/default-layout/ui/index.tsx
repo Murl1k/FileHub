@@ -5,7 +5,7 @@ import '../../../app/assets/styles/style.scss'
 
 const DefaultLayout = () => {
     return (
-        <div style={{display: 'flex'}}>
+        <div style={{display: 'flex', minHeight: '100vh'}}>
             <Menu/>
             <div style={{width: '100%', marginLeft: '280px'}}>
                 <Header/>

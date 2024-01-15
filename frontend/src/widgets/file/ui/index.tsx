@@ -1,9 +1,8 @@
 import styles from "./styles.module.scss";
-import {FC} from "react";
 import {Transition} from "react-transition-group";
 import Button from "../../../shared/UIKit/button";
 
-const File: FC<{ view: boolean }> = ({view}) => {
+const File = ({view}: { view: boolean }) => {
     return (
         <Transition in={view} timeout={300} unmountOnExit={true}>
             {(state) => (

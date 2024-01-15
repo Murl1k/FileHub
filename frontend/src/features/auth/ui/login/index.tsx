@@ -1,4 +1,5 @@
 import styles from '../styles.module.scss'
+import {avatarIcon} from '../../../../app/assets/images'
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
@@ -24,9 +25,9 @@ const Login = () => {
     const onSubmit: SubmitHandler<IUser> = async (values) => {
         try {
             const data = await dispatch(fetchLogin(values))
+            localStorage.setItem('token', data.payload.auth_token)
             dispatch(fetchLoginMe())
 
-            localStorage.setItem('token', data.payload.auth_token)
             navigate('/')
         } catch (err) {
             console.log(err)
@@ -35,6 +36,7 @@ const Login = () => {
 
     return (
         <div className={styles.auth}>
+            <img src={avatarIcon} alt="avatar"/>
             <h3>SIGN IN</h3>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
                 <input
@@ -48,7 +50,7 @@ const Login = () => {
                     type="password"
                 />
                 <button type='submit'>
-                    Continue
+                    SIGN IN
                 </button>
             </form>
         </div>

@@ -1,6 +1,17 @@
-@import '../../app/assets/styles/vars';
+@import '../../../../app/assets/styles/vars';
+
+.popup {
+  position: fixed;
+  backdrop-filter: blur(2px);
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: calc(100% - $nav-width);
+  height: 100%;
+}
 
 .uploadFiles {
+  position: relative;
   background: #fff;
   padding: 40px;
   border: 1px solid $gray;
@@ -8,7 +19,8 @@
   transition: background .1s ease-in-out;
 
   &.drag {
-    background: greenyellow;
+    border: 3px dashed #0d90be;
+    background: #bce7ff;
   }
 
   h3 {
