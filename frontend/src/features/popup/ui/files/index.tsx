@@ -1,4 +1,5 @@
 import styles from './styles.module.scss'
+import {Transition} from "react-transition-group";
 import {ChangeEvent, Dispatch, DragEventHandler, FC, SetStateAction, useRef, useState} from "react";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
@@ -56,38 +57,45 @@ const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>>
     }
 
     return (
-        <div className={styles.popup}>
-            <form
-                className={!isDrag ? `${styles.uploadFiles}` : `${styles.uploadFiles} ${styles.drag}`}
-                onDragEnter={handleDrag}
-                onDragOver={handleDrag}
-                onDragLeave={handleLeave}
-                onDrop={handleDrop}
-                onReset={handleReset}
-                onSubmit={handleSubmit}
-                ref={popupRef}
-            >
-                <CloseBtn onClick={() => stateAction(!state)}/>
-                <h3>Upload your files</h3>
-                <>
-                    <label>
-                        <span>Press to upload</span>
-                        <input type="file" multiple={true} onChange={handleChange}/>
-                    </label>
-                    {files.length > 0 && <div style={{marginTop: '20px'}}>
-                        {files.map((item, i) => (
-                            <div key={i}>
-                                {item.name}
-                            </div>
-                        ))}
-                    </div>}
-                </>
-                <div className={styles.btns}>
-                    <button type='reset'>Reset</button>
-                    <button type='submit'>Submit</button>
+        <Transition nodeRef={popupRef} in={state} timeout={300} unmountOnExit={true}>
+            {(state) => (
+                <div className={`${styles.popup} ${styles[state]}`}>
+                    <form
+                        className={!isDrag ? `${styles.uploadFiles}` : `${styles.uploadFiles} ${styles.drag}`}
+                        onDragEnter={handleDrag}
+                        onDragOver={handleDrag}
+                        onDragLeave={handleLeave}
+                        onDrop={handleDrop}
+                        onReset={handleReset}
+                        onSubmit={handleSubmit}
+                        ref={popupRef}
+                    >
+                        <CloseBtn onClick={() => stateAction(!state)}/>
+                        <h3>Upload your files</h3>
+                        <label>
+                            <span>Press to upload</span>
+                            <input type="file" multiple={true} onChange={handleChange}/>
+                        </label>
+                        {files.length > 0 && <div style={{marginTop: '20px'}}>
+                            {files.map((item, i) => (
+                                <div style={{
+                                    overflow: 'hidden',
+                                    width: '150px',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap'
+                                }} key={i}>
+                                    {item.name}
+                                </div>
+                            ))}
+                        </div>}
+                        <div className={styles.btns}>
+                            <button type='reset'>Reset</button>
+                            <button type='submit'>Submit</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
+            )}
+        </Transition>
     );
 };
 

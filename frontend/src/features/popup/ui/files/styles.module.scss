@@ -8,6 +8,8 @@
   place-items: center;
   width: calc(100% - $nav-width);
   height: 100%;
+  transition: opacity .3s ease-in-out;
+  opacity: 0;
 }
 
 .uploadFiles {
@@ -66,5 +68,17 @@
     &:last-child {
       background: $primary;
     }
+  }
+}
+
+.popup {
+  &.entering,
+  &.entered {
+    opacity: 1;
+  }
+
+  &.exiting,
+  &.exited {
+    opacity: 0;
   }
 }
