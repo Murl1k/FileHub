@@ -2,7 +2,7 @@ import styles from "./styles.module.scss";
 import {GridItem} from "../../grid-item";
 import {ListItem} from "../../list-item";
 import {File} from "../../file";
-import {useEffect, useState} from "react";
+import {MouseEventHandler, useEffect, useState} from "react";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {fetchGetFolders} from "../../../shared/api/folder/folder.action.ts";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
@@ -19,6 +19,11 @@ const Main = () => {
     useEffect(() => {
         localStorage.getItem('token') && dispatch(fetchGetFolders())
     }, [dispatch])
+
+    const handleClick: MouseEventHandler<HTMLDivElement> = (e) => {
+        e.preventDefault()
+        setView(!view)
+    }
 
     return (
         <>
@@ -70,7 +75,7 @@ const Main = () => {
                             <GridItem
                                 key={i}
                                 style={view ? {border: '2px solid #583DA1'} : {}}
-                                onClick={() => setView(!view)}
+                                handleClick={handleClick}
                                 item={item}
                             />
                         ))}

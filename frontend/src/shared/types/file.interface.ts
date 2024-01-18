@@ -1,9 +1,10 @@
-export interface IFile {
-    folder?: string
-    file: FormData
-}
-
 export interface IFileData {
-    name: string,
+    id: string,
+    folder: string | null
     size: number
+    name: string
+    url: string
+    created_at: string
+    updated_at: string
+    is_public: boolean
 }

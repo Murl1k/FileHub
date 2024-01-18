@@ -21,6 +21,7 @@ import NotFound from "../pages/not-found";
 import {NotAuth} from "../widgets/not-auth";
 import {useAppSelector} from "../shared/lib/hooks/useAppSelector.ts";
 import {selectIsAuth} from "../features/auth/model/auth.slice.ts";
+import Folder from "../pages/folder";
 
 const Router = () => {
 
@@ -46,6 +47,7 @@ const Router = () => {
                             <Route path='/deleted-files' element={<DeletedFiles/>}/>
                             <Route path='/help' element={<Help/>}/>
                             <Route path='/profile' element={<Profile/>}/>
+                            <Route path='/folder/:id' element={<Folder/>}/>
                             <Route path='/profile/settings' element={<Settings/>}/>
                         </> :
                         <>

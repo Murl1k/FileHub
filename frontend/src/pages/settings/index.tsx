@@ -16,8 +16,10 @@ const Settings = () => {
     }
 
     const deleteMyAccount = () => {
-        dispatch(fetchDeleteMyAccount({current_password: password}))
+        dispatch(fetchDeleteMyAccount(password))
     }
+
+    console.log(password)
 
     return (
         <div className={styles.settings}>

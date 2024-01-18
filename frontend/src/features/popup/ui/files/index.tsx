@@ -1,10 +1,10 @@
 import styles from './styles.module.scss'
 import {Transition} from "react-transition-group";
-import {ChangeEvent, Dispatch, DragEventHandler, FC, SetStateAction, useRef, useState} from "react";
+import {ChangeEvent, Dispatch, DragEventHandler, FC, SetStateAction, useEffect, useRef, useState} from "react";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
-import {fetchAddFiles} from "../../../../shared/api/files/files.action.ts";
 import {CloseBtn} from "../../../close-btn";
+import {fetchAddFiles, fetchGetFiles} from "../../../../shared/api/files/files.action.ts";
 
 const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>> }> = ({state, stateAction}) => {
 
@@ -17,10 +17,14 @@ const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>>
 
     useOutsideClick(popupRef, stateAction, state)
 
+    useEffect(() => {
+        dispatch(fetchGetFiles())
+    }, [dispatch]);
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
-        if (e.target.files && e.target.files[0]) {
-            setFiles([...e.target.files])
+        if (e.target.files?.[0]) {
+            setFiles([e.target.files[0]])
         }
     }
 
@@ -37,8 +41,8 @@ const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>>
     const handleDrop: DragEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault()
         setIsDrag(false)
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            setFiles([...e.dataTransfer.files])
+        if (e.dataTransfer.files[0]) {
+            setFiles([e.dataTransfer.files[0]])
             // files.push(...e.dataTransfer.files)
         }
     }
@@ -50,10 +54,12 @@ const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>>
     const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         const data = new FormData()
-        files.forEach(file => {
-            data.append('file', file)
-        })
-        dispatch(fetchAddFiles({file: data}))
+
+        data.append('file', files[0])
+        // data.append('folder', '2EG7gpaYcyp5LzAwV9ys6j')
+        console.log(data)
+
+        dispatch(fetchAddFiles(data))
     }
 
     return (
@@ -69,12 +75,13 @@ const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>>
                         onReset={handleReset}
                         onSubmit={handleSubmit}
                         ref={popupRef}
+                        encType="multipart/form-data"
                     >
                         <CloseBtn onClick={() => stateAction(!state)}/>
                         <h3>Upload your files</h3>
                         <label>
                             <span>Press to upload</span>
-                            <input type="file" multiple={true} onChange={handleChange}/>
+                            <input name="file" type="file" onChange={handleChange}/>
                         </label>
                         {files.length > 0 && <div style={{marginTop: '20px'}}>
                             {files.map((item, i) => (

@@ -53,9 +53,9 @@ export const fetchUpdateMyAccount = createAsyncThunk(
 
 export const fetchDeleteMyAccount = createAsyncThunk(
     'auth/fetchDeleteMyAccount',
-    async (params: { current_password: string }) => {
+    async (current_password: string) => {
         try {
-            const res = await axiosInstance.delete('/users/me/', params)
+            const res = await axiosInstance.delete('/users/me/', current_password)
             return res.data
         } catch (err) {
             console.log(err)

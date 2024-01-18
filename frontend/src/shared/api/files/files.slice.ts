@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {IFileData} from "../../types";
-import {fetchAddFiles} from "./files.action.ts";
+import {fetchAddFiles, fetchGetFiles} from "./files.action.ts";
 
 interface IInitialState {
     data: IFileData[],
@@ -25,9 +25,20 @@ export const filesSlice = createSlice({
             })
             .addCase(fetchAddFiles.fulfilled, (state, action) => {
                 state.isLoading = false
-                state.data = action.payload
+                state.data.push(action.payload)
             })
             .addCase(fetchAddFiles.rejected, state => {
+                state.isLoading = false
+                state.error = 'error'
+            })
+            .addCase(fetchGetFiles.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(fetchGetFiles.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.data = action.payload
+            })
+            .addCase(fetchGetFiles.rejected, state => {
                 state.isLoading = false
                 state.error = 'error'
             })
