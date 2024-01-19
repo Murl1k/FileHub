@@ -1,13 +1,13 @@
 import styles from "./styles.module.scss";
 import {folderIcon} from '../../../app/assets/images'
 import {FC, HTMLAttributes, MouseEventHandler} from "react";
-import {IFolderData} from "../../../shared/types";
 import {Link} from "react-router-dom";
 import {SizeCalculate} from "../../../shared/lib/size-calculate.ts";
+import {IFolderData} from "../../../shared/types";
 
 interface IGridItem extends HTMLAttributes<HTMLAnchorElement> {
     item: IFolderData
-    handleClick: MouseEventHandler<HTMLDivElement>
+    handleClick?: MouseEventHandler<HTMLDivElement>
 }
 
 const GridItem: FC<IGridItem> = ({item, handleClick, ...props}) => {

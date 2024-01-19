@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import {IFileData} from "../types";
+import {IFileData, IFolderData} from "../types";
 
 export const api = createApi({
     reducerPath: 'api',
@@ -9,11 +9,14 @@ export const api = createApi({
         headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
     }),
     endpoints: builder => ({
-        getFolder: builder.query<IFileData[], string>({
+        getFiles: builder.query<IFileData[], string>({
             query: (id) => `/cloud_storage/files/?folder=${id}`,
             providesTags: ["Folder"]
+        }),
+        getFolders: builder.query<IFolderData[], string>({
+            query: (id) => `/cloud_storage/folders/${id}/child_folders/`
         })
     })
 })
 
-export const {useGetFolderQuery} = api
+export const {useGetFilesQuery, useGetFoldersQuery} = api

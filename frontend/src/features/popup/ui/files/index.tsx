@@ -1,10 +1,11 @@
 import styles from './styles.module.scss'
 import {Transition} from "react-transition-group";
-import {ChangeEvent, Dispatch, DragEventHandler, FC, SetStateAction, useEffect, useRef, useState} from "react";
+import {ChangeEvent, Dispatch, DragEventHandler, FC, SetStateAction, useRef, useState} from "react";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {CloseBtn} from "../../../close-btn";
-import {fetchAddFiles, fetchGetFiles} from "../../../../shared/api/files/files.action.ts";
+import {fetchAddFiles} from "../../../../shared/api/files/files.action.ts";
+import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 
 const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>> }> = ({state, stateAction}) => {
 
@@ -13,13 +14,11 @@ const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>>
     const [files, setFiles] = useState<File[]>([])
     const [isDrag, setIsDrag] = useState(false)
 
+    const {current_folder} = useAppSelector(state => state.folder)
+
     const popupRef = useRef<HTMLFormElement>(null)
 
     useOutsideClick(popupRef, stateAction, state)
-
-    useEffect(() => {
-        dispatch(fetchGetFiles())
-    }, [dispatch]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -56,11 +55,15 @@ const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>>
         const data = new FormData()
 
         data.append('file', files[0])
-        // data.append('folder', '2EG7gpaYcyp5LzAwV9ys6j')
+        if (current_folder) {
+            data.append('folder', current_folder)
+        }
         console.log(data)
 
         dispatch(fetchAddFiles(data))
     }
+
+    console.log(current_folder)
 
     return (
         <Transition nodeRef={popupRef} in={state} timeout={300} unmountOnExit={true}>

@@ -2,6 +2,7 @@ import styles from "./styles.module.scss";
 import {FC, HTMLAttributes} from "react";
 import {folderIcon} from "../../../app/assets/images";
 import {IFolderData} from "../../../shared/types";
+import {SizeCalculate} from "../../../shared/lib/size-calculate.ts";
 
 interface IListItem extends HTMLAttributes<HTMLDivElement> {
     item: IFolderData
@@ -16,7 +17,7 @@ const ListItem: FC<IListItem> = ({item, ...props}) => {
                     <h4>{item.title}</h4>
                 </div>
                 <div>
-                    <h5>{item.size} Mb</h5>
+                    <h5>{SizeCalculate(item.size)}</h5>
                     <p>Folder</p>
                 </div>
             </div>

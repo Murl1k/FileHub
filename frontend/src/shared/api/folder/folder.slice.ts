@@ -4,12 +4,14 @@ import {IFolderData} from "../../types";
 
 interface IInitialState {
     data: IFolderData[]
+    current_folder: string
     isLoading: boolean
     error: string
 }
 
 const initialState: IInitialState = {
     data: [],
+    current_folder: '',
     isLoading: true,
     error: ''
 }
@@ -17,7 +19,11 @@ const initialState: IInitialState = {
 export const folderSlice = createSlice({
     name: 'folder',
     initialState,
-    reducers: {},
+    reducers: {
+        getCurrentFolder(state) {
+            state.current_folder = location.pathname.replace('/folder/', '')
+        }
+    },
     extraReducers: builder => {
         builder
             .addCase(fetchAddFolder.pending, state => {
@@ -42,3 +48,5 @@ export const folderSlice = createSlice({
             })
     }
 })
+
+export const {getCurrentFolder} = folderSlice.actions

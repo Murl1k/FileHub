@@ -1,12 +1,11 @@
 import styles from './styles.module.scss';
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
-import {Dispatch, FC, HTMLAttributes, SetStateAction, useRef} from "react";
+import {ChangeEvent, Dispatch, FC, HTMLAttributes, SetStateAction, useRef, useState} from "react";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
-import {SubmitHandler, useForm} from "react-hook-form";
 import {fetchAddFolder} from "../../../../shared/api/folder/folder.action.ts";
-import {IFolder} from "../../../../shared/types";
 import {Transition} from "react-transition-group";
 import {CloseBtn} from "../../../close-btn";
+import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 
 interface IPopup extends HTMLAttributes<HTMLDivElement> {
     state: boolean
@@ -17,27 +16,27 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
 
     const dispatch = useAppDispatch()
 
+    const [title, setTitle] = useState('')
+
+    const {current_folder} = useAppSelector(state => state.folder)
+
     const popupRef = useRef<HTMLFormElement>(null)
 
     useOutsideClick(popupRef, stateAction, state)
 
-    const {
-        register,
-        handleSubmit
-    } = useForm({
-        defaultValues: {
-            title: '',
-            parent_folder: null
-        },
-        mode: 'onChange'
-    })
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.target.value)
+    }
 
-    const onSubmit: SubmitHandler<IFolder> = (values) => {
-        console.log(values)
-
-        dispatch(fetchAddFolder(values))
+    const handleSubmit = () => {
+        dispatch(fetchAddFolder({
+            title,
+            parent_folder: current_folder ? current_folder : null
+        }))
         stateAction(false)
     }
+
+    console.log(current_folder)
 
     return (
         <Transition
@@ -47,20 +46,15 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
         >
             {(animationState) => (
                 <div className={`${styles.popup} ${styles[animationState]}`}>
-                    <form onSubmit={handleSubmit(onSubmit)} ref={popupRef}>
+                    <form ref={popupRef}>
                         <CloseBtn onClick={() => stateAction(!state)}/>
                         <h2>Create a folder</h2>
                         <input
                             type="text"
                             placeholder='title'
-                            {...register('title', {required: true})}
+                            onChange={handleChange}
                         />
-                        <input
-                            type="text"
-                            placeholder='parent folder'
-                            {...register('parent_folder')}
-                        />
-                        <button type='submit'>Create a folder</button>
+                        <button onClick={handleSubmit}>Create a folder</button>
                     </form>
                 </div>
             )}
