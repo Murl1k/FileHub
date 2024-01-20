@@ -1,24 +1,20 @@
 import styles from "./styles.module.scss";
-import {FC, HTMLAttributes} from "react";
-import {folderIcon} from "../../../app/assets/images";
-import {IFolderData} from "../../../shared/types";
+import {FC} from "react";
+import {fileIcon, folderIcon} from "../../../app/assets/images";
+import {IMergedData} from "../../../shared/types";
 import {SizeCalculate} from "../../../shared/lib/size-calculate.ts";
 
-interface IListItem extends HTMLAttributes<HTMLDivElement> {
-    item: IFolderData
-}
-
-const ListItem: FC<IListItem> = ({item, ...props}) => {
+const ListItem: FC<{ item: IMergedData }> = ({item}) => {
     return (
-        <div {...props} className={styles.container}>
+        <div className={styles.container}>
             <div className={styles.item}>
                 <div>
-                    <img height='40' width='40' src={folderIcon} alt="folder"/>
-                    <h4>{item.title}</h4>
+                    <img height='40' width='40' src={item.title ? folderIcon : fileIcon} alt="folder"/>
+                    <h4>{item.title ? item.title : item.name}</h4>
                 </div>
                 <div>
                     <h5>{SizeCalculate(item.size)}</h5>
-                    <p>Folder</p>
+                    <p>{item.title ? 'Folder' : 'File'}</p>
                 </div>
             </div>
         </div>

@@ -1,0 +1,38 @@
+@import '../../../app/assets/styles/vars';
+
+.popup {
+  background-color: #fff;
+  border: 1px solid $gray;
+  border-radius: 12px;
+  position: absolute;
+  right: 35px;
+  top: 35px;
+  z-index: 5;
+  display: grid;
+
+  button {
+    padding: 10px;
+    font-weight: 600;
+    color: #fff;
+
+    &:first-child {
+      border-bottom: 1px solid $gray;
+      border-radius: 12px 12px 0 0;
+      background-color: $primary;;
+    }
+
+    &:last-child {
+      background-color: $secondary;
+      border-radius: 0 0 12px 12px;
+    }
+  }
+}
+
+.privacy {
+  background-color: #fff;
+  padding: 20px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  backdrop-filter: blur(2px);
+}

@@ -1,20 +1,17 @@
 import styles from './styles.module.scss'
 import {Transition} from "react-transition-group";
 import {ChangeEvent, Dispatch, DragEventHandler, FC, SetStateAction, useRef, useState} from "react";
-import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {CloseBtn} from "../../../close-btn";
-import {fetchAddFiles} from "../../../../shared/api/files/files.action.ts";
-import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
+import {useAddFileMutation} from "../../../../shared/api/api.ts";
+import {useParams} from "react-router-dom";
 
 const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>> }> = ({state, stateAction}) => {
-
-    const dispatch = useAppDispatch()
 
     const [files, setFiles] = useState<File[]>([])
     const [isDrag, setIsDrag] = useState(false)
 
-    const {current_folder} = useAppSelector(state => state.folder)
+    const {id} = useParams()
 
     const popupRef = useRef<HTMLFormElement>(null)
 
@@ -42,7 +39,6 @@ const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>>
         setIsDrag(false)
         if (e.dataTransfer.files[0]) {
             setFiles([e.dataTransfer.files[0]])
-            // files.push(...e.dataTransfer.files)
         }
     }
 
@@ -50,20 +46,20 @@ const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>>
         setFiles([])
     }
 
+    const [updateResult] = useAddFileMutation()
+
     const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         const data = new FormData()
 
         data.append('file', files[0])
-        if (current_folder) {
-            data.append('folder', current_folder)
+        if (id) {
+            data.append('folder', id)
         }
         console.log(data)
 
-        dispatch(fetchAddFiles(data))
+        updateResult(data)
     }
-
-    console.log(current_folder)
 
     return (
         <Transition nodeRef={popupRef} in={state} timeout={300} unmountOnExit={true}>
@@ -78,7 +74,6 @@ const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>>
                         onReset={handleReset}
                         onSubmit={handleSubmit}
                         ref={popupRef}
-                        encType="multipart/form-data"
                     >
                         <CloseBtn onClick={() => stateAction(!state)}/>
                         <h3>Upload your files</h3>

@@ -1,34 +1,5 @@
 @import '../../../app/assets/styles/vars';
 
-.item, .itemFooter {
-  transition: background-color .2s ease-in-out;
-}
-
-.item {
-  cursor: pointer;
-  background-color: #fff;
-  border-radius: 24px;
-  user-select: none;
-  color: black;
-
-  &:hover {
-    background-color: $gray;
-
-    .itemFooter {
-      background-color: #e0e0e0;
-    }
-  }
-
-  h4 {
-    margin-bottom: 10px;
-  }
-
-  p {
-    font-size: 14px;
-    color: #8a8989;
-  }
-}
-
 .itemHeadline {
   display: flex;
   justify-content: space-between;
@@ -38,11 +9,21 @@
     filter: brightness(0) saturate(100%) invert(24%) sepia(46%) saturate(2167%) hue-rotate(234deg) brightness(91%) contrast(90%);
   }
 
-  div {
+  > div {
     cursor: pointer;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    height: max-content;
+
+    &:before {
+      content: '';
+      position: absolute;
+      height: 25px;
+      width: 25px;
+      right: 10px;
+      top: 18px;
+    }
 
     span {
       display: block;
@@ -55,9 +36,14 @@
 }
 
 .itemFooter {
-  background: #f0f0f0;
+  background-color: #f0f0f0;
   border-radius: 0 0 24px 24px;
   padding: 20px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
+
+  span {
+    font-weight: 600;
+  }
 }

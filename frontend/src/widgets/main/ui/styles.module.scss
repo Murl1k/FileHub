@@ -63,3 +63,34 @@
     width: calc(100% - 300px);
   }
 }
+
+.item, .item > div:last-child {
+  transition: background-color .2s ease-in-out;
+}
+
+.item {
+  background-color: #fff;
+  border-radius: 24px;
+  position: relative;
+  display: grid;
+  align-content: space-between;
+  cursor: pointer;
+  color: black;
+
+  &:hover {
+    background-color: $gray;
+
+    > div:last-child {
+      background-color: #e0e0e0;
+    }
+  }
+
+  h4 {
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 14px;
+    color: #8a8989;
+  }
+}

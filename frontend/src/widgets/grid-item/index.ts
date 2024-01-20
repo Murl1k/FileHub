@@ -1,3 +1,3 @@
-import GridItem from './ui'
+import GridItem from "./ui";
 
 export {GridItem}

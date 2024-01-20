@@ -1,35 +1,48 @@
-import styles from "./styles.module.scss";
-import {folderIcon} from '../../../app/assets/images'
-import {FC, HTMLAttributes, MouseEventHandler} from "react";
-import {Link} from "react-router-dom";
+import styles from './styles.module.scss'
+import {fileIcon, folderIcon} from "../../../app/assets/images";
 import {SizeCalculate} from "../../../shared/lib/size-calculate.ts";
-import {IFolderData} from "../../../shared/types";
+import {FC, useState} from "react";
+import {DownloadBtn} from "../../../features/download-btn";
+import {IMergedData} from "../../../shared/types";
 
-interface IGridItem extends HTMLAttributes<HTMLAnchorElement> {
-    item: IFolderData
-    handleClick?: MouseEventHandler<HTMLDivElement>
-}
+const GridItem: FC<{ item: IMergedData }> = ({item}) => {
 
-const GridItem: FC<IGridItem> = ({item, handleClick, ...props}) => {
+    const [isOpen, setIsOpen] = useState(false)
+
+    // const popupRef = useRef<HTMLDivElement>(null)
+    //
+    // useOutsideClick(popupRef, setIsOpen, isOpen)
+
     return (
-        <Link {...props} to={`/folder/${item.id}`} className={styles.item}>
+        <>
+            {isOpen && <DownloadBtn item={item}/>}
             <div style={{padding: '20px'}}>
                 <div className={styles.itemHeadline}>
-                    <img height='40' width='40' src={folderIcon} alt="folder"/>
-                    <div onClick={handleClick} style={{height: 'max-content'}}>
+                    <img
+                        height='40'
+                        width='40'
+                        src={item.title ? folderIcon : fileIcon}
+                        alt="item"
+                    />
+                    <div
+                        onClick={(e) => {
+                            e.preventDefault()
+                            setIsOpen(!isOpen)
+                        }}
+                    >
                         <span></span>
                         <span></span>
                         <span></span>
                     </div>
                 </div>
-                <h4>{item.title}</h4>
+                <h4>{item.name ? item.name : item.title}</h4>
                 <p>last updated at<br/>{new Date(item.updated_at).toLocaleString()}</p>
             </div>
             <div className={styles.itemFooter}>
                 <h5>{SizeCalculate(item.size)}</h5>
-                <img src="" alt=""/>
+                <span>{item.is_public ? 'Public' : 'Private'}</span>
             </div>
-        </Link>
+        </>
     );
 };
 

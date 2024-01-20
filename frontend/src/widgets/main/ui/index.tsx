@@ -1,33 +1,36 @@
 import styles from "./styles.module.scss";
 import {GridItem} from "../../grid-item";
 import {ListItem} from "../../list-item";
-import {File} from "../../file";
-import {MouseEventHandler, useEffect, useState} from "react";
-import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {fetchGetFolders} from "../../../shared/api/folder/folder.action.ts";
-import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
+import {useEffect, useState} from "react";
+import {IMergedData} from "../../../shared/types";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {useGetFilesQuery, useGetFoldersQuery} from "../../../shared/api/api.ts";
 
 const Main = () => {
 
-    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
-    const {data} = useAppSelector(state => state.folder)
+    const {id} = useParams<keyof { id: string }>() as { id: string }
 
-    const [view, setView] = useState(false)
     const [isGrid, setIsGrid] = useState(true)
 
-    useEffect(() => {
-        localStorage.getItem('token') && dispatch(fetchGetFolders())
-    }, [dispatch])
+    const {data: folders, isError} = useGetFoldersQuery(id)
+    const {data: files} = useGetFilesQuery(id)
 
-    const handleClick: MouseEventHandler<HTMLDivElement> = (e) => {
-        e.preventDefault()
-        setView(!view)
-    }
+    const mergedData: IMergedData[] = [
+        ...(folders ? folders : []),
+        ...(files ? files : [])
+    ] as IMergedData[]
+
+    useEffect(() => {
+        if (isError) {
+            navigate('/')
+        }
+    }, [isError, navigate]);
 
     return (
         <>
-            <div className={view ? `${styles.container} ${styles.active}` : styles.container}>
+            <div className={styles.container}>
                 <div className={styles.storageHeadline}>
                     <div>
                         <h2>My Cloud</h2>
@@ -71,13 +74,16 @@ const Main = () => {
                 </div>
                 {isGrid ?
                     <div className={styles.grid}>
-                        {data.map((item, i) => (
-                            <GridItem
-                                key={i}
-                                style={view ? {border: '2px solid #583DA1'} : {}}
-                                handleClick={handleClick}
-                                item={item}
-                            />
+                        {mergedData.map(item => (
+                            item.title
+                                ?
+                                <Link key={item.id} to={`/folder/${item.id}`} className={styles.item}>
+                                    <GridItem item={item}/>
+                                </Link>
+                                :
+                                <div key={item.id} className={styles.item}>
+                                    <GridItem item={item}/>
+                                </div>
                         ))}
                     </div>
                     : <div className={styles.list}>
@@ -93,17 +99,20 @@ const Main = () => {
                                 <h4>Type</h4>
                             </div>
                         </div>
-                        {data.map((item, i) => (
-                            <ListItem
-                                key={i}
-                                onClick={() => setView(!view)}
-                                item={item}
-                            />
+                        {mergedData.map(item => (
+                            item.title
+                                ?
+                                <Link key={item.id} to={`/folder/${item.id}`} className={styles.item}>
+                                    <ListItem item={item}/>
+                                </Link>
+                                :
+                                <div key={item.id} className={styles.item}>
+                                    <ListItem item={item}/>
+                                </div>
                         ))}
                     </div>
                 }
             </div>
-            <File view={view}/>
         </>
     );
 };

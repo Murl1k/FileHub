@@ -1,11 +1,10 @@
 import styles from './styles.module.scss';
-import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {ChangeEvent, Dispatch, FC, HTMLAttributes, SetStateAction, useRef, useState} from "react";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
-import {fetchAddFolder} from "../../../../shared/api/folder/folder.action.ts";
 import {Transition} from "react-transition-group";
 import {CloseBtn} from "../../../close-btn";
-import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
+import {useAddFolderMutation} from "../../../../shared/api/api.ts";
+import {useParams} from "react-router-dom";
 
 interface IPopup extends HTMLAttributes<HTMLDivElement> {
     state: boolean
@@ -14,11 +13,9 @@ interface IPopup extends HTMLAttributes<HTMLDivElement> {
 
 const Folder: FC<IPopup> = ({state, stateAction}) => {
 
-    const dispatch = useAppDispatch()
-
     const [title, setTitle] = useState('')
 
-    const {current_folder} = useAppSelector(state => state.folder)
+    const {id} = useParams()
 
     const popupRef = useRef<HTMLFormElement>(null)
 
@@ -28,15 +25,16 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
         setTitle(e.target.value)
     }
 
-    const handleSubmit = () => {
-        dispatch(fetchAddFolder({
+    const [updateResult] = useAddFolderMutation()
+
+    const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        updateResult({
             title,
-            parent_folder: current_folder ? current_folder : null
-        }))
+            parent_folder: id ? id : null
+        })
         stateAction(false)
     }
-
-    console.log(current_folder)
 
     return (
         <Transition
@@ -46,7 +44,7 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
         >
             {(animationState) => (
                 <div className={`${styles.popup} ${styles[animationState]}`}>
-                    <form ref={popupRef}>
+                    <form onSubmit={handleSubmit} ref={popupRef}>
                         <CloseBtn onClick={() => stateAction(!state)}/>
                         <h2>Create a folder</h2>
                         <input
@@ -54,7 +52,7 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
                             placeholder='title'
                             onChange={handleChange}
                         />
-                        <button onClick={handleSubmit}>Create a folder</button>
+                        <button type='submit'>Create a folder</button>
                     </form>
                 </div>
             )}
