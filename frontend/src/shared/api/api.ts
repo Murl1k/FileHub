@@ -15,6 +15,18 @@ export const api = createApi({
             },
             providesTags: ["File"]
         }),
+        addFile: builder.mutation<IFileData[], FormData>({
+            queryFn: async (data) => {
+                return await axiosInstance.post('/cloud_storage/files/', data)
+            },
+            invalidatesTags: ["File"]
+        }),
+        removeFile: builder.mutation<IFileData[], string>({
+            queryFn: async (id) => {
+                return await axiosInstance.delete(`/cloud_storage/files/${id}/`)
+            },
+            invalidatesTags: ["File"]
+        }),
         getFolders: builder.query<IFolderData[], string>({
             queryFn: async (id) => {
                 if (location.pathname === '/') {
@@ -25,16 +37,21 @@ export const api = createApi({
             },
             providesTags: ["Folder"]
         }),
-        addFile: builder.mutation<IFileData[], FormData>({
-            queryFn: async (data) => {
-                return await axiosInstance.post('/cloud_storage/files/', data)
-            },
-            invalidatesTags: ["File"]
-        }),
         addFolder: builder.mutation<IFolderData[], IFolder>({
             queryFn: async (params) => {
-                console.log(params)
                 return await axiosInstance.post('/cloud_storage/folders/', params)
+            },
+            invalidatesTags: ["Folder"]
+        }),
+        removeFolder: builder.mutation<IFolderData[], string>({
+            queryFn: async (id) => {
+                return await axiosInstance.delete(`/cloud_storage/folders/${id}/`)
+            },
+            invalidatesTags: ["Folder"]
+        }),
+        updateFolderPrivacy: builder.mutation<IFolderData[], { id: string, title: string }>({
+            queryFn: async ({id, title}) => {
+                return await axiosInstance.post(`/cloud_storage/folders/${id}/change_privacy/`, title)
             },
             invalidatesTags: ["Folder"]
         })
@@ -45,5 +62,8 @@ export const {
     useGetFilesQuery,
     useGetFoldersQuery,
     useAddFileMutation,
-    useAddFolderMutation
+    useAddFolderMutation,
+    useUpdateFolderPrivacyMutation,
+    useRemoveFolderMutation,
+    useRemoveFileMutation
 } = api

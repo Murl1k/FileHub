@@ -1,13 +1,31 @@
 import styles from "./styles.module.scss";
 import Button from "../../../shared/UIKit/button";
 import {Link} from "react-router-dom";
-import {useState} from "react";
+import {MouseEventHandler, useState} from "react";
 import {Files, Folder} from "../../../features/popup";
 
 const Header = () => {
 
     const [isFolderOpen, setIsFolderOpen] = useState(false)
     const [isFilesOpen, setIsFilesOpen] = useState(false)
+
+    const handleOpenFolder: MouseEventHandler<HTMLButtonElement> = (e) => {
+        e.stopPropagation()
+        setIsFolderOpen(!isFolderOpen)
+
+        if (isFilesOpen) {
+            setIsFilesOpen(false)
+        }
+    }
+
+    const handleOpenFiles: MouseEventHandler<HTMLButtonElement> = (e) => {
+        e.stopPropagation()
+        setIsFilesOpen(!isFilesOpen)
+
+        if (isFolderOpen) {
+            setIsFolderOpen(false)
+        }
+    }
 
     return (
         <>
@@ -16,10 +34,7 @@ const Header = () => {
             <header className={styles.header}>
                 <div style={{display: 'flex', gap: '30px'}}>
                     <div className={styles.addBtn}>
-                        <Button onClick={(e) => {
-                            e.stopPropagation()
-                            setIsFolderOpen(!isFolderOpen)
-                        }}>
+                        <Button onClick={handleOpenFolder}>
                             <svg width="28" height="28" viewBox="0 0 24 20" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -34,10 +49,7 @@ const Header = () => {
                         <p>Add Folder</p>
                     </div>
                     <div className={styles.addBtn}>
-                        <Button onClick={(e) => {
-                            e.stopPropagation()
-                            setIsFilesOpen(!isFilesOpen)
-                        }}>
+                        <Button onClick={handleOpenFiles}>
                             <svg width="28" height="28" viewBox="0 0 64 58" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>

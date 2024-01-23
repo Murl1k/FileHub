@@ -24,12 +24,10 @@ const Username = () => {
     })
 
     const onSubmit: SubmitHandler<IChangeUsername> = async (values) => {
-        try {
-            await dispatch(fetchSetUsername(values))
+        const data = await dispatch(fetchSetUsername(values))
 
+        if (!data.payload) {
             navigate('/')
-        } catch (err) {
-            console.log(err)
         }
     }
 

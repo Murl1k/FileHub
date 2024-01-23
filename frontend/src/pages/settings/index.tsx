@@ -24,7 +24,7 @@ const Settings = () => {
     return (
         <div className={styles.settings}>
             <Breadcrumbs/>
-            <div className={styles.change} style={{display: 'grid', gap: '10px'}}>
+            <div className={styles.change}>
                 <Link to='/security/change-password'>
                     <button>Change password</button>
                 </Link>

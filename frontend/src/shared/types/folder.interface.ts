@@ -1,4 +1,5 @@
 import {IFileData} from "./file.interface.ts";
+import {Dispatch, SetStateAction} from "react";
 
 export interface IFolder {
     title: string
@@ -16,4 +17,9 @@ export interface IFolderData {
 }
 
 export interface IMergedData extends IFileData, IFolderData {
+}
+
+export interface IPopup {
+    state: boolean
+    stateAction: Dispatch<SetStateAction<boolean>>
 }

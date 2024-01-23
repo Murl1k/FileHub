@@ -25,12 +25,10 @@ const Password = () => {
     })
 
     const onSubmit: SubmitHandler<IChangePassword> = async (values) => {
-        try {
-            await dispatch(fetchSetPassword(values))
+        const data = await dispatch(fetchSetPassword(values))
 
+        if (!data.payload) {
             navigate('/')
-        } catch (err) {
-            console.log(err)
         }
     }
 
@@ -65,8 +63,8 @@ const Password = () => {
                         {...register('re_new_password', {required: true})}
                     />
                 </label>
-                <button className={!isValid ? styles.disabledBtn : ''} type='submit' disabled={!isValid}>Change my
-                    password
+                <button className={!isValid ? styles.disabledBtn : ''} type='submit' disabled={!isValid}>
+                    Change my password
                 </button>
             </form>
             <div className={styles.alert}>

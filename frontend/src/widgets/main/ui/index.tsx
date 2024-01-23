@@ -77,11 +77,12 @@ const Main = () => {
                         {mergedData.map(item => (
                             item.title
                                 ?
-                                <Link key={item.id} to={`/folder/${item.id}`} className={styles.item}>
+                                <Link key={item.id} to={`/folder/${item.id}`}
+                                      className={styles.gridItem}>
                                     <GridItem item={item}/>
                                 </Link>
                                 :
-                                <div key={item.id} className={styles.item}>
+                                <div key={item.id} className={styles.gridItem}>
                                     <GridItem item={item}/>
                                 </div>
                         ))}
@@ -94,7 +95,7 @@ const Main = () => {
                             borderBottom: '2px solid #583DA1'
                         }}>
                             <h4>Name</h4>
-                            <div style={{display: 'flex', gap: '40px'}}>
+                            <div style={{display: 'flex', gap: '25px', marginRight: '40px'}}>
                                 <h4>Size</h4>
                                 <h4>Type</h4>
                             </div>
@@ -102,11 +103,11 @@ const Main = () => {
                         {mergedData.map(item => (
                             item.title
                                 ?
-                                <Link key={item.id} to={`/folder/${item.id}`} className={styles.item}>
+                                <Link key={item.id} to={`/folder/${item.id}`} className={styles.listItem}>
                                     <ListItem item={item}/>
                                 </Link>
                                 :
-                                <div key={item.id} className={styles.item}>
+                                <div key={item.id} className={styles.listItem}>
                                     <ListItem item={item}/>
                                 </div>
                         ))}

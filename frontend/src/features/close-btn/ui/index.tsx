@@ -1,9 +1,8 @@
-import styles from './styles.module.scss'
 import {FC} from "react";
 
 const CloseBtn: FC<{ onClick: () => void }> = ({onClick}) => {
     return (
-        <div onClick={onClick} className={styles.close}>
+        <div onClick={onClick} style={{cursor: 'pointer'}}>
             <svg width="25" height="25" viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg"
                  fill="#000000">
                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>

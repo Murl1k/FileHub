@@ -11,13 +11,21 @@
   padding: 40px;
   position: fixed;
 
-  ul {
+  > ul {
     display: grid;
     gap: 10px;
+
+    &:nth-child(2) {
+      a:first-child, a:nth-child(3) {
+        img {
+          filter: invert(51%) sepia(0%) saturate(313%) hue-rotate(158deg) brightness(99%) contrast(81%);
+        }
+      }
+    }
   }
 
   li, img {
-    transition: all 80ms ease-in-out;
+    transition: background-color 80ms ease-in-out;
   }
 
   li {
@@ -29,10 +37,10 @@
     gap: 20px;
 
     &:hover {
-      background: $primary;
+      background-color: $primary;
 
       img {
-        filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7446%) hue-rotate(91deg) brightness(120%) contrast(89%);
+        filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7446%) hue-rotate(91deg) brightness(120%) contrast(89%) !important;
       }
     }
   }
@@ -43,7 +51,7 @@
     background: $primary;
 
     img {
-      filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7446%) hue-rotate(91deg) brightness(120%) contrast(89%);
+      filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7446%) hue-rotate(91deg) brightness(120%) contrast(89%) !important;
     }
   }
 }

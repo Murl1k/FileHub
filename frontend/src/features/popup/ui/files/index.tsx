@@ -1,19 +1,23 @@
 import styles from './styles.module.scss'
-import {Transition} from "react-transition-group";
-import {ChangeEvent, Dispatch, DragEventHandler, FC, SetStateAction, useRef, useState} from "react";
-import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
+import {deleteIcon} from '../../../../app/assets/images/'
+import {ChangeEvent, DragEventHandler, FC, useRef, useState} from "react";
 import {CloseBtn} from "../../../close-btn";
 import {useAddFileMutation} from "../../../../shared/api/api.ts";
 import {useParams} from "react-router-dom";
+import {IPopup} from "../../../../shared/types";
+import {SizeCalculate} from "../../../../shared/lib/size-calculate.ts";
+import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 
-const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>> }> = ({state, stateAction}) => {
+const Files: FC<IPopup> = ({state, stateAction}) => {
 
     const [files, setFiles] = useState<File[]>([])
     const [isDrag, setIsDrag] = useState(false)
 
     const {id} = useParams()
 
-    const popupRef = useRef<HTMLFormElement>(null)
+    const [updateResult] = useAddFileMutation()
+
+    const popupRef = useRef<HTMLDivElement>(null)
 
     useOutsideClick(popupRef, stateAction, state)
 
@@ -46,7 +50,7 @@ const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>>
         setFiles([])
     }
 
-    const [updateResult] = useAddFileMutation()
+    console.log(files)
 
     const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -62,45 +66,61 @@ const Files: FC<{ state: boolean, stateAction: Dispatch<SetStateAction<boolean>>
     }
 
     return (
-        <Transition nodeRef={popupRef} in={state} timeout={300} unmountOnExit={true}>
-            {(state) => (
-                <div className={`${styles.popup} ${styles[state]}`}>
+        <div className={styles.popup}>
+            <div className={styles.container} ref={popupRef}>
+                <div className={styles.popupHeadline}>
+                    <h3>Upload your file</h3>
+                    <CloseBtn onClick={() => stateAction(!state)}/>
+                </div>
+                <div style={{padding: '20px'}}>
                     <form
-                        className={!isDrag ? `${styles.uploadFiles}` : `${styles.uploadFiles} ${styles.drag}`}
                         onDragEnter={handleDrag}
                         onDragOver={handleDrag}
                         onDragLeave={handleLeave}
                         onDrop={handleDrop}
                         onReset={handleReset}
                         onSubmit={handleSubmit}
-                        ref={popupRef}
                     >
-                        <CloseBtn onClick={() => stateAction(!state)}/>
-                        <h3>Upload your files</h3>
-                        <label>
-                            <span>Press to upload</span>
-                            <input name="file" type="file" onChange={handleChange}/>
-                        </label>
+                        <div className={!isDrag ? `${styles.uploadFiles}` : `${styles.uploadFiles} ${styles.drag}`}>
+                            <svg height="40" width="40" viewBox="0 0 1024 1024" className="icon"
+                                 xmlns="http://www.w3.org/2000/svg" fill="#ccc"
+                                 stroke="#ccc">
+                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                                <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <path fill="#ccc"
+                                          d="M544 864V672h128L512 480 352 672h128v192H320v-1.6c-5.376.32-10.496 1.6-16 1.6A240 240 0 0164 624c0-123.136 93.12-223.488 212.608-237.248A239.808 239.808 0 01512 192a239.872 239.872 0 01235.456 194.752c119.488 13.76 212.48 114.112 212.48 237.248a240 240 0 01-240 240c-5.376 0-10.56-1.28-16-1.6v1.6H544z"></path>
+                                </g>
+                            </svg>
+                            <div className={styles.browse}>
+                                <p>Drag and drop or&nbsp;</p>
+                                <label>
+                                    <span>browse</span>
+                                    <input name="file" type="file" onChange={handleChange}/>
+                                </label>
+                            </div>
+                        </div>
                         {files.length > 0 && <div style={{marginTop: '20px'}}>
                             {files.map((item, i) => (
-                                <div style={{
-                                    overflow: 'hidden',
-                                    width: '150px',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap'
-                                }} key={i}>
-                                    {item.name}
+                                <div className={styles.file} key={i}>
+                                    <div>
+                                        <p>{item.name}</p>
+                                        <p>{SizeCalculate(item.size)}</p>
+                                    </div>
+                                    <button type='reset'>
+                                        <img src={deleteIcon} alt="trash"/>
+                                    </button>
                                 </div>
                             ))}
                         </div>}
                         <div className={styles.btns}>
-                            <button type='reset'>Reset</button>
-                            <button type='submit'>Submit</button>
+                            <button onClick={() => stateAction(false)}>Cancel</button>
+                            <button type='submit'>Add files</button>
                         </div>
                     </form>
                 </div>
-            )}
-        </Transition>
+            </div>
+        </div>
     );
 };
 

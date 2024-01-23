@@ -1,15 +1,10 @@
 import styles from './styles.module.scss';
-import {ChangeEvent, Dispatch, FC, HTMLAttributes, SetStateAction, useRef, useState} from "react";
-import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
-import {Transition} from "react-transition-group";
-import {CloseBtn} from "../../../close-btn";
+import {folderIcon} from '../../../../app/assets/images'
+import {ChangeEvent, FC, useRef, useState} from "react";
 import {useAddFolderMutation} from "../../../../shared/api/api.ts";
 import {useParams} from "react-router-dom";
-
-interface IPopup extends HTMLAttributes<HTMLDivElement> {
-    state: boolean
-    stateAction: Dispatch<SetStateAction<boolean>>
-}
+import {IPopup} from "../../../../shared/types";
+import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 
 const Folder: FC<IPopup> = ({state, stateAction}) => {
 
@@ -37,26 +32,22 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
     }
 
     return (
-        <Transition
-            in={state}
-            timeout={300}
-            unmountOnExit={true}
-        >
-            {(animationState) => (
-                <div className={`${styles.popup} ${styles[animationState]}`}>
-                    <form onSubmit={handleSubmit} ref={popupRef}>
-                        <CloseBtn onClick={() => stateAction(!state)}/>
-                        <h2>Create a folder</h2>
-                        <input
-                            type="text"
-                            placeholder='title'
-                            onChange={handleChange}
-                        />
-                        <button type='submit'>Create a folder</button>
-                    </form>
+        <div className={styles.popup}>
+            <form onSubmit={handleSubmit} ref={popupRef}>
+                <label>
+                    <img src={folderIcon} alt="folder"/>
+                    <input
+                        type="text"
+                        placeholder='Title'
+                        onChange={handleChange}
+                    />
+                </label>
+                <div className={styles.btns}>
+                    <button onClick={() => stateAction(false)}>Cancel</button>
+                    <button type='submit'>Create</button>
                 </div>
-            )}
-        </Transition>
+            </form>
+        </div>
     );
 };
 

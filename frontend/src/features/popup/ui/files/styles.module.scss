@@ -8,38 +8,54 @@
   place-items: center;
   width: calc(100% - $nav-width);
   height: 100%;
-  transition: opacity .3s ease-in-out;
-  opacity: 0;
+}
+
+.container {
+  width: 600px;
+  border: 1px solid $gray;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 0 10px 5px #dce1e4;
+}
+
+.popupHeadline {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid $gray;
+  box-shadow: 0 1px 5px #dce1e4;
+}
+
+.uploadFiles, .uploadFiles path {
+  transition: background .1s ease-in-out, fill .1s ease-in-out, border .1s ease-in-out;
 }
 
 .uploadFiles {
-  position: relative;
-  background: #fff;
+  display: grid;
+  place-items: center;
   padding: 40px;
-  border: 1px solid $gray;
-  border-radius: 12px;
-  transition: background .1s ease-in-out;
+  border: 2px dashed $gray;
+  border-radius: 6px;
 
   &.drag {
     border: 3px dashed #0d90be;
     background: #bce7ff;
+
+    path {
+      fill: #0d90be;
+    }
   }
 
-  h3 {
-    margin-bottom: 20px;
-  }
-
-  form {
-    display: grid;
-    gap: 20px;
-    justify-items: center;
+  svg {
+    margin-bottom: 10px;
   }
 
   label {
-    background: $primary;
-    padding: 10px;
-    color: #fff;
-    border-radius: 12px;
+    color: $secondary;
+    margin-top: 2px;
+    border-bottom: 1px solid $secondary;
     cursor: pointer;
   }
 
@@ -50,35 +66,63 @@
   }
 }
 
-.btns {
+.browse {
   display: flex;
-  gap: 10px;
-  margin-top: 20px;
+  align-items: center;
 
-  button {
-    color: #fff;
-    font-weight: 600;
-    padding: 10px 20px;
-    border-radius: 12px;
+  p {
+    color: #808080;
+  }
+}
 
-    &:first-child {
-      background: red;
-    }
+.file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #dce1e4;
+  border-radius: 6px;
+  padding: 10px;
+  background-color: #fafbfd;
+  box-shadow: -1px 2px 5px 1px #dce1e4;
 
-    &:last-child {
-      background: $primary;
+  div {
+    display: grid;
+    gap: 10px;
+
+    p {
+      &:first-child {
+        overflow: hidden;
+        white-space: nowrap;
+        width: 220px;
+        text-overflow: ellipsis;
+      }
+
+      &:last-child {
+        color: #c7c6c6;
+      }
     }
   }
 }
 
-.popup {
-  &.entering,
-  &.entered {
-    opacity: 1;
-  }
+.btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 30px;
+  margin-top: 20px;
 
-  &.exiting,
-  &.exited {
-    opacity: 0;
+  button {
+    font-weight: 600;
+
+    &:first-child {
+      background: #fff;
+      color: #1c87e1;
+    }
+
+    &:last-child {
+      background: $primary;
+      border-radius: 6px;
+      padding: 10px 30px;
+      color: #fff;
+    }
   }
 }

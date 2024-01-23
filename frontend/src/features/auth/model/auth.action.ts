@@ -89,12 +89,12 @@ export const fetchSetUsername = createAsyncThunk(
 
 export const fetchSetPassword = createAsyncThunk(
     'auth/fetchSetPassword',
-    async (params: IChangePassword) => {
+    async (params: IChangePassword, {rejectWithValue}) => {
         try {
             const res = await axiosInstance.post('/users/set_password/', params)
             return res.data
         } catch (err) {
-            console.log(err)
+            return rejectWithValue(err)
         }
     }
 )

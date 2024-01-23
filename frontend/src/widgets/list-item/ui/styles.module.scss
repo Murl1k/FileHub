@@ -14,12 +14,33 @@
   transition: background-color .2s ease-in-out;
   border-radius: 24px;
 
-  &:hover {
-    background-color: #fff;
+  div {
+    div:last-child {
+      cursor: pointer;
+      display: flex;
+      gap: 4px;
+      height: max-content;
+
+      &:before {
+        content: '';
+        position: absolute;
+        height: 25px;
+        width: 25px;
+        right: 17px;
+      }
+
+      span {
+        display: block;
+        border-radius: 50%;
+        width: 4px;
+        height: 4px;
+        background: #c7c3c3;
+      }
+    }
   }
 
-  img {
-    filter: brightness(0) saturate(100%) invert(24%) sepia(46%) saturate(2167%) hue-rotate(234deg) brightness(91%) contrast(90%);
+  &:hover {
+    background-color: #fff;
   }
 
   p {
