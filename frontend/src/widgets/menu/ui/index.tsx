@@ -35,51 +35,51 @@ const Menu = () => {
                 <img height={40} src="/vite.svg" alt="logo"/>
             </Link>
             <ul>
-                <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/'>
-                    <li>
+                <li>
+                    <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/'>
                         <img src={folderIcon} alt="folder"/>
                         <p>My Cloud</p>
-                    </li>
-                </NavLink>
-                <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/shared'>
-                    <li>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/shared'>
                         <img src={sharedIcon} alt="shared"/>
                         <p>Shared</p>
-                    </li>
-                </NavLink>
-                <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/all-files'>
-                    <li>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/all-files'>
                         <img src={fileIcon} alt="file"/>
                         <p>All files</p>
-                    </li>
-                </NavLink>
-                <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/favorites'>
-                    <li>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/favorites'>
                         <img src={favoritesIcon} alt="favorites"/>
                         <p>Favorites</p>
-                    </li>
-                </NavLink>
-                <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/private-files'>
-                    <li>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/private-files'>
                         <img src={privateIcon} alt="private"/>
                         <p>Private files</p>
-                    </li>
-                </NavLink>
-                <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/deleted-files'>
-                    <li>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/deleted-files'>
                         <img src={deleteIcon} alt="delete"/>
                         <p>Deleted files</p>
-                    </li>
-                </NavLink>
+                    </NavLink>
+                </li>
             </ul>
             <ul>
-                <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/help'>
-                    <li>
+                <li>
+                    <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/help'>
                         <img src={helpIcon} alt="help"/>
                         <p>Help & Support</p>
-                    </li>
-                </NavLink>
-                <li style={{cursor: 'pointer'}} onClick={logout}>
+                    </NavLink>
+                </li>
+                <li className={styles.logoutBtn} onClick={logout}>
                     <img src={logoutIcon} alt="logout"/>
                     <p>Log out</p>
                 </li>

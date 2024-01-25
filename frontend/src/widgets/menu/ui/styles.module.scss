@@ -16,7 +16,7 @@
     gap: 10px;
 
     &:nth-child(2) {
-      a:first-child, a:nth-child(3) {
+      li:first-child, li:nth-child(3) {
         img {
           filter: invert(51%) sepia(0%) saturate(313%) hue-rotate(158deg) brightness(99%) contrast(81%);
         }
@@ -24,34 +24,38 @@
     }
   }
 
-  li, img {
+  a, .logoutBtn, img {
     transition: background-color 80ms ease-in-out;
   }
 
-  li {
-    padding: 20px;
-    width: 200px;
-    border-radius: 24px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  ul {
+    a, .logoutBtn {
+      padding: 20px;
+      width: 200px;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
 
-    &:hover {
-      background-color: $primary;
+      &:hover {
+        background-color: $primary;
 
-      img {
-        filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7446%) hue-rotate(91deg) brightness(120%) contrast(89%) !important;
+        img {
+          filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7446%) hue-rotate(91deg) brightness(120%) contrast(89%) !important;
+        }
       }
     }
   }
 }
 
 .active {
-  li {
-    background: $primary;
+  background: $primary;
 
-    img {
-      filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7446%) hue-rotate(91deg) brightness(120%) contrast(89%) !important;
-    }
+  img {
+    filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7446%) hue-rotate(91deg) brightness(120%) contrast(89%) !important;
   }
+}
+
+.logoutBtn {
+  cursor: pointer;
 }

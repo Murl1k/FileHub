@@ -50,8 +50,6 @@ const Files: FC<IPopup> = ({state, stateAction}) => {
         setFiles([])
     }
 
-    console.log(files)
-
     const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         const data = new FormData()

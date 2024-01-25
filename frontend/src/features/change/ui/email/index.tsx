@@ -40,17 +40,11 @@ const Email = () => {
     console.log(isUpdating)
 
     return (
-        <>
-            <label htmlFor="username">
-                <h4>Username</h4>
-                <Input id='username' type="text" placeholder={data?.username} disabled/>
-            </label>
-            <label htmlFor="email">
-                <h4>Email</h4>
-                <Input id='email' type="text" placeholder={data?.email} value={email} onChange={handleEmailChange}/>
-                <button onClick={handleUpdateEmail}>Update email</button>
-            </label>
-        </>
+        <label htmlFor="email">
+            <h4>Email</h4>
+            <Input id='email' type="text" placeholder={data?.email} value={email} onChange={handleEmailChange}/>
+            <button onClick={handleUpdateEmail}>Update email</button>
+        </label>
     );
 };
 

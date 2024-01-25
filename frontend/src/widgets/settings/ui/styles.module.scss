@@ -1,0 +1,36 @@
+@import '../../../app/assets/styles/vars';
+
+.settings {
+  padding: 40px;
+  display: grid;
+  gap: 20px;
+
+  div:not(:last-child) {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    button {
+      background-color: $primary;
+      color: #fff;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+  }
+
+  label {
+    h4 {
+      margin-bottom: 10px;
+    }
+
+    button {
+      margin-left: 20px;
+      font-weight: 600;
+      background-color: $primary;
+      color: #fff;
+      border-radius: 12px;
+      padding: 10px;
+    }
+  }
+}

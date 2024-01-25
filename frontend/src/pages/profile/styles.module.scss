@@ -9,14 +9,9 @@
       margin-bottom: 20px;
     }
   }
-}
-
-.card {
-  display: grid;
-  gap: 40px;
-  justify-items: center;
 
   span {
+    margin: 0 auto 40px auto;
     border: 1px solid $secondary;
     background: #fff;
     border-radius: 50%;
@@ -31,56 +26,55 @@
       width: 50px;
     }
   }
+}
 
-  label {
-    width: 100%;
+.container {
+  background-color: #fff;
+  border-radius: 12px;
+}
 
-    h4 {
-      margin-bottom: 10px;
-    }
+.containerHeadline {
+  position: relative;
+  display: flex;
+  gap: 20px;
+  padding: 10px 40px;
+  border-bottom: 1px solid $gray;
+  user-select: none;
 
-    input {
-      width: 100%;
-      background: #fff;
-    }
+  p {
+    cursor: pointer;
+    font-weight: 600;
+  }
 
-    button {
-      background: #fff;
-      padding: 10px;
-      margin-top: 8px;
-      border-radius: 12px;
-      border: 1px solid $gray;
-    }
+  &:before {
+    transition: transform .2s ease-in-out, width .2s ease-in-out;
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    width: 114px;
+    height: 2px;
+    background-color: $secondary;
   }
 }
 
-.cardBtns {
-  margin-top: 40px;
+.settingsActive {
+  &:before {
+    transform: translateX(134px);
+    width: 57px;
+  }
+}
+
+.backToHomeBtn {
   display: flex;
   justify-content: flex-end;
-  gap: 20px;
+  padding: 0 40px 40px 40px;
 
   button {
+    color: #fff;
+    font-weight: 600;
+    border: 1px solid $gray;
+    background: $primary;
     border-radius: 6px;
     padding: 10px 40px;
-  }
-
-  a {
-    &:first-child {
-      button {
-        color: $primary;
-        font-weight: 600;
-        border: 1px solid $gray;
-        background: #fff;
-      }
-    }
-
-    &:last-child {
-      button {
-        color: #fff;
-        font-weight: 600;
-        background: $primary;
-      }
-    }
   }
 }

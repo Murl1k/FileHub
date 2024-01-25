@@ -1,6 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {
     fetchDeleteMyAccount,
+    fetchGetUsersCount,
     fetchLogin,
     fetchLoginMe,
     fetchLogout,
@@ -16,13 +17,15 @@ interface IInitialState {
     isLoading: boolean
     error: string
     status: string
+    users_count: string
 }
 
 const initialState: IInitialState = {
     data: null,
     isLoading: true,
     error: '',
-    status: ''
+    status: '',
+    users_count: ''
 }
 
 export const authSlice = createSlice({
@@ -113,6 +116,16 @@ export const authSlice = createSlice({
                 state.data.username = action.meta.arg.new_username
             })
             .addCase(fetchSetUsername.rejected, state => {
+                state.error = 'error'
+            })
+            .addCase(fetchGetUsersCount.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(fetchGetUsersCount.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.users_count = action.payload.users_count
+            })
+            .addCase(fetchGetUsersCount.rejected, state => {
                 state.error = 'error'
             })
     }

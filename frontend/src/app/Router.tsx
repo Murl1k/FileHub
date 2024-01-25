@@ -12,15 +12,14 @@ import Help from "../pages/help";
 import SignUp from "../pages/sign-up";
 import SignIn from "../pages/sign-in";
 import Profile from "../pages/profile";
-import Settings from "../pages/settings";
+import NotFound from "../pages/not-found";
 import {DefaultLayout} from "../widgets/default-layout";
 import {PageLayout} from "../widgets/page-layout";
-import {useAppDispatch} from "../shared/lib/hooks/useAppDispatch.ts";
-import {fetchLoginMe} from "../features/auth/model/auth.action.ts";
-import NotFound from "../pages/not-found";
 import {NotAuth} from "../widgets/not-auth";
-import {useAppSelector} from "../shared/lib/hooks/useAppSelector.ts";
+import {fetchLoginMe} from "../features/auth/model/auth.action.ts";
 import {selectIsAuth} from "../features/auth/model/auth.slice.ts";
+import {useAppDispatch} from "../shared/lib/hooks/useAppDispatch.ts";
+import {useAppSelector} from "../shared/lib/hooks/useAppSelector.ts";
 
 const Router = () => {
 
@@ -47,7 +46,6 @@ const Router = () => {
                             <Route path='/deleted-files' element={<DeletedFiles/>}/>
                             <Route path='/help' element={<Help/>}/>
                             <Route path='/profile' element={<Profile/>}/>
-                            <Route path='/profile/settings' element={<Settings/>}/>
                         </> :
                         <>
                             <Route index element={<NotAuth/>}/>

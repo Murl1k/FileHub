@@ -22,6 +22,10 @@ const Main = () => {
         ...(files ? files : [])
     ] as IMergedData[]
 
+    const sortedMergedData = mergedData
+        .sort((a, b) =>
+            new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+
     useEffect(() => {
         if (isError) {
             navigate('/')
@@ -74,7 +78,7 @@ const Main = () => {
                 </div>
                 {isGrid ?
                     <div className={styles.grid}>
-                        {mergedData.map(item => (
+                        {sortedMergedData.map(item => (
                             item.title
                                 ?
                                 <Link key={item.id} to={`/folder/${item.id}`}
@@ -100,7 +104,7 @@ const Main = () => {
                                 <h4>Type</h4>
                             </div>
                         </div>
-                        {mergedData.map(item => (
+                        {sortedMergedData.map(item => (
                             item.title
                                 ?
                                 <Link key={item.id} to={`/folder/${item.id}`} className={styles.listItem}>

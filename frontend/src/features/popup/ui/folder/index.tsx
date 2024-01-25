@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
 import {folderIcon} from '../../../../app/assets/images'
-import {ChangeEvent, FC, useRef, useState} from "react";
+import {ChangeEvent, FC, FormEvent, KeyboardEvent, useRef, useState} from "react";
 import {useAddFolderMutation} from "../../../../shared/api/api.ts";
 import {useParams} from "react-router-dom";
 import {IPopup} from "../../../../shared/types";
@@ -22,13 +22,19 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
 
     const [updateResult] = useAddFolderMutation()
 
-    const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>) => {
         e.preventDefault()
         updateResult({
             title,
             parent_folder: id ? id : null
         })
         stateAction(false)
+    }
+
+    const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.code === 'Enter') {
+            handleSubmit(e)
+        }
     }
 
     return (
@@ -39,7 +45,9 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
                     <input
                         type="text"
                         placeholder='Title'
+                        autoFocus
                         onChange={handleChange}
+                        onKeyDown={onKeyDown}
                     />
                 </label>
                 <div className={styles.btns}>

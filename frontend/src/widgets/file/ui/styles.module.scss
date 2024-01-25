@@ -112,6 +112,6 @@
 
   &.exiting,
   &.exited {
-    transform: translateX(300px);
+    transform: translateX($file-width);
   }
 }

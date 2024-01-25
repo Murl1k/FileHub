@@ -98,3 +98,15 @@ export const fetchSetPassword = createAsyncThunk(
         }
     }
 )
+
+export const fetchGetUsersCount = createAsyncThunk(
+    'auth/fetchGetUsersCount',
+    async (_, {rejectWithValue}) => {
+        try {
+            const res = await axios.get('http://localhost:8000/api/v1/users/count_all/')
+            return res.data
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)

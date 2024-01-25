@@ -1,9 +1,8 @@
 import styles from './styles.module.scss'
-import React, {Dispatch, FC, SetStateAction, useRef, useState} from "react";
+import {Dispatch, FC, MouseEvent, SetStateAction, useRef, useState} from "react";
 import {fetchDownloadFolderAsZip} from "../../../shared/api/folders/folders.action.ts";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {IMergedData} from "../../../shared/types";
-import {folderIcon} from "../../../app/assets/images";
 import {
     useRemoveFileMutation,
     useRemoveFolderMutation,
@@ -21,7 +20,7 @@ const FilesMenu: FC<IDownloadBtn> = ({item, stateAction}) => {
     const dispatch = useAppDispatch()
 
     const [isOpen, setIsOpen] = useState(false)
-    const [isPrivacyOpen, setIsPrivacyOpen] = useState(item.is_public)
+    // const [isPrivacyOpen, setIsPrivacyOpen] = useState(item.is_public)
     const popupRef = useRef<HTMLDivElement>(null)
 
     const [updatePrivacy] = useUpdateFolderPrivacyMutation()
@@ -57,7 +56,7 @@ const FilesMenu: FC<IDownloadBtn> = ({item, stateAction}) => {
         }
     };
 
-    const handleRemove = (e: React.MouseEvent<HTMLButtonElement>, id: string, title: string) => {
+    const handleRemove = (e: MouseEvent<HTMLButtonElement>, id: string, title: string) => {
         e.preventDefault()
 
         if (title) {
@@ -68,40 +67,50 @@ const FilesMenu: FC<IDownloadBtn> = ({item, stateAction}) => {
         stateAction(false)
     }
 
+    const handleChangePrivacy = (id: string, title: string) => {
+        if (title) {
+            updatePrivacy({id: id, title: title})
+        }
+    }
+
     return (
         <>
-            {isOpen &&
-                <div onClick={e => e.preventDefault()} className={styles.changePrivacy}>
-                    <div className={styles.privacy}>
-                        <h2>Change privacy</h2>
-                        <div className={styles.title}>
-                            <img src={folderIcon} alt="folders"/>
-                            <h4>{item.title}</h4>
-                        </div>
-                        <div className={styles.status}>
-                            <span>Status: {String(isPrivacyOpen)}</span>
-                            <button onClick={() => setIsPrivacyOpen(!isPrivacyOpen)}>
-                                <label className={styles.checkboxIos}>
-                                    <input onChange={() => setIsPrivacyOpen(!isPrivacyOpen)} type="checkbox"/>
-                                    <span className={styles.checkboxIosSwitch}></span>
-                                </label>
-                            </button>
-                        </div>
-                        <div className={styles.btns}>
-                            <button onClick={() => setIsOpen(false)}>Cancel</button>
-                            <button onClick={() => updatePrivacy({
-                                id: item.id, title: item.title
-                            })}>Apply
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            }
-            <div ref={popupRef} className={styles.popup}>
-                <button onClick={(e) => {
-                    e.preventDefault();
+
+            <div onClick={e => e.preventDefault()} ref={popupRef} className={styles.popup}>
+                {isOpen &&
+                    // <div onClick={e => e.preventDefault()} className={styles.changePrivacy}>
+                    //     <div className={styles.privacy}>
+                    //         <h2>Change privacy</h2>
+                    //         <div className={styles.title}>
+                    //             <img src={folderIcon} alt="folders"/>
+                    //             <h4>{item.title}</h4>
+                    //         </div>
+                    //         <div className={styles.status}>
+                    //             <span>Status: {String(isPrivacyOpen)}</span>
+                    //             <button onClick={() => setIsPrivacyOpen(!isPrivacyOpen)}>
+                    <label className={styles.checkboxIos}>
+                        <input checked={item.is_public}
+                               onChange={() => handleChangePrivacy(item.id, item.title)}
+                               type="checkbox"
+                        />
+                        <span className={styles.checkboxIosSwitch}></span>
+                    </label>
+                    //             </button>
+                    //         </div>
+                    //         <div className={styles.btns}>
+                    //             <button onClick={() => setIsOpen(false)}>Cancel</button>
+                    //             <button onClick={() => updatePrivacy({
+                    //                 id: item.id, title: item.title
+                    //             })}>
+                    //                 Apply
+                    //             </button>
+                    //         </div>
+                    //     </div>
+                    // </div>
+                }
+                <button onClick={() => {
                     setIsOpen(true)
-                    stateAction(false)
+                    // stateAction(false)
                 }}>
                     Change privacy
                 </button>
