@@ -15,7 +15,7 @@
 .addBtn, .info {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 10px;
 }
 
 .addBtn {
@@ -25,7 +25,7 @@
 }
 
 .info {
-  button {
+  > button {
     &:first-child {
       display: flex;
       align-items: center;
@@ -33,14 +33,10 @@
       border-radius: 24px;
       padding: 10px;
       border: 1px solid #eaeff0;
+      margin-right: 10px;
 
       p {
         color: $primary;
-        font-weight: 600;
-      }
-
-      span {
-        color: #1c1c1c;
         font-weight: 600;
       }
     }

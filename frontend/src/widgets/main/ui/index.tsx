@@ -1,21 +1,32 @@
 import styles from "./styles.module.scss";
 import {GridItem} from "../../grid-item";
 import {ListItem} from "../../list-item";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {IMergedData} from "../../../shared/types";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useGetFilesQuery, useGetFoldersQuery} from "../../../shared/api/api.ts";
+import {Copy} from "../../copy";
+import {useOutsideClick} from "../../../shared/lib/hooks/useClickOutside.ts";
+import {IIsActive} from "../../../shared/types/copy.interface.ts";
 
 const Main = () => {
 
     const navigate = useNavigate()
 
-    const {id} = useParams<keyof { id: string }>() as { id: string }
+    const {id} = useParams() as { id: string }
 
     const [isGrid, setIsGrid] = useState(true)
+    const [isActive, setIsActive] = useState({
+        status: false,
+        id: '',
+        isFolder: false
+    })
 
     const {data: folders, isError} = useGetFoldersQuery(id)
     const {data: files} = useGetFilesQuery(id)
+
+    const copyRef = useRef<HTMLDivElement>(null)
+    useOutsideClick<IIsActive>(copyRef, setIsActive, {status: false, id: '', isFolder: false}, isActive.status)
 
     const mergedData: IMergedData[] = [
         ...(folders ? folders : []),
@@ -40,7 +51,7 @@ const Main = () => {
                         <h2>My Cloud</h2>
                         <p>Sort by: Type</p>
                     </div>
-                    <div>
+                    <div ref={copyRef}>
                         <button className={isGrid ? styles.activeBtn : ''} onClick={() => setIsGrid(true)}>
                             <svg width={16} height={16} viewBox="0 0 28 28" version="1.1"
                                  xmlns="http://www.w3.org/2000/svg"
@@ -74,21 +85,13 @@ const Main = () => {
                                 </g>
                             </svg>
                         </button>
+                        {isActive.status && <Copy isActive={isActive}/>}
                     </div>
                 </div>
                 {isGrid ?
                     <div className={styles.grid}>
                         {sortedMergedData.map(item => (
-                            item.title
-                                ?
-                                <Link key={item.id} to={`/folder/${item.id}`}
-                                      className={styles.gridItem}>
-                                    <GridItem item={item}/>
-                                </Link>
-                                :
-                                <div key={item.id} className={styles.gridItem}>
-                                    <GridItem item={item}/>
-                                </div>
+                            <GridItem key={item.id} item={item} isActive={isActive} setIsActive={setIsActive}/>
                         ))}
                     </div>
                     : <div className={styles.list}>
@@ -105,15 +108,7 @@ const Main = () => {
                             </div>
                         </div>
                         {sortedMergedData.map(item => (
-                            item.title
-                                ?
-                                <Link key={item.id} to={`/folder/${item.id}`} className={styles.listItem}>
-                                    <ListItem item={item}/>
-                                </Link>
-                                :
-                                <div key={item.id} className={styles.listItem}>
-                                    <ListItem item={item}/>
-                                </div>
+                            <ListItem key={item.id} item={item} isActive={isActive} setIsActive={setIsActive}/>
                         ))}
                     </div>
                 }

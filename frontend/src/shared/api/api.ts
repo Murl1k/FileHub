@@ -27,6 +27,12 @@ export const api = createApi({
             },
             invalidatesTags: ["File"]
         }),
+        copyFile: builder.mutation<IFolderData, { id: string, folder: string }>({
+            queryFn: async ({id, folder}) => {
+                return await axiosInstance.post(`/cloud_storage/files/${id}/copy/`, {folder: folder})
+            },
+            invalidatesTags: ["File"]
+        }),
         getFolders: builder.query<IFolderData[], string>({
             queryFn: async (id) => {
                 if (location.pathname === '/') {
@@ -54,6 +60,12 @@ export const api = createApi({
                 return await axiosInstance.post(`/cloud_storage/folders/${id}/change_privacy/`, title)
             },
             invalidatesTags: ["Folder"]
+        }),
+        copyFolder: builder.mutation<IFolderData, { id: string, folder: string }>({
+            queryFn: async ({id, folder}) => {
+                return await axiosInstance.post(`/cloud_storage/folders/${id}/copy/`, {parent_folder: folder})
+            },
+            invalidatesTags: ["Folder"]
         })
     })
 })
@@ -65,5 +77,7 @@ export const {
     useAddFolderMutation,
     useUpdateFolderPrivacyMutation,
     useRemoveFolderMutation,
-    useRemoveFileMutation
+    useRemoveFileMutation,
+    useCopyFolderMutation,
+    useCopyFileMutation
 } = api

@@ -14,7 +14,7 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
 
     const popupRef = useRef<HTMLFormElement>(null)
 
-    useOutsideClick(popupRef, stateAction, state)
+    useOutsideClick<boolean>(popupRef, stateAction, false, state)
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)
@@ -37,6 +37,12 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
         }
     }
 
+    const onKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.code === 'Escape') {
+            stateAction(false)
+        }
+    }
+
     return (
         <div className={styles.popup}>
             <form onSubmit={handleSubmit} ref={popupRef}>
@@ -48,6 +54,7 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
                         autoFocus
                         onChange={handleChange}
                         onKeyDown={onKeyDown}
+                        onKeyUp={onKeyUp}
                     />
                 </label>
                 <div className={styles.btns}>

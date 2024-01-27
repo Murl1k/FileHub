@@ -1,5 +1,5 @@
 import styles from './styles.module.scss'
-import {Dispatch, FC, MouseEvent, SetStateAction, useRef, useState} from "react";
+import {ChangeEvent, Dispatch, FC, MouseEvent, SetStateAction, useRef, useState} from "react";
 import {fetchDownloadFolderAsZip} from "../../../shared/api/folders/folders.action.ts";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {IMergedData} from "../../../shared/types";
@@ -27,11 +27,11 @@ const FilesMenu: FC<IDownloadBtn> = ({item, stateAction}) => {
     const [updateRemoveFolder] = useRemoveFolderMutation()
     const [updateRemoveFile] = useRemoveFileMutation()
 
-    useOutsideClick(popupRef, setIsOpen, isOpen)
+    useOutsideClick<boolean>(popupRef, setIsOpen, false, isOpen)
 
-    const handleDownload = async (e: React.MouseEvent<HTMLButtonElement>, id: string, data: string, title: string) => {
+    const handleDownload = async (e: MouseEvent<HTMLButtonElement>, id: string, data: string, title: string) => {
         try {
-            e.preventDefault()
+            e.stopPropagation()
             let blobData
 
             if (!data) {
@@ -57,7 +57,7 @@ const FilesMenu: FC<IDownloadBtn> = ({item, stateAction}) => {
     };
 
     const handleRemove = (e: MouseEvent<HTMLButtonElement>, id: string, title: string) => {
-        e.preventDefault()
+        e.stopPropagation()
 
         if (title) {
             updateRemoveFolder(id)
@@ -67,7 +67,10 @@ const FilesMenu: FC<IDownloadBtn> = ({item, stateAction}) => {
         stateAction(false)
     }
 
-    const handleChangePrivacy = (id: string, title: string) => {
+    const handleChangePrivacy = (e: ChangeEvent<HTMLInputElement>, id: string, title: string) => {
+        e.preventDefault()
+        e.stopPropagation()
+
         if (title) {
             updatePrivacy({id: id, title: title})
         }
@@ -75,40 +78,40 @@ const FilesMenu: FC<IDownloadBtn> = ({item, stateAction}) => {
 
     return (
         <>
-
-            <div onClick={e => e.preventDefault()} ref={popupRef} className={styles.popup}>
-                {isOpen &&
-                    // <div onClick={e => e.preventDefault()} className={styles.changePrivacy}>
-                    //     <div className={styles.privacy}>
-                    //         <h2>Change privacy</h2>
-                    //         <div className={styles.title}>
-                    //             <img src={folderIcon} alt="folders"/>
-                    //             <h4>{item.title}</h4>
-                    //         </div>
-                    //         <div className={styles.status}>
-                    //             <span>Status: {String(isPrivacyOpen)}</span>
-                    //             <button onClick={() => setIsPrivacyOpen(!isPrivacyOpen)}>
-                    <label className={styles.checkboxIos}>
-                        <input checked={item.is_public}
-                               onChange={() => handleChangePrivacy(item.id, item.title)}
-                               type="checkbox"
-                        />
-                        <span className={styles.checkboxIosSwitch}></span>
-                    </label>
-                    //             </button>
-                    //         </div>
-                    //         <div className={styles.btns}>
-                    //             <button onClick={() => setIsOpen(false)}>Cancel</button>
-                    //             <button onClick={() => updatePrivacy({
-                    //                 id: item.id, title: item.title
-                    //             })}>
-                    //                 Apply
-                    //             </button>
-                    //         </div>
-                    //     </div>
-                    // </div>
-                }
-                <button onClick={() => {
+            {isOpen &&
+                // <div onClick={e => e.preventDefault()} className={styles.changePrivacy}>
+                //     <div className={styles.privacy}>
+                //         <h2>Change privacy</h2>
+                //         <div className={styles.title}>
+                //             <img src={folderIcon} alt="folders"/>
+                //             <h4>{item.title}</h4>
+                //         </div>
+                //         <div className={styles.status}>
+                //             <span>Status: {String(isPrivacyOpen)}</span>
+                //             <button onClick={() => setIsPrivacyOpen(!isPrivacyOpen)}>
+                <label onClick={e => e.stopPropagation()} className={styles.checkboxIos}>
+                    <input checked={item.is_public}
+                           onChange={(e) => handleChangePrivacy(e, item.id, item.title)}
+                           type="checkbox"
+                    />
+                    <span className={styles.checkboxIosSwitch}></span>
+                </label>
+                //             </button>
+                //         </div>
+                //         <div className={styles.btns}>
+                //             <button onClick={() => setIsOpen(false)}>Cancel</button>
+                //             <button onClick={() => updatePrivacy({
+                //                 id: item.id, title: item.title
+                //             })}>
+                //                 Apply
+                //             </button>
+                //         </div>
+                //     </div>
+                // </div>
+            }
+            <div ref={popupRef} className={styles.popup}>
+                <button onClick={(e) => {
+                    e.stopPropagation()
                     setIsOpen(true)
                     // stateAction(false)
                 }}>

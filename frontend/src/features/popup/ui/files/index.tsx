@@ -19,7 +19,7 @@ const Files: FC<IPopup> = ({state, stateAction}) => {
 
     const popupRef = useRef<HTMLDivElement>(null)
 
-    useOutsideClick(popupRef, stateAction, state)
+    useOutsideClick<boolean>(popupRef, stateAction, false, state)
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -68,7 +68,7 @@ const Files: FC<IPopup> = ({state, stateAction}) => {
             <div className={styles.container} ref={popupRef}>
                 <div className={styles.popupHeadline}>
                     <h3>Upload your file</h3>
-                    <CloseBtn onClick={() => stateAction(!state)}/>
+                    <CloseBtn onClick={() => stateAction(false)}/>
                 </div>
                 <div style={{padding: '20px'}}>
                     <form
@@ -79,7 +79,7 @@ const Files: FC<IPopup> = ({state, stateAction}) => {
                         onReset={handleReset}
                         onSubmit={handleSubmit}
                     >
-                        <div className={!isDrag ? `${styles.uploadFiles}` : `${styles.uploadFiles} ${styles.drag}`}>
+                        <div className={!isDrag ? styles.uploadFiles : `${styles.uploadFiles} ${styles.drag}`}>
                             <svg height="40" width="40" viewBox="0 0 1024 1024" className="icon"
                                  xmlns="http://www.w3.org/2000/svg" fill="#ccc"
                                  stroke="#ccc">

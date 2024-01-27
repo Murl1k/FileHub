@@ -1,7 +1,7 @@
+import '../../../app/assets/styles/style.scss'
 import {Menu} from "../../menu";
 import {Header} from "../../header";
 import {Outlet} from "react-router-dom";
-import '../../../app/assets/styles/style.scss'
 
 const DefaultLayout = () => {
     return (

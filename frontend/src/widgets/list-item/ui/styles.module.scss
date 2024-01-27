@@ -1,5 +1,10 @@
 @import '../../../app/assets/styles/vars';
 
+.listItem {
+  position: relative;
+  color: black;
+}
+
 .container {
   border-bottom: 2px solid $primary;
 }
@@ -11,7 +16,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: background-color .2s ease-in-out;
+  transition: background-color .2s ease-in-out, box-shadow .2s ease-in-out;
   border-radius: 24px;
 
   div {
@@ -39,7 +44,7 @@
     }
   }
 
-  &:hover {
+  &:not(.active):hover {
     background-color: #fff;
   }
 
@@ -53,4 +58,9 @@
     align-items: center;
     gap: 20px;
   }
+}
+
+.active {
+  box-shadow: 0 0 5px 2px $primary;
+  background-color: #fff;
 }

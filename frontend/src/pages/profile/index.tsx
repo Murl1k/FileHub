@@ -18,7 +18,7 @@ const Profile = () => {
             <div className={styles.container}>
                 <div
                     className={isActive
-                        ? `${styles.containerHeadline}`
+                        ? styles.containerHeadline
                         : `${styles.containerHeadline} ${styles.settingsActive}`}
                 >
                     <p onClick={() => setIsActive(true)}>
