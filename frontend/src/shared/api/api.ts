@@ -13,7 +13,7 @@ export const api = createApi({
             queryFn: async (id) => {
                 return await axiosInstance.get(`/cloud_storage/files/?folder=${id ? id : ''}`)
             },
-            providesTags: ["File"]
+            providesTags: ["File"],
         }),
         addFile: builder.mutation<IFileData[], FormData>({
             queryFn: async (data) => {
@@ -27,11 +27,10 @@ export const api = createApi({
             },
             invalidatesTags: ["File"]
         }),
-        copyFile: builder.mutation<IFolderData, { id: string, folder: string }>({
+        copyFile: builder.mutation<IFileData[], { id: string, folder: string }>({
             queryFn: async ({id, folder}) => {
                 return await axiosInstance.post(`/cloud_storage/files/${id}/copy/`, {folder: folder})
-            },
-            invalidatesTags: ["File"]
+            }
         }),
         getFolders: builder.query<IFolderData[], string>({
             queryFn: async (id) => {
@@ -61,11 +60,10 @@ export const api = createApi({
             },
             invalidatesTags: ["Folder"]
         }),
-        copyFolder: builder.mutation<IFolderData, { id: string, folder: string }>({
+        copyFolder: builder.mutation<IFolderData[], { id: string, folder: string }>({
             queryFn: async ({id, folder}) => {
                 return await axiosInstance.post(`/cloud_storage/folders/${id}/copy/`, {parent_folder: folder})
-            },
-            invalidatesTags: ["Folder"]
+            }
         })
     })
 })

@@ -1,13 +1,13 @@
 import styles from "./styles.module.scss";
 import {GridItem} from "../../grid-item";
 import {ListItem} from "../../list-item";
-import {useEffect, useRef, useState} from "react";
+import {MouseEvent, useEffect, useRef, useState} from "react";
 import {IMergedData} from "../../../shared/types";
 import {useNavigate, useParams} from "react-router-dom";
 import {useGetFilesQuery, useGetFoldersQuery} from "../../../shared/api/api.ts";
-import {Copy} from "../../copy";
+import {IIsActive, SelectionBar} from "../../../features/selection-bar";
 import {useOutsideClick} from "../../../shared/lib/hooks/useClickOutside.ts";
-import {IIsActive} from "../../../shared/types/copy.interface.ts";
+import {ContextMenuMain} from "../../../features/context-menu";
 
 const Main = () => {
 
@@ -16,17 +16,23 @@ const Main = () => {
     const {id} = useParams() as { id: string }
 
     const [isGrid, setIsGrid] = useState(true)
+    const [contextMenu, setContextMenu] = useState({
+        show: false,
+        x: 0,
+        y: 0
+    })
     const [isActive, setIsActive] = useState({
         status: false,
         id: '',
         isFolder: false
     })
 
-    const {data: folders, isError} = useGetFoldersQuery(id)
-    const {data: files} = useGetFilesQuery(id)
+    const {data: folders, isError, refetch: foldersRefetch} = useGetFoldersQuery(id)
+    const {data: files, refetch: filesRefetch} = useGetFilesQuery(id)
 
-    const copyRef = useRef<HTMLDivElement>(null)
-    useOutsideClick<IIsActive>(copyRef, setIsActive, {status: false, id: '', isFolder: false}, isActive.status)
+    const selectionBarRef = useRef<HTMLDivElement>(null)
+
+    useOutsideClick<IIsActive>(selectionBarRef, setIsActive, {status: false, id: '', isFolder: false}, isActive.status)
 
     const mergedData: IMergedData[] = [
         ...(folders ? folders : []),
@@ -37,6 +43,16 @@ const Main = () => {
         .sort((a, b) =>
             new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
 
+    const handleRightClick = (e: MouseEvent<HTMLDivElement>) => {
+        e.preventDefault()
+
+        setContextMenu({
+            show: true,
+            x: e.pageX,
+            y: e.pageY
+        })
+    }
+
     useEffect(() => {
         if (isError) {
             navigate('/')
@@ -45,13 +61,14 @@ const Main = () => {
 
     return (
         <>
-            <div className={styles.container}>
+            {contextMenu.show && <ContextMenuMain contextMenu={contextMenu} setContextMenu={setContextMenu}/>}
+            <div onContextMenu={handleRightClick} className={styles.container}>
                 <div className={styles.storageHeadline}>
                     <div>
                         <h2>My Cloud</h2>
                         <p>Sort by: Type</p>
                     </div>
-                    <div ref={copyRef}>
+                    <div ref={selectionBarRef}>
                         <button className={isGrid ? styles.activeBtn : ''} onClick={() => setIsGrid(true)}>
                             <svg width={16} height={16} viewBox="0 0 28 28" version="1.1"
                                  xmlns="http://www.w3.org/2000/svg"
@@ -85,7 +102,9 @@ const Main = () => {
                                 </g>
                             </svg>
                         </button>
-                        {isActive.status && <Copy isActive={isActive}/>}
+                        {isActive.status &&
+                            <SelectionBar isActive={isActive} filesRefetch={filesRefetch}
+                                          foldersRefetch={foldersRefetch}/>}
                     </div>
                 </div>
                 {isGrid ?

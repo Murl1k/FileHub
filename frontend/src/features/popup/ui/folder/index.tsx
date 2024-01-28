@@ -3,10 +3,13 @@ import {folderIcon} from '../../../../app/assets/images'
 import {ChangeEvent, FC, FormEvent, KeyboardEvent, useRef, useState} from "react";
 import {useAddFolderMutation} from "../../../../shared/api/api.ts";
 import {useParams} from "react-router-dom";
-import {IPopup} from "../../../../shared/types";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
+import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
+import {IPopup, IPopupAction} from "../../";
 
 const Folder: FC<IPopup> = ({state, stateAction}) => {
+
+    const dispatch = useAppDispatch()
 
     const [title, setTitle] = useState('')
 
@@ -14,7 +17,7 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
 
     const popupRef = useRef<HTMLFormElement>(null)
 
-    useOutsideClick<boolean>(popupRef, stateAction, false, state)
+    useOutsideClick<IPopupAction>(popupRef, dispatch, stateAction(false), state)
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)
@@ -28,7 +31,7 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
             title,
             parent_folder: id ? id : null
         })
-        stateAction(false)
+        dispatch(stateAction(false))
     }
 
     const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -39,13 +42,13 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
 
     const onKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.code === 'Escape') {
-            stateAction(false)
+            dispatch(stateAction(false))
         }
     }
 
     return (
         <div className={styles.popup}>
-            <form onSubmit={handleSubmit} ref={popupRef}>
+            <form onSubmit={handleSubmit} onReset={() => dispatch(stateAction(false))} ref={popupRef}>
                 <label>
                     <img src={folderIcon} alt="folder"/>
                     <input
@@ -58,7 +61,7 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
                     />
                 </label>
                 <div className={styles.btns}>
-                    <button onClick={() => stateAction(false)}>Cancel</button>
+                    <button type='reset'>Cancel</button>
                     <button type='submit'>Create</button>
                 </div>
             </form>

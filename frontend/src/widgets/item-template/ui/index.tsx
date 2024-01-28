@@ -1,6 +1,6 @@
 import {Dispatch, FC, HTMLAttributes, MouseEvent, SetStateAction} from "react";
 import {useNavigate} from "react-router-dom";
-import {IIsActive} from "../../../shared/types/copy.interface.ts";
+import {IIsActive} from "../../../features/selection-bar";
 
 interface IItemTemplate extends HTMLAttributes<HTMLDivElement> {
     itemProps: {

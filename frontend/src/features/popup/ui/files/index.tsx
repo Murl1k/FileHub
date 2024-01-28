@@ -4,11 +4,14 @@ import {ChangeEvent, DragEventHandler, FC, useRef, useState} from "react";
 import {CloseBtn} from "../../../close-btn";
 import {useAddFileMutation} from "../../../../shared/api/api.ts";
 import {useParams} from "react-router-dom";
-import {IPopup} from "../../../../shared/types";
 import {SizeCalculate} from "../../../../shared/lib/size-calculate.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
+import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
+import {IPopup, IPopupAction} from "../../";
 
 const Files: FC<IPopup> = ({state, stateAction}) => {
+
+    const dispatch = useAppDispatch()
 
     const [files, setFiles] = useState<File[]>([])
     const [isDrag, setIsDrag] = useState(false)
@@ -19,7 +22,7 @@ const Files: FC<IPopup> = ({state, stateAction}) => {
 
     const popupRef = useRef<HTMLDivElement>(null)
 
-    useOutsideClick<boolean>(popupRef, stateAction, false, state)
+    useOutsideClick<IPopupAction>(popupRef, dispatch, stateAction(false), state)
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -68,7 +71,7 @@ const Files: FC<IPopup> = ({state, stateAction}) => {
             <div className={styles.container} ref={popupRef}>
                 <div className={styles.popupHeadline}>
                     <h3>Upload your file</h3>
-                    <CloseBtn onClick={() => stateAction(false)}/>
+                    <CloseBtn onClick={() => dispatch(stateAction(false))}/>
                 </div>
                 <div style={{padding: '20px'}}>
                     <form
@@ -112,7 +115,7 @@ const Files: FC<IPopup> = ({state, stateAction}) => {
                             ))}
                         </div>}
                         <div className={styles.btns}>
-                            <button onClick={() => stateAction(false)}>Cancel</button>
+                            <button onClick={() => dispatch(stateAction(false))}>Cancel</button>
                             <button type='submit'>Add files</button>
                         </div>
                     </form>

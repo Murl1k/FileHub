@@ -1,0 +1,25 @@
+@import "../../../../app/assets/styles/vars";
+
+.contextMenu {
+  position: absolute;
+  z-index: 3;
+  background: #fff;
+  border-radius: 12px;
+  display: grid;
+
+  button {
+    padding: 10px;
+    color: #fff;
+    font-weight: 600;
+
+    &:first-child {
+      background-color: $primary;
+      border-radius: 12px 12px 0 0;
+    }
+
+    &:last-child {
+      background-color: $secondary;
+      border-radius: 0 0 12px 12px;
+    }
+  }
+}

@@ -1,36 +1,42 @@
 import styles from "./styles.module.scss";
 import Button from "../../../shared/UIKit/button";
 import {Link} from "react-router-dom";
-import {MouseEventHandler, useState} from "react";
+import {MouseEventHandler} from "react";
 import {Files, Folder} from "../../../features/popup";
 import {UsersCount} from "../../users-count";
+import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
+import {setIsFoldersOpen} from "../../../shared/api/folders/folders.slice.ts";
+import {setIsFilesOpen} from "../../../shared/api/files/files.slice.ts";
+import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 
 const Header = () => {
 
-    const [isFolderOpen, setIsFolderOpen] = useState(false)
-    const [isFilesOpen, setIsFilesOpen] = useState(false)
+    const dispatch = useAppDispatch()
+
+    const {isFoldersOpen} = useAppSelector(state => state.folders)
+    const {isFilesOpen} = useAppSelector(state => state.files)
 
     const handleOpenFolder: MouseEventHandler<HTMLButtonElement> = (e) => {
         e.stopPropagation()
-        setIsFolderOpen(!isFolderOpen)
+        dispatch(setIsFoldersOpen(!isFoldersOpen))
 
         if (isFilesOpen) {
-            setIsFilesOpen(false)
+            dispatch(setIsFilesOpen(false))
         }
     }
 
     const handleOpenFiles: MouseEventHandler<HTMLButtonElement> = (e) => {
         e.stopPropagation()
-        setIsFilesOpen(!isFilesOpen)
+        dispatch(setIsFilesOpen(!isFilesOpen))
 
-        if (isFolderOpen) {
-            setIsFolderOpen(false)
+        if (isFoldersOpen) {
+            dispatch(setIsFoldersOpen(false))
         }
     }
 
     return (
         <>
-            {isFolderOpen && <Folder state={isFolderOpen} stateAction={setIsFolderOpen}/>}
+            {isFoldersOpen && <Folder state={isFoldersOpen} stateAction={setIsFoldersOpen}/>}
             {isFilesOpen && <Files state={isFilesOpen} stateAction={setIsFilesOpen}/>}
             <header className={styles.header}>
                 <div style={{display: 'flex', gap: '30px'}}>

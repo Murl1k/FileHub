@@ -1,24 +1,21 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 interface IInitialState {
-    id: string
-    isFolder: boolean
+    isFoldersOpen: boolean
 }
 
 const initialState: IInitialState = {
-    id: '',
-    isFolder: false
+    isFoldersOpen: false
 }
 
 export const foldersSlice = createSlice({
     name: "folders",
     initialState,
     reducers: {
-        getFolderId: (state, action) => {
-            state.id = action.payload.id
-            state.isFolder = action.payload.isFolder
+        setIsFoldersOpen: (state, action: PayloadAction<boolean>) => {
+            state.isFoldersOpen = action.payload
         }
     }
 })
 
-export const {getFolderId} = foldersSlice.actions
+export const {setIsFoldersOpen} = foldersSlice.actions

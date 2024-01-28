@@ -1,14 +1,18 @@
 import styles from "./styles.module.scss";
-import {FC, useState} from "react";
+import {FC, MouseEvent, useState} from "react";
 import {fileIcon, folderIcon} from "../../../app/assets/images";
 import {SizeCalculate} from "../../../shared/lib/size-calculate.ts";
-import {FilesMenu} from "../../../features/files-menu";
-import {IItem} from "../../../shared/types/copy.interface.ts";
+import {ContextMenuItem} from "../../../features/context-menu";
 import {ItemTemplate} from "../../item-template";
+import {ISelectionBarProps} from "../../../features/selection-bar";
 
-const ListItem: FC<IItem> = ({item, isActive, setIsActive}) => {
+const ListItem: FC<ISelectionBarProps> = ({item, isActive, setIsActive}) => {
 
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState({
+        show: false,
+        x: 0,
+        y: 0
+    })
     const [isClicked, setIsClicked] = useState(false);
 
     const itemProps = {
@@ -19,14 +23,27 @@ const ListItem: FC<IItem> = ({item, isActive, setIsActive}) => {
         setIsActive
     }
 
+    const handleRightClick = (e: MouseEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        setIsOpen({
+            show: !isOpen.show,
+            x: e.pageX,
+            y: e.pageY
+        })
+    }
+
     return (
         <ItemTemplate
             itemProps={itemProps}
             className={styles.listItem}
+            style={!isOpen.x ? {position: 'relative'} : {}}
         >
-            {isOpen && <FilesMenu item={item} stateAction={setIsOpen}/>}
+            {isOpen.show && <ContextMenuItem item={item} state={isOpen} stateAction={setIsOpen}/>}
             <div className={styles.container}>
                 <div
+                    onContextMenu={handleRightClick}
                     className={isClicked && isActive.status && isActive.id === item.id ?
                         `${styles.item} ${styles.active}` :
                         styles.item}
@@ -43,7 +60,11 @@ const ListItem: FC<IItem> = ({item, isActive, setIsActive}) => {
                         <div
                             onClick={(e) => {
                                 e.preventDefault()
-                                setIsOpen(!isOpen)
+                                setIsOpen({
+                                    show: !isOpen.show,
+                                    x: 0,
+                                    y: 0
+                                })
                             }}
                         >
                             <span></span>

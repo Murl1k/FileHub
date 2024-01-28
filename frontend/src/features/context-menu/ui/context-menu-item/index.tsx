@@ -1,33 +1,35 @@
 import styles from './styles.module.scss'
 import {ChangeEvent, Dispatch, FC, MouseEvent, SetStateAction, useRef, useState} from "react";
-import {fetchDownloadFolderAsZip} from "../../../shared/api/folders/folders.action.ts";
-import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {IMergedData} from "../../../shared/types";
+import {fetchDownloadFolderAsZip} from "../../../../shared/api/folders/folders.action.ts";
+import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
+import {IMergedData} from "../../../../shared/types";
 import {
     useRemoveFileMutation,
     useRemoveFolderMutation,
     useUpdateFolderPrivacyMutation
-} from "../../../shared/api/api.ts";
-import {useOutsideClick} from "../../../shared/lib/hooks/useClickOutside.ts";
+} from "../../../../shared/api/api.ts";
+import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
+import {IContextMenu} from "../../index.ts";
 
 interface IDownloadBtn {
     item: IMergedData
-    stateAction: Dispatch<SetStateAction<boolean>>
+    state: IContextMenu
+    stateAction: Dispatch<SetStateAction<IContextMenu>>
 }
 
-const FilesMenu: FC<IDownloadBtn> = ({item, stateAction}) => {
+const ContextMenuItem: FC<IDownloadBtn> = ({item, state, stateAction}) => {
 
     const dispatch = useAppDispatch()
 
     const [isOpen, setIsOpen] = useState(false)
     // const [isPrivacyOpen, setIsPrivacyOpen] = useState(item.is_public)
-    const popupRef = useRef<HTMLDivElement>(null)
+    const contextMenuRef = useRef<HTMLDivElement>(null)
 
     const [updatePrivacy] = useUpdateFolderPrivacyMutation()
     const [updateRemoveFolder] = useRemoveFolderMutation()
     const [updateRemoveFile] = useRemoveFileMutation()
 
-    useOutsideClick<boolean>(popupRef, setIsOpen, false, isOpen)
+    useOutsideClick<IContextMenu>(contextMenuRef, stateAction, {show: false, x: 0, y: 0}, state.show)
 
     const handleDownload = async (e: MouseEvent<HTMLButtonElement>, id: string, data: string, title: string) => {
         try {
@@ -50,7 +52,11 @@ const FilesMenu: FC<IDownloadBtn> = ({item, stateAction}) => {
             window.URL.revokeObjectURL(url)
             document.body.removeChild(a)
 
-            stateAction(false)
+            stateAction({
+                show: false,
+                x: 0,
+                y: 0
+            })
         } catch (err) {
             console.error(err)
         }
@@ -64,7 +70,11 @@ const FilesMenu: FC<IDownloadBtn> = ({item, stateAction}) => {
         } else {
             updateRemoveFile(id)
         }
-        stateAction(false)
+        stateAction({
+            show: false,
+            x: 0,
+            y: 0
+        })
     }
 
     const handleChangePrivacy = (e: ChangeEvent<HTMLInputElement>, id: string, title: string) => {
@@ -109,7 +119,14 @@ const FilesMenu: FC<IDownloadBtn> = ({item, stateAction}) => {
                 //     </div>
                 // </div>
             }
-            <div ref={popupRef} className={styles.popup}>
+            <div
+                ref={contextMenuRef}
+                style={state.x ? {top: `calc(${state.y}px - 83px)`, left: `calc(${state.x}px - 280px)`} : {
+                    top: '40px',
+                    right: '35px'
+                }}
+                className={styles.contextMenu}
+            >
                 <button onClick={(e) => {
                     e.stopPropagation()
                     setIsOpen(true)
@@ -128,4 +145,4 @@ const FilesMenu: FC<IDownloadBtn> = ({item, stateAction}) => {
     );
 };
 
-export default FilesMenu;
+export default ContextMenuItem;

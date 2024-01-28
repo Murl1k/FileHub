@@ -1,14 +1,18 @@
 import styles from './styles.module.scss'
 import {fileIcon, folderIcon} from "../../../app/assets/images";
 import {SizeCalculate} from "../../../shared/lib/size-calculate.ts";
-import {FC, useState} from "react";
-import {FilesMenu} from "../../../features/files-menu";
-import {IItem} from "../../../shared/types/copy.interface.ts";
+import {FC, MouseEvent, useState} from "react";
+import {ContextMenuItem} from "../../../features/context-menu";
 import {ItemTemplate} from "../../item-template";
+import {ISelectionBarProps} from "../../../features/selection-bar";
 
-const GridItem: FC<IItem> = ({item, isActive, setIsActive}) => {
+const GridItem: FC<ISelectionBarProps> = ({item, isActive, setIsActive}) => {
 
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState({
+        show: false,
+        x: 0,
+        y: 0
+    })
     const [isClicked, setIsClicked] = useState(false);
 
     const itemProps = {
@@ -19,16 +23,27 @@ const GridItem: FC<IItem> = ({item, isActive, setIsActive}) => {
         setIsActive
     }
 
-    console.log(isActive)
+    const handleRightClick = (e: MouseEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        setIsOpen({
+            show: !isOpen.show,
+            x: e.pageX,
+            y: e.pageY
+        })
+    }
 
     return (
         <ItemTemplate
+            style={!isOpen.x ? {position: 'relative'} : {}}
+            onContextMenu={handleRightClick}
             itemProps={itemProps}
             className={isClicked && isActive.status && isActive.id === item.id ?
                 `${styles.gridItem} ${styles.active}` :
                 styles.gridItem}
         >
-            {isOpen && <FilesMenu item={item} stateAction={setIsOpen}/>}
+            {isOpen.show && <ContextMenuItem item={item} state={isOpen} stateAction={setIsOpen}/>}
             <div style={{padding: '20px'}}>
                 <div className={styles.itemHeadline}>
                     <img
@@ -40,7 +55,11 @@ const GridItem: FC<IItem> = ({item, isActive, setIsActive}) => {
                     <div
                         onClick={(e) => {
                             e.stopPropagation()
-                            setIsOpen(!isOpen)
+                            setIsOpen({
+                                show: !isOpen.show,
+                                x: 0,
+                                y: 0
+                            })
                         }}
                     >
                         <span></span>

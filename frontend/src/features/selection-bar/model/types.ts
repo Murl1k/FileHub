@@ -1,4 +1,4 @@
-import {IMergedData} from "./folder.interface.ts";
+import {IMergedData} from "../../../shared/types";
 import {Dispatch, SetStateAction} from "react";
 
 export interface IIsActive {
@@ -7,7 +7,7 @@ export interface IIsActive {
     status: boolean
 }
 
-export interface IItem {
+export interface ISelectionBarProps {
     item: IMergedData
     isActive: IIsActive
     setIsActive: Dispatch<SetStateAction<IIsActive>>
