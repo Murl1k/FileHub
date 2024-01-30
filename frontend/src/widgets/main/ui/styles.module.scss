@@ -1,5 +1,13 @@
 @import '../../../app/assets/styles/vars';
 
+.container {
+  width: 100%;
+  height: calc(100vh - $header-height);
+  padding: 40px;
+  transition: width .3s ease-in-out;
+  overflow: auto;
+}
+
 .storageHeadline {
   display: flex;
   align-items: center;
@@ -54,8 +62,23 @@
   gap: 10px;
 }
 
-.container {
-  width: 100%;
-  padding: 40px;
-  transition: width .3s ease-in-out;
+.selectionBar {
+  position: fixed;
+  display: flex;
+  gap: 20px;
+  width: calc(100% - $nav-width);
+  padding: 20px 40px;
+  left: $nav-width;
+  background-color: #fff;
+  border-top: 1px solid $gray;
+  bottom: 0;
+  z-index: 7;
+
+  button {
+    background-color: $primary;
+    border-radius: 12px;
+    padding: 10px 20px;
+    color: #fff;
+    font-weight: 600;
+  }
 }

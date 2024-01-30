@@ -5,7 +5,7 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {IChangePassword} from "../../../../shared/types";
 import {fetchSetPassword} from "../../../auth/model/auth.action.ts";
 
-const Password = () => {
+const UpdatePassword = () => {
 
     const dispatch = useAppDispatch()
 
@@ -33,7 +33,7 @@ const Password = () => {
     }
 
     return (
-        <div className={styles.change}>
+        <div className={styles.update}>
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
                 <h3>Change your password</h3>
                 <label>
@@ -77,4 +77,4 @@ const Password = () => {
     );
 };
 
-export default Password;
+export default UpdatePassword;

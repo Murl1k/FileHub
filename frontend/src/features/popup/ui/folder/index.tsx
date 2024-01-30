@@ -7,7 +7,7 @@ import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {IPopup, IPopupAction} from "../../";
 
-const Folder: FC<IPopup> = ({state, stateAction}) => {
+const FolderPopup: FC<IPopup> = ({state, stateAction}) => {
 
     const dispatch = useAppDispatch()
 
@@ -69,4 +69,4 @@ const Folder: FC<IPopup> = ({state, stateAction}) => {
     );
 };
 
-export default Folder;
+export default FolderPopup;

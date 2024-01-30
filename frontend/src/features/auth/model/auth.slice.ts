@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     fetchDeleteMyAccount,
     fetchGetUsersCount,
@@ -17,7 +17,7 @@ interface IInitialState {
     isLoading: boolean
     error: string
     status: string
-    users_count: string
+    users_count: number
 }
 
 const initialState: IInitialState = {
@@ -25,7 +25,7 @@ const initialState: IInitialState = {
     isLoading: true,
     error: '',
     status: '',
-    users_count: ''
+    users_count: 0
 }
 
 export const authSlice = createSlice({
@@ -37,7 +37,7 @@ export const authSlice = createSlice({
             .addCase(fetchRegister.pending, state => {
                 state.isLoading = true
             })
-            .addCase(fetchRegister.fulfilled, (state, action) => {
+            .addCase(fetchRegister.fulfilled, (state, action: PayloadAction<IUserData>) => {
                 state.isLoading = false
                 state.data = action.payload
             })
@@ -81,7 +81,7 @@ export const authSlice = createSlice({
             .addCase(fetchUpdateMyAccount.pending, state => {
                 state.isLoading = true
             })
-            .addCase(fetchUpdateMyAccount.fulfilled, (state, action) => {
+            .addCase(fetchUpdateMyAccount.fulfilled, (state, action: PayloadAction<{ email: string }>) => {
                 if (!state.data) {
                     return
                 }
@@ -121,7 +121,7 @@ export const authSlice = createSlice({
             .addCase(fetchGetUsersCount.pending, state => {
                 state.isLoading = true
             })
-            .addCase(fetchGetUsersCount.fulfilled, (state, action) => {
+            .addCase(fetchGetUsersCount.fulfilled, (state, action: PayloadAction<{ users_count: number }>) => {
                 state.isLoading = false
                 state.users_count = action.payload.users_count
             })

@@ -1,10 +1,8 @@
 import styles from './styles.module.scss';
 import {Dispatch, FC, MouseEvent, SetStateAction, useRef} from "react";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
-import {IContextMenu} from "../../model/types.ts";
+import {contextMenuPosition, IContextMenu, setIsFilesOpen, setIsFoldersOpen} from "../../";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
-import {setIsFilesOpen} from "../../../../shared/api/files/files.slice.ts";
-import {setIsFoldersOpen} from "../../../../shared/api/folders/folders.slice.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 
 interface IContextMenuMain {
@@ -16,7 +14,7 @@ const ContextMenuMain: FC<IContextMenuMain> = ({contextMenu, setContextMenu}) =>
 
     const dispatch = useAppDispatch()
 
-    const {isFoldersOpen} = useAppSelector(state => state.folders)
+    const {isFoldersOpen} = useAppSelector(state => state.contextMenuMain)
 
     const contextMenuRef = useRef<HTMLDivElement>(null)
 
@@ -49,10 +47,11 @@ const ContextMenuMain: FC<IContextMenuMain> = ({contextMenu, setContextMenu}) =>
     }
 
     return (
-        <div ref={contextMenuRef} className={styles.contextMenu} style={{
-            top: `calc(${contextMenu.y}px - 83px)`,
-            left: `calc(${contextMenu.x}px - 280px)`
-        }}>
+        <div
+            ref={contextMenuRef}
+            className={styles.contextMenu}
+            style={contextMenuPosition(contextMenu.x, contextMenu.y, 83)}
+        >
             <button onClick={handleOpenFolders}>Add folder</button>
             <button onClick={handleOpenFiles}>Add files</button>
         </div>

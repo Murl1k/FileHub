@@ -4,7 +4,7 @@ import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 import {ChangeEvent, useState} from "react";
 import {fetchUpdateMyAccount} from "../../../auth/model/auth.action.ts";
 
-const Email = () => {
+const UpdateEmail = () => {
 
     const dispatch = useAppDispatch()
 
@@ -48,4 +48,4 @@ const Email = () => {
     );
 };
 
-export default Email;
+export default UpdateEmail;

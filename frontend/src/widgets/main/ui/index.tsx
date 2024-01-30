@@ -53,6 +53,21 @@ const Main = () => {
         })
     }
 
+    const selectionBarData = sortedMergedData.map(item => {
+        const selectionProps = {
+            isActive,
+            setIsActive,
+            foldersRefetch,
+            filesRefetch,
+            name: item.name,
+            title: item.title,
+            itemId: item.id,
+            url: item.url
+        }
+
+        return <SelectionBar key={item.id} selectionProps={selectionProps}/>
+    })
+
     useEffect(() => {
         if (isError) {
             navigate('/')
@@ -68,7 +83,7 @@ const Main = () => {
                         <h2>My Cloud</h2>
                         <p>Sort by: Type</p>
                     </div>
-                    <div ref={selectionBarRef}>
+                    <div onClick={e => e.stopPropagation()}>
                         <button className={isGrid ? styles.activeBtn : ''} onClick={() => setIsGrid(true)}>
                             <svg width={16} height={16} viewBox="0 0 28 28" version="1.1"
                                  xmlns="http://www.w3.org/2000/svg"
@@ -102,15 +117,18 @@ const Main = () => {
                                 </g>
                             </svg>
                         </button>
-                        {isActive.status &&
-                            <SelectionBar isActive={isActive} filesRefetch={filesRefetch}
-                                          foldersRefetch={foldersRefetch}/>}
                     </div>
                 </div>
                 {isGrid ?
                     <div className={styles.grid}>
                         {sortedMergedData.map(item => (
-                            <GridItem key={item.id} item={item} isActive={isActive} setIsActive={setIsActive}/>
+                            <GridItem
+                                key={item.id}
+                                item={item}
+                                isActive={isActive}
+                                setIsActive={setIsActive}
+                                isGrid={isGrid}
+                            />
                         ))}
                     </div>
                     : <div className={styles.list}>
@@ -127,8 +145,23 @@ const Main = () => {
                             </div>
                         </div>
                         {sortedMergedData.map(item => (
-                            <ListItem key={item.id} item={item} isActive={isActive} setIsActive={setIsActive}/>
+                            <ListItem
+                                key={item.id}
+                                item={item}
+                                isActive={isActive}
+                                setIsActive={setIsActive}
+                                isGrid={isGrid}
+                            />
                         ))}
+                    </div>
+                }
+                {isActive.status &&
+                    <div
+                        onContextMenu={e => e.stopPropagation()}
+                        ref={selectionBarRef}
+                        className={styles.selectionBar}
+                    >
+                        {selectionBarData}
                     </div>
                 }
             </div>

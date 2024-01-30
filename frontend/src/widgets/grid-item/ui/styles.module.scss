@@ -1,40 +1,5 @@
 @import '../../../app/assets/styles/vars';
 
-.gridItem, .gridItem > div:last-child {
-  transition: background-color .2s ease-in-out, box-shadow .2s ease-in-out;
-}
-
-.gridItem {
-  background-color: #fff;
-  border-radius: 24px;
-  display: grid;
-  align-content: space-between;
-  cursor: pointer;
-  color: black;
-
-  &:not(.active):hover {
-    background-color: $gray;
-    box-shadow: 0 0 5px 2px gray;
-
-    .itemFooter {
-      background-color: #e0e0e0;
-    }
-  }
-
-  h4 {
-    margin-bottom: 10px;
-  }
-
-  p {
-    font-size: 14px;
-    color: #8a8989;
-  }
-}
-
-.active {
-  box-shadow: 0 0 5px 2px $primary;
-}
-
 .itemHeadline {
   display: flex;
   justify-content: space-between;

@@ -36,7 +36,7 @@ const UsersCount = () => {
                           className="ci-primary"></rect>
                 </g>
             </svg>
-            <p>Users count: {users_count}</p>
+            <p>Users count: {Boolean(users_count) && users_count}</p>
         </button>
     );
 };

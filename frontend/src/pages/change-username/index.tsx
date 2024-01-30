@@ -1,8 +1,8 @@
-import {Username} from "../../features/change";
+import {UpdateUsername} from "../../features/update";
 
 const ChangeUsername = () => {
     return (
-        <Username/>
+        <UpdateUsername/>
     );
 };
 

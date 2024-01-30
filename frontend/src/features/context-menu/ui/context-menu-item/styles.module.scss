@@ -6,7 +6,8 @@
   border-radius: 12px;
   position: absolute;
   z-index: 2;
-  display: grid;
+  display: grid !important;
+  gap: 0 !important;
 
   button {
     padding: 10px;

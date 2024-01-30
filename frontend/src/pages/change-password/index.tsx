@@ -1,8 +1,8 @@
-import {Password} from "../../features/change";
+import {UpdatePassword} from "../../features/update";
 
 const ChangePassword = () => {
     return (
-        <Password/>
+        <UpdatePassword/>
     );
 };
 

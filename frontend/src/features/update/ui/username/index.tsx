@@ -5,7 +5,7 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {IChangeUsername} from "../../../../shared/types";
 import {fetchSetUsername} from "../../../auth/model/auth.action.ts";
 
-const Username = () => {
+const UpdateUsername = () => {
 
     const dispatch = useAppDispatch()
 
@@ -32,7 +32,7 @@ const Username = () => {
     }
 
     return (
-        <div className={styles.change}>
+        <div className={styles.update}>
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
                 <h3>Change your username</h3>
                 <label>
@@ -68,4 +68,4 @@ const Username = () => {
     );
 };
 
-export default Username;
+export default UpdateUsername;

@@ -18,6 +18,7 @@
 
 body {
   background: $background;
+  overflow: hidden;
 }
 
 a {
@@ -42,8 +43,6 @@ input {
 }
 
 .main {
-  display: flex;
-  justify-content: space-between;
   position: relative;
   top: $header-height;
   height: 100%;

@@ -2,19 +2,17 @@ import styles from "./styles.module.scss";
 import Button from "../../../shared/UIKit/button";
 import {Link} from "react-router-dom";
 import {MouseEventHandler} from "react";
-import {Files, Folder} from "../../../features/popup";
+import {FilesPopup, FolderPopup} from "../../../features/popup";
 import {UsersCount} from "../../users-count";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {setIsFoldersOpen} from "../../../shared/api/folders/folders.slice.ts";
-import {setIsFilesOpen} from "../../../shared/api/files/files.slice.ts";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
+import {setIsFilesOpen, setIsFoldersOpen} from "../../../features/context-menu";
 
 const Header = () => {
 
     const dispatch = useAppDispatch()
 
-    const {isFoldersOpen} = useAppSelector(state => state.folders)
-    const {isFilesOpen} = useAppSelector(state => state.files)
+    const {isFoldersOpen, isFilesOpen} = useAppSelector(state => state.contextMenuMain)
 
     const handleOpenFolder: MouseEventHandler<HTMLButtonElement> = (e) => {
         e.stopPropagation()
@@ -36,8 +34,8 @@ const Header = () => {
 
     return (
         <>
-            {isFoldersOpen && <Folder state={isFoldersOpen} stateAction={setIsFoldersOpen}/>}
-            {isFilesOpen && <Files state={isFilesOpen} stateAction={setIsFilesOpen}/>}
+            {isFoldersOpen && <FolderPopup state={isFoldersOpen} stateAction={setIsFoldersOpen}/>}
+            {isFilesOpen && <FilesPopup state={isFilesOpen} stateAction={setIsFilesOpen}/>}
             <header className={styles.header}>
                 <div style={{display: 'flex', gap: '30px'}}>
                     <div className={styles.addBtn}>

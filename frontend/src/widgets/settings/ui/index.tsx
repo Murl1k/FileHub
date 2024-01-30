@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
 import {Link} from "react-router-dom";
-import {Email} from "../../../features/change";
+import {UpdateEmail} from "../../../features/update";
 
 const Settings = () => {
     return (
@@ -17,7 +17,7 @@ const Settings = () => {
                     <button>Change username</button>
                 </Link>
             </div>
-            <Email/>
+            <UpdateEmail/>
         </div>
     );
 };

@@ -1,9 +1,5 @@
-import styles from './styles.module.scss';
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {FC} from "react";
-import {useCopyFileMutation, useCopyFolderMutation} from "../../../shared/api/api.ts";
-import {useParams} from "react-router-dom";
-import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
+import {Dispatch, FC, SetStateAction} from "react";
 import {
     BaseQueryFn,
     FetchArgs,
@@ -13,21 +9,42 @@ import {
     QueryDefinition
 } from "@reduxjs/toolkit/query";
 import {IFileData, IFolderData} from "../../../shared/types";
-import {IIsActive} from "../";
-import {getItemId} from "../model/selection-bar.slice.ts";
+import {useCopyFileMutation, useCopyFolderMutation} from "../../../shared/api/api.ts";
+import {useParams} from "react-router-dom";
+import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
+import {getItemId, IIsActive} from "../";
+import {FeatureButtons} from "../../feature-buttons";
 
 interface ISelectionBar {
-    isActive: IIsActive
-    filesRefetch: () => QueryActionCreatorResult<QueryDefinition<string, BaseQueryFn<string |
-        FetchArgs, unknown, FetchBaseQueryError, NonNullable<unknown>, FetchBaseQueryMeta>,
-        "File", IFileData[], "api">>
-    foldersRefetch: () => QueryActionCreatorResult<QueryDefinition<string, BaseQueryFn<string |
-        FetchArgs, unknown, FetchBaseQueryError, NonNullable<unknown>, FetchBaseQueryMeta>,
-        "Folder", IFolderData[], "api">>
+    selectionProps: {
+        isActive: IIsActive
+        setIsActive: Dispatch<SetStateAction<IIsActive>>
+        name: string
+        title: string
+        url: string
+        itemId: string
+        filesRefetch: () => QueryActionCreatorResult<QueryDefinition<string, BaseQueryFn<string |
+            FetchArgs, unknown, FetchBaseQueryError, NonNullable<unknown>, FetchBaseQueryMeta>,
+            "File", IFileData[], "api">>
+        foldersRefetch: () => QueryActionCreatorResult<QueryDefinition<string, BaseQueryFn<string |
+            FetchArgs, unknown, FetchBaseQueryError, NonNullable<unknown>, FetchBaseQueryMeta>,
+            "Folder", IFolderData[], "api">>
+    }
 }
 
 
-const SelectionBar: FC<ISelectionBar> = ({isActive, filesRefetch, foldersRefetch}) => {
+const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
+
+    const {
+        isActive,
+        setIsActive,
+        name,
+        title,
+        url,
+        itemId,
+        filesRefetch,
+        foldersRefetch
+    } = selectionProps
 
     const dispatch = useAppDispatch()
 
@@ -49,20 +66,33 @@ const SelectionBar: FC<ISelectionBar> = ({isActive, filesRefetch, foldersRefetch
             await updateFolderResult({id: folderId, folder: id})
             setTimeout(() => {
                 foldersRefetch()
-            }, 200)
+            }, 250)
         } else {
             await updateFileResult({id: folderId, folder: id})
             setTimeout(() => {
                 filesRefetch()
-            }, 200)
+            }, 250)
         }
     }
 
+    const featureButtonsProps = {
+        title,
+        url,
+        name,
+        id: itemId,
+        stateAction: setIsActive,
+    }
+
     return (
-        <div className={styles.selectionBar}>
-            <button onClick={handleCopy}>Copy</button>
-            <button onClick={handlePaste}>Paste</button>
-        </div>
+        <>
+            {isActive.id === itemId &&
+                <>
+                    <button onClick={handleCopy}>Copy</button>
+                    <button onClick={handlePaste}>Paste</button>
+                    <FeatureButtons featureButtonsProps={featureButtonsProps}/>
+                </>
+            }
+        </>
     );
 };
 

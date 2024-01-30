@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 interface IInitialState {
     id: string
@@ -14,7 +14,7 @@ export const selectionBarSlice = createSlice({
     name: "folders",
     initialState,
     reducers: {
-        getItemId: (state, action) => {
+        getItemId: (state, action: PayloadAction<{ id: string, isFolder: boolean }>) => {
             state.id = action.payload.id
             state.isFolder = action.payload.isFolder
         }

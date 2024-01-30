@@ -2,13 +2,11 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import {authSlice} from "../../../features/auth/model/auth.slice.ts";
 import {api} from "../api.ts";
 import {selectionBarSlice} from "../../../features/selection-bar";
-import {foldersSlice} from "../folders/folders.slice.ts";
-import {filesSlice} from "../files/files.slice.ts";
+import {contextMenuMainSlice} from "../../../features/context-menu";
 
 const rootReducer = combineReducers({
     auth: authSlice.reducer,
-    folders: foldersSlice.reducer,
-    files: filesSlice.reducer,
+    contextMenuMain: contextMenuMainSlice.reducer,
     selectionBar: selectionBarSlice.reducer,
     [api.reducerPath]: api.reducer
 })

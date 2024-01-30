@@ -1,49 +1,24 @@
 import styles from './styles.module.scss'
 import {fileIcon, folderIcon} from "../../../app/assets/images";
 import {SizeCalculate} from "../../../shared/lib/size-calculate.ts";
-import {FC, MouseEvent, useState} from "react";
-import {ContextMenuItem} from "../../../features/context-menu";
-import {ItemTemplate} from "../../item-template";
-import {ISelectionBarProps} from "../../../features/selection-bar";
+import {FC} from "react";
+import {ItemTemplate} from "../../../features/item-template";
+import {IItem} from "../../../shared/types";
 
-const GridItem: FC<ISelectionBarProps> = ({item, isActive, setIsActive}) => {
+const GridItem: FC<IItem> = ({item, isActive, setIsActive, isGrid}) => {
 
-    const [isOpen, setIsOpen] = useState({
-        show: false,
-        x: 0,
-        y: 0
-    })
-    const [isClicked, setIsClicked] = useState(false);
-
-    const itemProps = {
+    const templateProps = {
+        setIsActive,
+        isActive,
+        item,
+        isGrid,
         id: item.id,
         title: item.title,
-        isActiveId: isActive.id,
-        setIsClicked,
-        setIsActive
-    }
-
-    const handleRightClick = (e: MouseEvent<HTMLDivElement>) => {
-        e.preventDefault()
-        e.stopPropagation()
-
-        setIsOpen({
-            show: !isOpen.show,
-            x: e.pageX,
-            y: e.pageY
-        })
+        isActiveId: isActive.id
     }
 
     return (
-        <ItemTemplate
-            style={!isOpen.x ? {position: 'relative'} : {}}
-            onContextMenu={handleRightClick}
-            itemProps={itemProps}
-            className={isClicked && isActive.status && isActive.id === item.id ?
-                `${styles.gridItem} ${styles.active}` :
-                styles.gridItem}
-        >
-            {isOpen.show && <ContextMenuItem item={item} state={isOpen} stateAction={setIsOpen}/>}
+        <ItemTemplate itemProps={templateProps}>
             <div style={{padding: '20px'}}>
                 <div className={styles.itemHeadline}>
                     <img
@@ -52,20 +27,6 @@ const GridItem: FC<ISelectionBarProps> = ({item, isActive, setIsActive}) => {
                         src={item.title ? folderIcon : fileIcon}
                         alt="item"
                     />
-                    <div
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            setIsOpen({
-                                show: !isOpen.show,
-                                x: 0,
-                                y: 0
-                            })
-                        }}
-                    >
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
                 </div>
                 <h4>{item.name ? item.name : item.title}</h4>
                 <p>last updated at<br/>{new Date(item.updated_at).toLocaleString()}</p>

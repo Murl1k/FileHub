@@ -1,15 +1,10 @@
 import styles from './styles.module.scss'
-import {ChangeEvent, Dispatch, FC, MouseEvent, SetStateAction, useRef, useState} from "react";
-import {fetchDownloadFolderAsZip} from "../../../../shared/api/folders/folders.action.ts";
-import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
+import {ChangeEvent, Dispatch, FC, SetStateAction, useRef, useState} from "react";
 import {IMergedData} from "../../../../shared/types";
-import {
-    useRemoveFileMutation,
-    useRemoveFolderMutation,
-    useUpdateFolderPrivacyMutation
-} from "../../../../shared/api/api.ts";
+import {useUpdateFolderPrivacyMutation} from "../../../../shared/api/api.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
-import {IContextMenu} from "../../index.ts";
+import {contextMenuPosition, IContextMenu} from "../../";
+import {FeatureButtons} from "../../../feature-buttons";
 
 interface IDownloadBtn {
     item: IMergedData
@@ -19,63 +14,13 @@ interface IDownloadBtn {
 
 const ContextMenuItem: FC<IDownloadBtn> = ({item, state, stateAction}) => {
 
-    const dispatch = useAppDispatch()
-
     const [isOpen, setIsOpen] = useState(false)
     // const [isPrivacyOpen, setIsPrivacyOpen] = useState(item.is_public)
     const contextMenuRef = useRef<HTMLDivElement>(null)
 
     const [updatePrivacy] = useUpdateFolderPrivacyMutation()
-    const [updateRemoveFolder] = useRemoveFolderMutation()
-    const [updateRemoveFile] = useRemoveFileMutation()
 
     useOutsideClick<IContextMenu>(contextMenuRef, stateAction, {show: false, x: 0, y: 0}, state.show)
-
-    const handleDownload = async (e: MouseEvent<HTMLButtonElement>, id: string, data: string, title: string) => {
-        try {
-            e.stopPropagation()
-            let blobData
-
-            if (!data) {
-                blobData = (await dispatch(fetchDownloadFolderAsZip(id))).payload
-            }
-
-            const url = window.URL.createObjectURL(new Blob([blobData]))
-
-            const a = document.createElement('a')
-            a.href = data ? data : url
-            a.download = data ? title : `${title}.zip`
-
-            document.body.appendChild(a)
-            a.click()
-
-            window.URL.revokeObjectURL(url)
-            document.body.removeChild(a)
-
-            stateAction({
-                show: false,
-                x: 0,
-                y: 0
-            })
-        } catch (err) {
-            console.error(err)
-        }
-    };
-
-    const handleRemove = (e: MouseEvent<HTMLButtonElement>, id: string, title: string) => {
-        e.stopPropagation()
-
-        if (title) {
-            updateRemoveFolder(id)
-        } else {
-            updateRemoveFile(id)
-        }
-        stateAction({
-            show: false,
-            x: 0,
-            y: 0
-        })
-    }
 
     const handleChangePrivacy = (e: ChangeEvent<HTMLInputElement>, id: string, title: string) => {
         e.preventDefault()
@@ -84,6 +29,14 @@ const ContextMenuItem: FC<IDownloadBtn> = ({item, state, stateAction}) => {
         if (title) {
             updatePrivacy({id: id, title: title})
         }
+    }
+
+    const featureButtonsProps = {
+        stateAction,
+        id: item.id,
+        title: item.title,
+        name: item.name,
+        url: item.url
     }
 
     return (
@@ -120,8 +73,18 @@ const ContextMenuItem: FC<IDownloadBtn> = ({item, state, stateAction}) => {
                 // </div>
             }
             <div
+                onContextMenu={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+
+                    return stateAction({
+                        show: false,
+                        x: 0,
+                        y: 0
+                    })
+                }}
                 ref={contextMenuRef}
-                style={state.x ? {top: `calc(${state.y}px - 83px)`, left: `calc(${state.x}px - 280px)`} : {
+                style={state.x ? contextMenuPosition(state.x, state.y, 118) : {
                     top: '40px',
                     right: '35px'
                 }}
@@ -134,12 +97,7 @@ const ContextMenuItem: FC<IDownloadBtn> = ({item, state, stateAction}) => {
                 }}>
                     Change privacy
                 </button>
-                <button onClick={(e) => handleDownload(e, item.id, item.url, item.title ? item.title : item.name)}>
-                    Download
-                </button>
-                <button onClick={(e) => handleRemove(e, item.id, item.title)}>
-                    Delete
-                </button>
+                <FeatureButtons featureButtonsProps={featureButtonsProps}/>
             </div>
         </>
     );
