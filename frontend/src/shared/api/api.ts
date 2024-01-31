@@ -1,6 +1,7 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {IFileData, IFolder, IFolderData} from "../types";
 import axiosInstance from "./axiosInstance.ts";
+import {toast} from "react-toastify";
 
 export const api = createApi({
     reducerPath: 'api',
@@ -17,19 +18,34 @@ export const api = createApi({
         }),
         addFile: builder.mutation<IFileData[], FormData>({
             queryFn: async (data) => {
-                return await axiosInstance.post('/cloud_storage/files/', data)
+                try {
+                    const res = await axiosInstance.post('/cloud_storage/files/', data)
+                    return res.data
+                } catch (err) {
+                    return toast.error(err.message)
+                }
             },
             invalidatesTags: ["File"]
         }),
         removeFile: builder.mutation<IFileData[], string>({
             queryFn: async (id) => {
-                return await axiosInstance.delete(`/cloud_storage/files/${id}/`)
+                try {
+                    const res = await axiosInstance.delete(`/cloud_storage/files/${id}/`)
+                    return res.data
+                } catch (err) {
+                    return toast.error(err.message)
+                }
             },
             invalidatesTags: ["File"]
         }),
         copyFile: builder.mutation<IFileData[], { id: string, folder: string }>({
             queryFn: async ({id, folder}) => {
-                return await axiosInstance.post(`/cloud_storage/files/${id}/copy/`, {folder: folder})
+                try {
+                    const res = await axiosInstance.post(`/cloud_storage/files/${id}/copy/`, {folder: folder})
+                    return res.data
+                } catch (err) {
+                    return toast.error(err.message)
+                }
             }
         }),
         getFolders: builder.query<IFolderData[], string>({
@@ -44,25 +60,45 @@ export const api = createApi({
         }),
         addFolder: builder.mutation<IFolderData[], IFolder>({
             queryFn: async (params) => {
-                return await axiosInstance.post('/cloud_storage/folders/', params)
+                try {
+                    const res = await axiosInstance.post('/cloud_storage/folders/', params)
+                    return res.data
+                } catch (err) {
+                    return toast.error(err.message)
+                }
             },
             invalidatesTags: ["Folder"]
         }),
         removeFolder: builder.mutation<IFolderData[], string>({
             queryFn: async (id) => {
-                return await axiosInstance.delete(`/cloud_storage/folders/${id}/`)
+                try {
+                    const res = await axiosInstance.delete(`/cloud_storage/folders/${id}/`)
+                    return res.data
+                } catch (err) {
+                    return toast.error(err.message)
+                }
             },
             invalidatesTags: ["Folder"]
         }),
         updateFolderPrivacy: builder.mutation<IFolderData[], { id: string, title: string }>({
             queryFn: async ({id, title}) => {
-                return await axiosInstance.post(`/cloud_storage/folders/${id}/change_privacy/`, title)
+                try {
+                    const res = await axiosInstance.post(`/cloud_storage/folders/${id}/change_privacy/`, title)
+                    return res.data
+                } catch (err) {
+                    return toast.error(err.message)
+                }
             },
             invalidatesTags: ["Folder"]
         }),
         copyFolder: builder.mutation<IFolderData[], { id: string, folder: string }>({
             queryFn: async ({id, folder}) => {
-                return await axiosInstance.post(`/cloud_storage/folders/${id}/copy/`, {parent_folder: folder})
+                try {
+                    const res = await axiosInstance.post(`/cloud_storage/folders/${id}/copy/`, {parent_folder: folder})
+                    return res.data
+                } catch (err) {
+                    return toast.error(err.message)
+                }
             }
         })
     })

@@ -6,13 +6,13 @@ import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {contextMenuPosition, IContextMenu} from "../../";
 import {FeatureButtons} from "../../../feature-buttons";
 
-interface IDownloadBtn {
+interface IContextMenuItem {
     item: IMergedData
     state: IContextMenu
     stateAction: Dispatch<SetStateAction<IContextMenu>>
 }
 
-const ContextMenuItem: FC<IDownloadBtn> = ({item, state, stateAction}) => {
+const ContextMenuItem: FC<IContextMenuItem> = ({item, state, stateAction}) => {
 
     const [isOpen, setIsOpen] = useState(false)
     // const [isPrivacyOpen, setIsPrivacyOpen] = useState(item.is_public)
@@ -52,7 +52,9 @@ const ContextMenuItem: FC<IDownloadBtn> = ({item, state, stateAction}) => {
                 //         <div className={styles.status}>
                 //             <span>Status: {String(isPrivacyOpen)}</span>
                 //             <button onClick={() => setIsPrivacyOpen(!isPrivacyOpen)}>
-                <label onClick={e => e.stopPropagation()} className={styles.checkboxIos}>
+                <label onClick={e => {
+                    e.stopPropagation()
+                }} className={styles.checkboxIos}>
                     <input checked={item.is_public}
                            onChange={(e) => handleChangePrivacy(e, item.id, item.title)}
                            type="checkbox"

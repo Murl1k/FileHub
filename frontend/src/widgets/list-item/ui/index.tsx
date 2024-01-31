@@ -12,8 +12,6 @@ const ListItem: FC<IItem> = ({item, isActive, setIsActive, isGrid}) => {
         isActive,
         item,
         isGrid,
-        id: item.id,
-        title: item.title,
         isActiveId: isActive.id
     }
 

@@ -7,8 +7,6 @@ import {IMergedData} from "../../../shared/types";
 
 interface IItemTemplate extends HTMLAttributes<HTMLDivElement> {
     itemProps: {
-        id: string
-        title: string
         isActive: IIsActive
         isGrid: boolean
         setIsActive: Dispatch<SetStateAction<IIsActive>>
@@ -19,8 +17,6 @@ interface IItemTemplate extends HTMLAttributes<HTMLDivElement> {
 const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
 
     const {
-        id,
-        title,
         isActive,
         isGrid,
         setIsActive,
@@ -51,14 +47,14 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
         e.stopPropagation()
         setIsClicked(true);
 
-        if (isActive.id !== id) {
-            setIsActive({status: true, id: id, isFolder: Boolean(title)})
+        if (isActive.id !== item.id) {
+            setIsActive({status: true, id: item.id, isFolder: Boolean(item.title)})
         }
     };
 
     const handleDoubleClick = () => {
-        if (title) {
-            navigate(`/folder/${id}`)
+        if (item.title) {
+            navigate(`/folder/${item.id}`)
         }
     };
 
