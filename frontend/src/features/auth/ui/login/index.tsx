@@ -25,10 +25,12 @@ const Login = () => {
     const onSubmit: SubmitHandler<IUser> = async (values) => {
         try {
             const data = await dispatch(fetchLogin(values))
-            localStorage.setItem('token', data.payload.auth_token)
-            dispatch(fetchLoginMe())
 
-            navigate('/')
+            if (typeof data.payload === "object") {
+                dispatch(fetchLoginMe())
+                localStorage.setItem('token', data.payload.auth_token)
+                navigate('/')
+            }
         } catch (err) {
             console.log(err)
         }

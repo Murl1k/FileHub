@@ -39,17 +39,19 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
                 blobData = (await dispatch(fetchDownloadFolderAsZip(id))).payload
             }
 
-            const url = window.URL.createObjectURL(new Blob([blobData]))
+            if (blobData || data) {
+                const url = window.URL.createObjectURL(new Blob([blobData]))
 
-            const a = document.createElement('a')
-            a.href = data ? data : url
-            a.download = data ? title : `${title}.zip`
+                const a = document.createElement('a')
+                a.href = data ? data : url
+                a.download = data ? title : `${title}.zip`
 
-            document.body.appendChild(a)
-            a.click()
+                document.body.appendChild(a)
+                a.click()
 
-            window.URL.revokeObjectURL(url)
-            document.body.removeChild(a)
+                window.URL.revokeObjectURL(url)
+                document.body.removeChild(a)
+            }
         } catch (err) {
             console.error(err)
         }

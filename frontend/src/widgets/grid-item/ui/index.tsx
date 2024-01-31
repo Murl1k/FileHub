@@ -17,7 +17,7 @@ const GridItem: FC<IItem> = ({item, isActive, setIsActive, isGrid}) => {
 
     return (
         <ItemTemplate itemProps={templateProps}>
-            <div style={{padding: '20px'}}>
+            <div className={styles.itemInfo}>
                 <div className={styles.itemHeadline}>
                     <img
                         height='40'

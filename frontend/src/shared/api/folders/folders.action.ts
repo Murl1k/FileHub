@@ -9,7 +9,7 @@ export const fetchDownloadFolderAsZip = createAsyncThunk(
             const res = await axiosInstance.get(`/cloud_storage/folders/${id}/download_as_zip/`, {responseType: "blob"})
             return res.data
         } catch (err) {
-            toast.error(err.message)
+            return toast.error(err.message)
         }
     }
 )

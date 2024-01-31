@@ -22,7 +22,7 @@ export const api = createApi({
                     const res = await axiosInstance.post('/cloud_storage/files/', data)
                     return res.data
                 } catch (err) {
-                    return toast.error(err.message)
+                    return toast.error(err.response.data.file[0])
                 }
             },
             invalidatesTags: ["File"]
@@ -33,7 +33,7 @@ export const api = createApi({
                     const res = await axiosInstance.delete(`/cloud_storage/files/${id}/`)
                     return res.data
                 } catch (err) {
-                    return toast.error(err.message)
+                    return toast.error(err.response.data.detail)
                 }
             },
             invalidatesTags: ["File"]
@@ -44,7 +44,7 @@ export const api = createApi({
                     const res = await axiosInstance.post(`/cloud_storage/files/${id}/copy/`, {folder: folder})
                     return res.data
                 } catch (err) {
-                    return toast.error(err.message)
+                    return toast.error(err.response.data.detail)
                 }
             }
         }),
@@ -64,7 +64,7 @@ export const api = createApi({
                     const res = await axiosInstance.post('/cloud_storage/folders/', params)
                     return res.data
                 } catch (err) {
-                    return toast.error(err.message)
+                    return toast.error(err.response.data.title[0])
                 }
             },
             invalidatesTags: ["Folder"]
@@ -75,7 +75,7 @@ export const api = createApi({
                     const res = await axiosInstance.delete(`/cloud_storage/folders/${id}/`)
                     return res.data
                 } catch (err) {
-                    return toast.error(err.message)
+                    return toast.error(err.response.data.detail)
                 }
             },
             invalidatesTags: ["Folder"]
@@ -97,7 +97,7 @@ export const api = createApi({
                     const res = await axiosInstance.post(`/cloud_storage/folders/${id}/copy/`, {parent_folder: folder})
                     return res.data
                 } catch (err) {
-                    return toast.error(err.message)
+                    return toast.error(err.response.data.detail)
                 }
             }
         })

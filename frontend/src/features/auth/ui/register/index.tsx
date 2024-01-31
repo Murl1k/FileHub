@@ -33,15 +33,17 @@ const Register = () => {
                 return alert('Passwords dont match')
             }
 
-            await dispatch(fetchRegister(values))
-            const data = await dispatch(fetchLogin({
-                password: values.password,
-                username: values.username
-            }))
-            dispatch(fetchLoginMe())
+            const register = await dispatch(fetchRegister(values))
 
-            localStorage.setItem('token', data.payload.auth_token)
-            navigate('/')
+            if (typeof register.payload === "object") {
+                const data = await dispatch(fetchLogin({
+                    password: values.password,
+                    username: values.username
+                }))
+                dispatch(fetchLoginMe())
+                navigate('/')
+                localStorage.setItem('token', data.payload.auth_token)
+            }
         } catch (err) {
             console.log(err)
         }

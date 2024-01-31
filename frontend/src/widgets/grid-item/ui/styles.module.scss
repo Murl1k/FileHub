@@ -1,5 +1,16 @@
 @import '../../../app/assets/styles/vars';
 
+.itemInfo {
+  padding: 20px;
+
+  h4 {
+    overflow: hidden;
+    width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 .itemHeadline {
   display: flex;
   justify-content: space-between;

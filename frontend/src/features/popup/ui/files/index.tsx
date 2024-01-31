@@ -53,7 +53,7 @@ const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
         setFiles([])
     }
 
-    const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         const data = new FormData()
 
@@ -63,7 +63,8 @@ const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
         }
         console.log(data)
 
-        updateResult(data)
+        await updateResult(data)
+        dispatch(stateAction(false))
     }
 
     return (
