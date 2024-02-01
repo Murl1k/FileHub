@@ -1,19 +1,11 @@
+import styles from "./styles.module.scss";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {Dispatch, FC, SetStateAction} from "react";
-import {
-    BaseQueryFn,
-    FetchArgs,
-    FetchBaseQueryError,
-    FetchBaseQueryMeta,
-    QueryActionCreatorResult,
-    QueryDefinition
-} from "@reduxjs/toolkit/query";
-import {IFileData, IFolderData} from "../../../shared/types";
-import {useCopyFileMutation, useCopyFolderMutation} from "../../../shared/api/api.ts";
-import {useParams} from "react-router-dom";
+import {Dispatch, FC, SetStateAction, useRef} from "react";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {getItemId, IIsActive} from "../";
 import {FeatureButtons} from "../../feature-buttons";
+import {useOutsideClick} from "../../../shared/lib/hooks/useClickOutside.ts";
+import {PasteButton} from "../../paste-button";
 
 interface ISelectionBar {
     selectionProps: {
@@ -23,12 +15,6 @@ interface ISelectionBar {
         title: string
         url: string
         itemId: string
-        filesRefetch: () => QueryActionCreatorResult<QueryDefinition<string, BaseQueryFn<string |
-            FetchArgs, unknown, FetchBaseQueryError, NonNullable<unknown>, FetchBaseQueryMeta>,
-            "File", IFileData[], "api">>
-        foldersRefetch: () => QueryActionCreatorResult<QueryDefinition<string, BaseQueryFn<string |
-            FetchArgs, unknown, FetchBaseQueryError, NonNullable<unknown>, FetchBaseQueryMeta>,
-            "Folder", IFolderData[], "api">>
     }
 }
 
@@ -41,37 +27,25 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
         name,
         title,
         url,
-        itemId,
-        filesRefetch,
-        foldersRefetch
+        itemId
     } = selectionProps
 
     const dispatch = useAppDispatch()
 
-    const {id} = useParams() as { id: string }
+    const selectionBarRef = useRef<HTMLDivElement>(null)
 
-    const {isFolder, id: folderId} = useAppSelector(state => state.selectionBar)
+    useOutsideClick<IIsActive>(selectionBarRef, setIsActive, {status: false, id: '', isFolder: false}, isActive.status)
 
-    const [updateFolderResult] = useCopyFolderMutation()
-    const [updateFileResult] = useCopyFileMutation()
+    const {id: objectId} = useAppSelector(state => state.selectionBar)
 
     const handleCopy = () => {
-        if (folderId !== isActive.id) {
+        if (objectId !== isActive.id) {
             dispatch(getItemId({id: isActive.id, isFolder: isActive.isFolder}))
-        }
-    }
-
-    const handlePaste = async () => {
-        if (isFolder) {
-            await updateFolderResult({id: folderId, folder: id})
-            setTimeout(() => {
-                foldersRefetch()
-            }, 250)
-        } else {
-            await updateFileResult({id: folderId, folder: id})
-            setTimeout(() => {
-                filesRefetch()
-            }, 250)
+            setIsActive({
+                status: false,
+                id: '',
+                isFolder: false
+            })
         }
     }
 
@@ -84,15 +58,15 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
     }
 
     return (
-        <>
-            {isActive.id === itemId &&
-                <>
-                    <button onClick={handleCopy}>Copy</button>
-                    <button onClick={handlePaste}>Paste</button>
-                    <FeatureButtons featureButtonsProps={featureButtonsProps}/>
-                </>
-            }
-        </>
+        <div
+            onContextMenu={e => e.stopPropagation()}
+            ref={selectionBarRef}
+            className={styles.selectionBar}
+        >
+            <button onClick={handleCopy}>Copy</button>
+            <PasteButton/>
+            <FeatureButtons featureButtonsProps={featureButtonsProps}/>
+        </div>
     );
 };
 

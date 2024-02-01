@@ -1,12 +1,11 @@
 import styles from "./styles.module.scss";
 import {GridItem} from "../../grid-item";
 import {ListItem} from "../../list-item";
-import {MouseEvent, useEffect, useRef, useState} from "react";
+import {MouseEvent, useEffect, useState} from "react";
 import {IMergedData} from "../../../shared/types";
 import {useNavigate, useParams} from "react-router-dom";
 import {useGetFilesQuery, useGetFoldersQuery} from "../../../shared/api/api.ts";
-import {IIsActive, SelectionBar} from "../../../features/selection-bar";
-import {useOutsideClick} from "../../../shared/lib/hooks/useClickOutside.ts";
+import {SelectionBar} from "../../../features/selection-bar";
 import {ContextMenuMain} from "../../../features/context-menu";
 
 const Main = () => {
@@ -27,12 +26,8 @@ const Main = () => {
         isFolder: false
     })
 
-    const {data: folders, isError, refetch: foldersRefetch} = useGetFoldersQuery(id)
-    const {data: files, refetch: filesRefetch} = useGetFilesQuery(id)
-
-    const selectionBarRef = useRef<HTMLDivElement>(null)
-
-    useOutsideClick<IIsActive>(selectionBarRef, setIsActive, {status: false, id: '', isFolder: false}, isActive.status)
+    const {data: folders, isError} = useGetFoldersQuery(id)
+    const {data: files} = useGetFilesQuery(id)
 
     const mergedData: IMergedData[] = [
         ...(folders ? folders : []),
@@ -43,6 +38,8 @@ const Main = () => {
         .sort((a, b) =>
             new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
 
+    const selectionBarData = sortedMergedData.filter(item => item.id === isActive.id)
+
     const handleRightClick = (e: MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
 
@@ -52,21 +49,6 @@ const Main = () => {
             y: e.pageY
         })
     }
-
-    const selectionBarData = sortedMergedData.map(item => {
-        const selectionProps = {
-            isActive,
-            setIsActive,
-            foldersRefetch,
-            filesRefetch,
-            name: item.name,
-            title: item.title,
-            itemId: item.id,
-            url: item.url
-        }
-
-        return <SelectionBar key={item.id} selectionProps={selectionProps}/>
-    })
 
     useEffect(() => {
         if (isError) {
@@ -156,13 +138,18 @@ const Main = () => {
                     </div>
                 }
                 {isActive.status &&
-                    <div
-                        onContextMenu={e => e.stopPropagation()}
-                        ref={selectionBarRef}
-                        className={styles.selectionBar}
-                    >
-                        {selectionBarData}
-                    </div>
+                    selectionBarData.map(item => {
+                        const selectionProps = {
+                            isActive,
+                            setIsActive,
+                            name: item.name,
+                            title: item.title,
+                            itemId: item.id,
+                            url: item.url
+                        }
+
+                        return <SelectionBar key={item.id} selectionProps={selectionProps}/>
+                    })
                 }
             </div>
         </>

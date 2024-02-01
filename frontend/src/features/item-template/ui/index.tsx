@@ -55,6 +55,11 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
     const handleDoubleClick = () => {
         if (item.title) {
             navigate(`/folder/${item.id}`)
+            setIsActive({
+                status: false,
+                id: '',
+                isFolder: false
+            })
         }
     };
 

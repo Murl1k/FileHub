@@ -8,6 +8,7 @@ import {SizeCalculate} from "../../../../shared/lib/size-calculate.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {IPopup, IPopupAction} from "../../";
+import {toast} from "react-toastify";
 
 const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
 
@@ -63,7 +64,9 @@ const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
         }
         console.log(data)
 
+        const loading = toast.loading('Uploading the file...')
         await updateResult(data)
+        toast.update(loading, {render: "The file is uploaded", type: "success", isLoading: false, autoClose: undefined})
         dispatch(stateAction(false))
     }
 

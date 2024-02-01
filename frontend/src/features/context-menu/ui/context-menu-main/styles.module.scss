@@ -17,8 +17,12 @@
       border-radius: 12px 12px 0 0;
     }
 
-    &:last-child {
+    &:nth-child(2) {
       background-color: $secondary;
+    }
+
+    &:nth-child(3) {
+      background-color: #658a1f;
       border-radius: 0 0 12px 12px;
     }
   }
