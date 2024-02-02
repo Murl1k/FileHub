@@ -1,14 +1,24 @@
 import styles from "./styles.module.scss";
 import {GridItem} from "../../grid-item";
-import {ListItem} from "../../list-item";
-import {MouseEvent, useEffect, useState} from "react";
+import {KeyboardEvent, MouseEvent, useEffect, useState} from "react";
 import {IMergedData} from "../../../shared/types";
 import {useNavigate, useParams} from "react-router-dom";
-import {useGetFilesQuery, useGetFoldersQuery} from "../../../shared/api/api.ts";
-import {SelectionBar} from "../../../features/selection-bar";
+import {
+    useCopyFileMutation,
+    useCopyFolderMutation,
+    useGetFilesQuery,
+    useGetFoldersQuery
+} from "../../../shared/api/api.ts";
+import {getItemId, SelectionBar} from "../../../features/selection-bar";
 import {ContextMenuMain} from "../../../features/context-menu";
+import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
+import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
+import {ItemTemplate} from "../../../features/item-template";
+import {ListItem} from "../../list-item";
 
 const Main = () => {
+
+    const dispatch = useAppDispatch()
 
     const navigate = useNavigate()
 
@@ -20,14 +30,20 @@ const Main = () => {
         x: 0,
         y: 0
     })
-    const [isActive, setIsActive] = useState({
-        status: false,
-        id: '',
-        isFolder: false
+    const [isOpen, setIsOpen] = useState({
+        show: false,
+        x: 0,
+        y: 0
     })
 
-    const {data: folders, isError} = useGetFoldersQuery(id)
-    const {data: files} = useGetFilesQuery(id)
+    const {id: objectId, isFolder} = useAppSelector(state => state.selectionBar)
+    const isActive = useAppSelector(state => state.itemTemplate)
+
+    const {data: folders, isError, refetch: foldersRefetch} = useGetFoldersQuery(id)
+    const {data: files, refetch: filesRefetch} = useGetFilesQuery(id)
+
+    const [copyFolder] = useCopyFolderMutation()
+    const [copyFile] = useCopyFileMutation()
 
     const mergedData: IMergedData[] = [
         ...(folders ? folders : []),
@@ -51,6 +67,42 @@ const Main = () => {
     }
 
     useEffect(() => {
+        const handleCopy = (e: KeyboardEvent) => {
+            if ((e.ctrlKey || e.metaKey) && e.code === 'KeyC') {
+                if (objectId !== isActive.id) {
+                    dispatch(getItemId({id: isActive.id, isFolder: isActive.isFolder}))
+                }
+            }
+        }
+
+        document.addEventListener('keydown', handleCopy as never)
+
+        return () => document.removeEventListener('keydown', handleCopy as never)
+    }, [dispatch, isActive.id, isActive.isFolder, objectId]);
+
+    useEffect(() => {
+        const handlePaste = async (e: KeyboardEvent) => {
+            if ((e.ctrlKey || e.metaKey) && e.code === 'KeyV') {
+                if (isFolder) {
+                    await copyFolder({id: objectId, folder: id})
+                    setTimeout(() => {
+                        foldersRefetch()
+                    }, 250)
+                } else {
+                    await copyFile({id: objectId, folder: id})
+                    setTimeout(() => {
+                        filesRefetch()
+                    }, 250)
+                }
+            }
+        }
+
+        document.addEventListener('keydown', handlePaste as never)
+
+        return () => document.removeEventListener('keydown', handlePaste as never)
+    }, [copyFile, copyFolder, filesRefetch, foldersRefetch, id, isFolder, objectId]);
+
+    useEffect(() => {
         if (isError) {
             navigate('/')
         }
@@ -59,7 +111,11 @@ const Main = () => {
     return (
         <>
             {contextMenu.show && <ContextMenuMain contextMenu={contextMenu} setContextMenu={setContextMenu}/>}
-            <div onContextMenu={handleRightClick} className={styles.container}>
+            <div
+                onContextMenu={handleRightClick}
+                className={styles.container}
+                style={isActive.status ? {height: 'calc(100vh - 83px - 75px)'} : {height: 'calc(100vh - 83px)'}}
+            >
                 <div className={styles.storageHeadline}>
                     <div>
                         <h2>My Cloud</h2>
@@ -103,15 +159,20 @@ const Main = () => {
                 </div>
                 {isGrid ?
                     <div className={styles.grid}>
-                        {sortedMergedData.map(item => (
-                            <GridItem
-                                key={item.id}
-                                item={item}
-                                isActive={isActive}
-                                setIsActive={setIsActive}
-                                isGrid={isGrid}
-                            />
-                        ))}
+                        {sortedMergedData.map(item => {
+                            const itemProps = {
+                                isGrid,
+                                item,
+                                state: isOpen,
+                                stateAction: setIsOpen
+                            }
+
+                            return (
+                                <ItemTemplate key={item.id} itemProps={itemProps}>
+                                    <GridItem item={item}/>
+                                </ItemTemplate>
+                            )
+                        })}
                     </div>
                     : <div className={styles.list}>
                         <div style={{
@@ -121,37 +182,43 @@ const Main = () => {
                             borderBottom: '2px solid #583DA1'
                         }}>
                             <h4>Name</h4>
-                            <div style={{display: 'flex', gap: '25px', marginRight: '40px'}}>
+                            <div style={{display: 'flex', gap: '25px', marginRight: '30px'}}>
                                 <h4>Size</h4>
                                 <h4>Type</h4>
                             </div>
                         </div>
-                        {sortedMergedData.map(item => (
-                            <ListItem
-                                key={item.id}
-                                item={item}
-                                isActive={isActive}
-                                setIsActive={setIsActive}
-                                isGrid={isGrid}
-                            />
-                        ))}
+                        {sortedMergedData.map(item => {
+                            const itemProps = {
+                                isGrid,
+                                item,
+                                state: isOpen,
+                                stateAction: setIsOpen
+                            }
+
+                            return (
+                                <div key={item.id} className={styles.listContainer}>
+                                    <ItemTemplate itemProps={itemProps}>
+                                        <ListItem item={item}/>
+                                    </ItemTemplate>
+                                </div>
+                            )
+                        })}
                     </div>
                 }
-                {isActive.status &&
-                    selectionBarData.map(item => {
-                        const selectionProps = {
-                            isActive,
-                            setIsActive,
-                            name: item.name,
-                            title: item.title,
-                            itemId: item.id,
-                            url: item.url
-                        }
 
-                        return <SelectionBar key={item.id} selectionProps={selectionProps}/>
-                    })
-                }
             </div>
+            {isActive.status &&
+                selectionBarData.map(item => {
+                    const selectionProps = {
+                        name: item.name,
+                        title: item.title,
+                        itemId: item.id,
+                        url: item.url
+                    }
+
+                    return <SelectionBar key={item.id} selectionProps={selectionProps}/>
+                })
+            }
         </>
     );
 };

@@ -2,7 +2,6 @@
 
 .container {
   width: 100%;
-  height: calc(100vh - $header-height);
   padding: 40px;
   transition: width .3s ease-in-out;
   overflow: auto;
@@ -60,4 +59,8 @@
 .list {
   display: grid;
   gap: 10px;
+}
+
+.listContainer {
+  border-bottom: 2px solid $primary;
 }

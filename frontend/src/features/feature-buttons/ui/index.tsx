@@ -3,7 +3,10 @@ import {fetchDownloadFolderAsZip} from "../../../shared/api/folders/folders.acti
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useRemoveFileMutation, useRemoveFolderMutation} from "../../../shared/api/api.ts";
 import {IContextMenu} from "../../context-menu";
-import {IIsActive} from "../../selection-bar";
+import {IIsActive} from "../../item-template";
+import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
+import {getItemId} from "../../selection-bar";
+import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 
 interface IFeatureButtons {
     featureButtonsProps: {
@@ -11,7 +14,7 @@ interface IFeatureButtons {
         title: string
         url: string
         name: string
-        stateAction: Dispatch<SetStateAction<IContextMenu>> | Dispatch<SetStateAction<IIsActive>>
+        stateAction: Dispatch<SetStateAction<IContextMenu>> | ActionCreatorWithPayload<IIsActive>
     }
 }
 
@@ -27,8 +30,25 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
 
     const dispatch = useAppDispatch()
 
+    const {id: objectId} = useAppSelector(state => state.selectionBar)
+    const {id: activeId, isFolder} = useAppSelector(state => state.itemTemplate)
+
     const [updateRemoveFolder] = useRemoveFolderMutation()
     const [updateRemoveFile] = useRemoveFileMutation()
+
+    const handleCopy = (e: MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation()
+
+        if (objectId !== activeId) {
+            dispatch(getItemId({id: activeId, isFolder: isFolder}))
+        }
+
+        (stateAction as Dispatch<SetStateAction<IContextMenu>>)({
+            show: false,
+            x: 0,
+            y: 0
+        });
+    }
 
     const handleDownload = async (e: MouseEvent<HTMLButtonElement>, id: string, data: string, title: string) => {
         try {
@@ -67,11 +87,11 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
         }
 
         if ("status" in stateAction) {
-            (stateAction as Dispatch<SetStateAction<IIsActive>>)({
+            dispatch((stateAction as ActionCreatorWithPayload<IIsActive>)({
                 id: '',
                 isFolder: false,
                 status: false
-            });
+            }))
         } else {
             (stateAction as Dispatch<SetStateAction<IContextMenu>>)({
                 show: false,
@@ -83,6 +103,7 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
 
     return (
         <>
+            <button onClick={handleCopy}>Copy</button>
             <button onClick={(e) => handleDownload(e, id, url, title ? title : name)}>
                 Download
             </button>

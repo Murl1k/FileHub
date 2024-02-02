@@ -1,15 +1,10 @@
 import styles from './styles.module.scss';
-import {Dispatch, FC, MouseEvent, SetStateAction, useRef} from "react";
+import {FC, MouseEvent, useRef} from "react";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
-import {contextMenuPosition, IContextMenu, setIsFilesOpen, setIsFoldersOpen} from "../../";
+import {contextMenuPosition, IContextMenu, IContextMenuMain, setIsFilesOpen, setIsFoldersOpen} from "../../";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 import {PasteButton} from "../../../paste-button";
-
-interface IContextMenuMain {
-    contextMenu: IContextMenu
-    setContextMenu: Dispatch<SetStateAction<IContextMenu>>
-}
 
 const ContextMenuMain: FC<IContextMenuMain> = ({contextMenu, setContextMenu}) => {
 
@@ -55,7 +50,7 @@ const ContextMenuMain: FC<IContextMenuMain> = ({contextMenu, setContextMenu}) =>
         >
             <button onClick={handleOpenFolders}>Add folder</button>
             <button onClick={handleOpenFiles}>Add files</button>
-            <PasteButton/>
+            <PasteButton setContextMenu={setContextMenu}/>
         </div>
     );
 };

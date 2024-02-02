@@ -1,16 +1,15 @@
 import styles from "./styles.module.scss";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {Dispatch, FC, SetStateAction, useRef} from "react";
+import {FC, useRef} from "react";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
-import {getItemId, IIsActive} from "../";
 import {FeatureButtons} from "../../feature-buttons";
 import {useOutsideClick} from "../../../shared/lib/hooks/useClickOutside.ts";
 import {PasteButton} from "../../paste-button";
+import {IIsActive, setIsActive} from "../../item-template";
+import {PayloadAction} from "@reduxjs/toolkit";
 
 interface ISelectionBar {
     selectionProps: {
-        isActive: IIsActive
-        setIsActive: Dispatch<SetStateAction<IIsActive>>
         name: string
         title: string
         url: string
@@ -22,8 +21,6 @@ interface ISelectionBar {
 const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
 
     const {
-        isActive,
-        setIsActive,
         name,
         title,
         url,
@@ -32,22 +29,15 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
 
     const dispatch = useAppDispatch()
 
+    const isActive = useAppSelector(state => state.itemTemplate)
+
     const selectionBarRef = useRef<HTMLDivElement>(null)
 
-    useOutsideClick<IIsActive>(selectionBarRef, setIsActive, {status: false, id: '', isFolder: false}, isActive.status)
-
-    const {id: objectId} = useAppSelector(state => state.selectionBar)
-
-    const handleCopy = () => {
-        if (objectId !== isActive.id) {
-            dispatch(getItemId({id: isActive.id, isFolder: isActive.isFolder}))
-            setIsActive({
-                status: false,
-                id: '',
-                isFolder: false
-            })
-        }
-    }
+    useOutsideClick<PayloadAction<IIsActive>>(selectionBarRef, dispatch, setIsActive({
+        status: false,
+        id: '',
+        isFolder: false
+    }), isActive.status)
 
     const featureButtonsProps = {
         title,
@@ -63,7 +53,6 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
             ref={selectionBarRef}
             className={styles.selectionBar}
         >
-            <button onClick={handleCopy}>Copy</button>
             <PasteButton/>
             <FeatureButtons featureButtonsProps={featureButtonsProps}/>
         </div>

@@ -79,7 +79,7 @@ const ContextMenuItem: FC<IContextMenuItem> = ({item, state, stateAction}) => {
                     e.preventDefault()
                     e.stopPropagation()
 
-                    return stateAction({
+                    stateAction({
                         show: false,
                         x: 0,
                         y: 0

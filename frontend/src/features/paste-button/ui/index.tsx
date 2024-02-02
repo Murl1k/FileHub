@@ -6,8 +6,13 @@ import {
 } from "../../../shared/api/api.ts";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {useParams} from "react-router-dom";
+import {FC} from "react";
+import {IContextMenuMain} from "../../context-menu";
 
-const PasteButton = () => {
+interface IPasteButton extends Partial<Pick<IContextMenuMain, 'setContextMenu'>> {
+}
+
+const PasteButton: FC<IPasteButton> = ({setContextMenu}) => {
 
     const {id} = useParams() as { id: string }
 
@@ -24,16 +29,24 @@ const PasteButton = () => {
             await copyFolder({id: objectId, folder: id})
             setTimeout(() => {
                 foldersRefetch()
+                setContextMenu && setContextMenu({
+                    show: false,
+                    x: 0,
+                    y: 0
+                })
             }, 250)
         } else {
             await copyFile({id: objectId, folder: id})
             setTimeout(() => {
                 filesRefetch()
+                setContextMenu && setContextMenu({
+                    show: false,
+                    x: 0,
+                    y: 0
+                })
             }, 250)
         }
     }
-
-    console.log(Boolean(objectId))
 
     return (
         <button disabled={!objectId} onClick={handlePaste}>Paste</button>
