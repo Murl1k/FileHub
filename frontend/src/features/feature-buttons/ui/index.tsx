@@ -1,12 +1,11 @@
-import {Dispatch, FC, MouseEvent, SetStateAction} from "react";
+import {FC, MouseEvent} from "react";
 import {fetchDownloadFolderAsZip} from "../../../shared/api/folders/folders.action.ts";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useRemoveFileMutation, useRemoveFolderMutation} from "../../../shared/api/api.ts";
-import {IContextMenu} from "../../context-menu";
-import {IIsActive} from "../../item-template";
-import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
+import {setIsActive} from "../../item-template";
 import {getItemId} from "../../selection-bar";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
+import {initialContextState, setContextMenu} from "../../context-menu";
 
 interface IFeatureButtons {
     featureButtonsProps: {
@@ -14,7 +13,6 @@ interface IFeatureButtons {
         title: string
         url: string
         name: string
-        stateAction: Dispatch<SetStateAction<IContextMenu>> | ActionCreatorWithPayload<IIsActive>
     }
 }
 
@@ -24,14 +22,14 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
         id,
         title,
         url,
-        name,
-        stateAction
+        name
     } = featureButtonsProps
 
     const dispatch = useAppDispatch()
 
+    const {type} = useAppSelector(state => state.contextMenu)
     const {id: objectId} = useAppSelector(state => state.selectionBar)
-    const {id: activeId, isFolder} = useAppSelector(state => state.itemTemplate)
+    const isActive = useAppSelector(state => state.itemTemplate)
 
     const [updateRemoveFolder] = useRemoveFolderMutation()
     const [updateRemoveFile] = useRemoveFileMutation()
@@ -39,15 +37,11 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
     const handleCopy = (e: MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
 
-        if (objectId !== activeId) {
-            dispatch(getItemId({id: activeId, isFolder: isFolder}))
+        if (objectId !== isActive.id) {
+            dispatch(getItemId({id: isActive.id, isFolder: isActive.isFolder}))
         }
 
-        (stateAction as Dispatch<SetStateAction<IContextMenu>>)({
-            show: false,
-            x: 0,
-            y: 0
-        });
+        type === 'item' && dispatch(setContextMenu(initialContextState))
     }
 
     const handleDownload = async (e: MouseEvent<HTMLButtonElement>, id: string, data: string, title: string) => {
@@ -86,19 +80,13 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
             updateRemoveFile(id)
         }
 
-        if ("status" in stateAction) {
-            dispatch((stateAction as ActionCreatorWithPayload<IIsActive>)({
-                id: '',
-                isFolder: false,
-                status: false
-            }))
-        } else {
-            (stateAction as Dispatch<SetStateAction<IContextMenu>>)({
-                show: false,
-                x: 0,
-                y: 0
-            });
-        }
+        isActive.status && dispatch(setIsActive({
+            id: '',
+            isFolder: false,
+            status: false
+        }))
+
+        type === 'item' && dispatch(setContextMenu(initialContextState))
     }
 
     return (

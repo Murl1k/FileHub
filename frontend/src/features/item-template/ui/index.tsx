@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
-import {Dispatch, FC, HTMLAttributes, MouseEvent, SetStateAction, useState} from "react";
+import {FC, HTMLAttributes, MouseEvent, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {ContextMenuItem, IContextMenu} from "../../context-menu";
+import {ContextMenuItem, initialContextState, setContextMenu} from "../../context-menu";
 import {IMergedData} from "../../../shared/types";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {setIsActive} from "../";
@@ -11,8 +11,6 @@ interface IItemTemplate extends HTMLAttributes<HTMLDivElement> {
     itemProps: {
         item: IMergedData
         isGrid: boolean
-        state: IContextMenu
-        stateAction: Dispatch<SetStateAction<IContextMenu>>
     }
 }
 
@@ -20,9 +18,7 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
 
     const {
         isGrid,
-        item,
-        state,
-        stateAction
+        item
     } = itemProps
 
     const dispatch = useAppDispatch()
@@ -31,17 +27,18 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
 
     const [isClicked, setIsClicked] = useState(false);
 
+    const {type, x} = useAppSelector(state => state.contextMenu)
     const {id, status} = useAppSelector(state => state.itemTemplate)
 
     const handleRightClick = (e: MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
         e.stopPropagation()
 
-        stateAction({
-            show: true,
+        dispatch(setContextMenu({
+            type: "item",
             x: e.pageX,
             y: e.pageY
-        })
+        }))
 
         dispatch(setIsActive({
             status: true,
@@ -59,6 +56,8 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
         if (id !== item.id) {
             dispatch(setIsActive({status: true, id: item.id, isFolder: Boolean(item.title)}))
         }
+
+        type === 'main' && dispatch(setContextMenu(initialContextState))
     };
 
     const handleDoubleClick = () => {
@@ -87,21 +86,19 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
             onDoubleClick={handleDoubleClick}
             onContextMenu={handleRightClick}
             className={templateClassnames()}
-            style={!state.x ? {position: 'relative'} : {}}
+            style={!x ? {position: 'relative'} : {}}
         >
             {children}
             <div style={isGrid ? {position: 'relative'} : {position: 'absolute'}}>
                 <div
-                    style={state.x ? {right: '35px'} : {}}
+                    style={x ? {right: '35px'} : {}}
                     className={styles.contextMenuBtn}
-                    onClick={(e) => {
-                        e.stopPropagation()
-
-                        stateAction({
-                            show: !state.show,
+                    onClick={() => {
+                        dispatch(setContextMenu({
+                            type: "item",
                             x: 0,
                             y: 0
-                        })
+                        }))
                     }}
                 >
                     <span></span>
@@ -109,7 +106,7 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
                     <span></span>
                 </div>
             </div>
-            {state.show && id === item.id && <ContextMenuItem item={item} state={state} stateAction={stateAction}/>}
+            {type === 'item' && id === item.id && <ContextMenuItem item={item}/>}
         </div>
     );
 };

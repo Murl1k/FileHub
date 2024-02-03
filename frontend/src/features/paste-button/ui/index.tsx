@@ -6,16 +6,16 @@ import {
 } from "../../../shared/api/api.ts";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {useParams} from "react-router-dom";
-import {FC} from "react";
-import {IContextMenuMain} from "../../context-menu";
+import {initialContextState, setContextMenu} from "../../context-menu";
+import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 
-interface IPasteButton extends Partial<Pick<IContextMenuMain, 'setContextMenu'>> {
-}
+const PasteButton = () => {
 
-const PasteButton: FC<IPasteButton> = ({setContextMenu}) => {
+    const dispatch = useAppDispatch()
 
     const {id} = useParams() as { id: string }
 
+    const {type} = useAppSelector(state => state.contextMenu)
     const {isFolder, id: objectId} = useAppSelector(state => state.selectionBar)
 
     const {refetch: foldersRefetch} = useGetFoldersQuery(id)
@@ -29,21 +29,13 @@ const PasteButton: FC<IPasteButton> = ({setContextMenu}) => {
             await copyFolder({id: objectId, folder: id})
             setTimeout(() => {
                 foldersRefetch()
-                setContextMenu && setContextMenu({
-                    show: false,
-                    x: 0,
-                    y: 0
-                })
+                type === "main" && dispatch(setContextMenu(initialContextState))
             }, 250)
         } else {
             await copyFile({id: objectId, folder: id})
             setTimeout(() => {
                 filesRefetch()
-                setContextMenu && setContextMenu({
-                    show: false,
-                    x: 0,
-                    y: 0
-                })
+                type === "main" && dispatch(setContextMenu(initialContextState))
             }, 250)
         }
     }

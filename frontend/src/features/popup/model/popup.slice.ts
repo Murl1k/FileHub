@@ -10,8 +10,8 @@ const initialState: IInitialState = {
     isFilesOpen: false
 }
 
-export const contextMenuMainSlice = createSlice({
-    name: 'contextMenuMain',
+export const popupSlice = createSlice({
+    name: 'popup',
     initialState,
     reducers: {
         setIsFoldersOpen: (state, action: PayloadAction<boolean>) => {
@@ -23,4 +23,4 @@ export const contextMenuMainSlice = createSlice({
     }
 })
 
-export const {setIsFoldersOpen, setIsFilesOpen} = contextMenuMainSlice.actions
+export const {setIsFoldersOpen, setIsFilesOpen} = popupSlice.actions

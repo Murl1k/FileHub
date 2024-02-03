@@ -1,12 +1,5 @@
 @import '../../../app/assets/styles/vars';
 
-.container {
-  width: 100%;
-  padding: 40px;
-  transition: width .3s ease-in-out;
-  overflow: auto;
-}
-
 .storageHeadline {
   display: flex;
   align-items: center;

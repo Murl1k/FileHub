@@ -1,26 +1,27 @@
 import styles from './styles.module.scss'
-import {ChangeEvent, Dispatch, FC, SetStateAction, useRef, useState} from "react";
+import {ChangeEvent, FC, useRef, useState} from "react";
 import {IMergedData} from "../../../../shared/types";
 import {useUpdateFolderPrivacyMutation} from "../../../../shared/api/api.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
-import {contextMenuPosition, IContextMenu} from "../../";
+import {contextMenuPosition, IContextMenu, initialContextState, setContextMenu} from "../../";
 import {FeatureButtons} from "../../../feature-buttons";
+import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
+import {PayloadAction} from "@reduxjs/toolkit";
+import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 
-interface IContextMenuItem {
-    item: IMergedData
-    state: IContextMenu
-    stateAction: Dispatch<SetStateAction<IContextMenu>>
-}
+const ContextMenuItem: FC<{ item: IMergedData }> = ({item}) => {
 
-const ContextMenuItem: FC<IContextMenuItem> = ({item, state, stateAction}) => {
+    const dispatch = useAppDispatch()
 
     const [isOpen, setIsOpen] = useState(false)
     // const [isPrivacyOpen, setIsPrivacyOpen] = useState(item.is_public)
     const contextMenuRef = useRef<HTMLDivElement>(null)
 
+    const state = useAppSelector(state => state.contextMenu)
+
     const [updatePrivacy] = useUpdateFolderPrivacyMutation()
 
-    useOutsideClick<IContextMenu>(contextMenuRef, stateAction, {show: false, x: 0, y: 0}, state.show)
+    useOutsideClick<PayloadAction<IContextMenu>>(contextMenuRef, dispatch, setContextMenu(initialContextState), state.type === 'item')
 
     const handleChangePrivacy = (e: ChangeEvent<HTMLInputElement>, id: string, title: string) => {
         e.preventDefault()
@@ -32,7 +33,6 @@ const ContextMenuItem: FC<IContextMenuItem> = ({item, state, stateAction}) => {
     }
 
     const featureButtonsProps = {
-        stateAction,
         id: item.id,
         title: item.title,
         name: item.name,
@@ -79,11 +79,7 @@ const ContextMenuItem: FC<IContextMenuItem> = ({item, state, stateAction}) => {
                     e.preventDefault()
                     e.stopPropagation()
 
-                    stateAction({
-                        show: false,
-                        x: 0,
-                        y: 0
-                    })
+                    dispatch(setContextMenu(initialContextState))
                 }}
                 ref={contextMenuRef}
                 style={state.x ? contextMenuPosition(state.x, state.y, 118) : {

@@ -2,17 +2,16 @@ import styles from "./styles.module.scss";
 import Button from "../../../shared/UIKit/button";
 import {Link} from "react-router-dom";
 import {MouseEventHandler} from "react";
-import {FilesPopup, FolderPopup} from "../../../features/popup";
+import {FilesPopup, FolderPopup, setIsFilesOpen, setIsFoldersOpen} from "../../../features/popup";
 import {UsersCount} from "../../users-count";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
-import {setIsFilesOpen, setIsFoldersOpen} from "../../../features/context-menu";
 
 const Header = () => {
 
     const dispatch = useAppDispatch()
 
-    const {isFoldersOpen, isFilesOpen} = useAppSelector(state => state.contextMenuMain)
+    const {isFoldersOpen, isFilesOpen} = useAppSelector(state => state.popup)
 
     const handleOpenFolder: MouseEventHandler<HTMLButtonElement> = (e) => {
         e.stopPropagation()

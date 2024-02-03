@@ -1,49 +1,27 @@
 import styles from "./styles.module.scss";
+import {MainContainer} from "../../../features/main-container";
 import {GridItem} from "../../grid-item";
-import {KeyboardEvent, MouseEvent, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {IMergedData} from "../../../shared/types";
 import {useNavigate, useParams} from "react-router-dom";
-import {
-    useCopyFileMutation,
-    useCopyFolderMutation,
-    useGetFilesQuery,
-    useGetFoldersQuery
-} from "../../../shared/api/api.ts";
-import {getItemId, SelectionBar} from "../../../features/selection-bar";
-import {ContextMenuMain} from "../../../features/context-menu";
+import {useGetFilesQuery, useGetFoldersQuery} from "../../../shared/api/api.ts";
+import {SelectionBar} from "../../../features/selection-bar";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
-import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {ItemTemplate} from "../../../features/item-template";
 import {ListItem} from "../../list-item";
 
 const Main = () => {
-
-    const dispatch = useAppDispatch()
 
     const navigate = useNavigate()
 
     const {id} = useParams() as { id: string }
 
     const [isGrid, setIsGrid] = useState(true)
-    const [contextMenu, setContextMenu] = useState({
-        show: false,
-        x: 0,
-        y: 0
-    })
-    const [isOpen, setIsOpen] = useState({
-        show: false,
-        x: 0,
-        y: 0
-    })
 
-    const {id: objectId, isFolder} = useAppSelector(state => state.selectionBar)
-    const isActive = useAppSelector(state => state.itemTemplate)
+    const {id: activeId, status} = useAppSelector(state => state.itemTemplate)
 
-    const {data: folders, isError, refetch: foldersRefetch} = useGetFoldersQuery(id)
-    const {data: files, refetch: filesRefetch} = useGetFilesQuery(id)
-
-    const [copyFolder] = useCopyFolderMutation()
-    const [copyFile] = useCopyFileMutation()
+    const {data: folders, isError} = useGetFoldersQuery(id)
+    const {data: files} = useGetFilesQuery(id)
 
     const mergedData: IMergedData[] = [
         ...(folders ? folders : []),
@@ -54,53 +32,7 @@ const Main = () => {
         .sort((a, b) =>
             new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
 
-    const selectionBarData = sortedMergedData.filter(item => item.id === isActive.id)
-
-    const handleRightClick = (e: MouseEvent<HTMLDivElement>) => {
-        e.preventDefault()
-
-        setContextMenu({
-            show: true,
-            x: e.pageX,
-            y: e.pageY
-        })
-    }
-
-    useEffect(() => {
-        const handleCopy = (e: KeyboardEvent) => {
-            if ((e.ctrlKey || e.metaKey) && e.code === 'KeyC') {
-                if (objectId !== isActive.id) {
-                    dispatch(getItemId({id: isActive.id, isFolder: isActive.isFolder}))
-                }
-            }
-        }
-
-        document.addEventListener('keydown', handleCopy as never)
-
-        return () => document.removeEventListener('keydown', handleCopy as never)
-    }, [dispatch, isActive.id, isActive.isFolder, objectId]);
-
-    useEffect(() => {
-        const handlePaste = async (e: KeyboardEvent) => {
-            if ((e.ctrlKey || e.metaKey) && e.code === 'KeyV') {
-                if (isFolder) {
-                    await copyFolder({id: objectId, folder: id})
-                    setTimeout(() => {
-                        foldersRefetch()
-                    }, 250)
-                } else {
-                    await copyFile({id: objectId, folder: id})
-                    setTimeout(() => {
-                        filesRefetch()
-                    }, 250)
-                }
-            }
-        }
-
-        document.addEventListener('keydown', handlePaste as never)
-
-        return () => document.removeEventListener('keydown', handlePaste as never)
-    }, [copyFile, copyFolder, filesRefetch, foldersRefetch, id, isFolder, objectId]);
+    const selectionBarData = sortedMergedData.filter(item => item.id === activeId)
 
     useEffect(() => {
         if (isError) {
@@ -110,12 +42,7 @@ const Main = () => {
 
     return (
         <>
-            {contextMenu.show && <ContextMenuMain contextMenu={contextMenu} setContextMenu={setContextMenu}/>}
-            <div
-                onContextMenu={handleRightClick}
-                className={styles.container}
-                style={isActive.status ? {height: 'calc(100vh - 83px - 75px)'} : {height: 'calc(100vh - 83px)'}}
-            >
+            <MainContainer>
                 <div className={styles.storageHeadline}>
                     <div>
                         <h2>My Cloud</h2>
@@ -162,9 +89,7 @@ const Main = () => {
                         {sortedMergedData.map(item => {
                             const itemProps = {
                                 isGrid,
-                                item,
-                                state: isOpen,
-                                stateAction: setIsOpen
+                                item
                             }
 
                             return (
@@ -190,9 +115,7 @@ const Main = () => {
                         {sortedMergedData.map(item => {
                             const itemProps = {
                                 isGrid,
-                                item,
-                                state: isOpen,
-                                stateAction: setIsOpen
+                                item
                             }
 
                             return (
@@ -205,9 +128,8 @@ const Main = () => {
                         })}
                     </div>
                 }
-
-            </div>
-            {isActive.status &&
+            </MainContainer>
+            {status &&
                 selectionBarData.map(item => {
                     const selectionProps = {
                         name: item.name,

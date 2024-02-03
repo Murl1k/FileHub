@@ -1,5 +1,5 @@
 import FolderPopup from "./ui/folder";
 import FilesPopup from "./ui/files";
 
-export * from './model/types.ts'
+export * from './model'
 export {FolderPopup, FilesPopup}

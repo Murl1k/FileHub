@@ -1,41 +1,36 @@
 import styles from './styles.module.scss';
-import {FC, MouseEvent, useRef} from "react";
+import {MouseEvent, useRef} from "react";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
-import {contextMenuPosition, IContextMenu, IContextMenuMain, setIsFilesOpen, setIsFoldersOpen} from "../../";
+import {contextMenuPosition, IContextMenu, initialContextState, setContextMenu} from "../../";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 import {PasteButton} from "../../../paste-button";
+import {setIsFilesOpen, setIsFoldersOpen} from "../../../popup";
+import {PayloadAction} from "@reduxjs/toolkit";
 
-const ContextMenuMain: FC<IContextMenuMain> = ({contextMenu, setContextMenu}) => {
+const ContextMenuMain = () => {
 
     const dispatch = useAppDispatch()
 
-    const {isFoldersOpen} = useAppSelector(state => state.contextMenuMain)
+    const contextMenu = useAppSelector(state => state.contextMenu)
+    const {isFoldersOpen} = useAppSelector(state => state.popup)
 
     const contextMenuRef = useRef<HTMLDivElement>(null)
 
-    useOutsideClick<IContextMenu>(contextMenuRef, setContextMenu, {show: false, x: 0, y: 0}, contextMenu.show)
+    useOutsideClick<PayloadAction<IContextMenu>>(contextMenuRef, dispatch, setContextMenu(initialContextState), contextMenu.type === 'main')
 
     const handleOpenFolders = (e: MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
         dispatch(setIsFoldersOpen(true))
 
-        setContextMenu({
-            show: false,
-            x: 0,
-            y: 0
-        })
+        setContextMenu(initialContextState)
     }
 
     const handleOpenFiles = (e: MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
         dispatch(setIsFilesOpen(true))
 
-        setContextMenu({
-            show: false,
-            x: 0,
-            y: 0
-        })
+        setContextMenu(initialContextState)
 
         if (isFoldersOpen) {
             dispatch(setIsFoldersOpen(false))
@@ -50,7 +45,7 @@ const ContextMenuMain: FC<IContextMenuMain> = ({contextMenu, setContextMenu}) =>
         >
             <button onClick={handleOpenFolders}>Add folder</button>
             <button onClick={handleOpenFiles}>Add files</button>
-            <PasteButton setContextMenu={setContextMenu}/>
+            <PasteButton/>
         </div>
     );
 };

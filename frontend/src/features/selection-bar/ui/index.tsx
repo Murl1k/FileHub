@@ -43,8 +43,7 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
         title,
         url,
         name,
-        id: itemId,
-        stateAction: setIsActive,
+        id: itemId
     }
 
     return (
