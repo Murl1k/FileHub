@@ -32,6 +32,12 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
     const {type, x} = useAppSelector(state => state.contextMenu)
     const {id, status} = useAppSelector(state => state.itemTemplate)
 
+    const setActiveState = {
+        status: true,
+        id: item.id,
+        isFolder: Boolean(item.title)
+    }
+
     const handleRightClick = (e: MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
         e.stopPropagation()
@@ -42,25 +48,28 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
             y: e.pageY
         }))
 
-        dispatch(setIsActive({
-            status: true,
-            id: item.id,
-            isFolder: Boolean(item.title)
-        }))
+        if (id !== item.id || !status) {
+            dispatch(setIsActive(setActiveState))
+        }
 
         setIsClicked(true)
     }
 
-    const handleSingleClick = (e: MouseEvent<HTMLDivElement>) => {
+    const handleClickTemplate = (e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation()
         setIsClicked(true);
 
         if (id !== item.id || !status) {
-            dispatch(setIsActive({status: true, id: item.id, isFolder: Boolean(item.title)}))
+            dispatch(setIsActive(setActiveState))
         }
 
         isFoldersOpen && dispatch(setIsFoldersOpen(false))
-        type === 'main' && dispatch(setContextMenu(initialContextState))
+    }
+
+    const handleSingleClick = (e: MouseEvent<HTMLDivElement>) => {
+        handleClickTemplate(e)
+
+        type !== 'initial' && dispatch(setContextMenu(initialContextState))
     };
 
     const handleDoubleClick = () => {
@@ -93,12 +102,16 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
                     <div
                         style={x ? {right: '35px'} : {}}
                         className={styles.contextMenuBtn}
-                        onClick={() => {
-                            dispatch(setContextMenu({
-                                type: "item",
-                                x: 0,
-                                y: 0
-                            }))
+                        onClick={(e) => {
+                            handleClickTemplate(e)
+
+                            if (type !== 'item' || x !== 0) {
+                                dispatch(setContextMenu({
+                                    type: "item",
+                                    x: 0,
+                                    y: 0
+                                }))
+                            }
                         }}
                     >
                         <span></span>

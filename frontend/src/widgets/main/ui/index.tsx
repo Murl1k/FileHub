@@ -9,8 +9,12 @@ import {SelectionBar} from "../../../features/selection-bar";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {ItemTemplate} from "../../../features/item-template";
 import {ListItem} from "../../list-item";
+import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
+import {initialContextState, setContextMenu} from "../../../features/context-menu";
 
 const Main = () => {
+
+    const dispatch = useAppDispatch()
 
     const navigate = useNavigate()
 
@@ -18,6 +22,7 @@ const Main = () => {
 
     const [isGrid, setIsGrid] = useState(true)
 
+    const {type} = useAppSelector(state => state.contextMenu)
     const {id: activeId, status} = useAppSelector(state => state.itemTemplate)
 
     const {data: folders, isError} = useGetFoldersQuery(id)
@@ -34,6 +39,12 @@ const Main = () => {
 
     const selectionBarData = sortedMergedData.filter(item => item.id === activeId)
 
+    const setView = (value: boolean) => {
+        setIsGrid(value)
+
+        type !== 'initial' && dispatch(setContextMenu(initialContextState))
+    }
+
     useEffect(() => {
         if (isError) {
             navigate('/')
@@ -49,7 +60,7 @@ const Main = () => {
                         <p>Sort by: Type</p>
                     </div>
                     <div onClick={e => e.stopPropagation()}>
-                        <button className={isGrid ? styles.activeBtn : ''} onClick={() => setIsGrid(true)}>
+                        <button className={isGrid ? styles.activeBtn : ''} onClick={() => setView(true)}>
                             <svg width={16} height={16} viewBox="0 0 28 28" version="1.1"
                                  xmlns="http://www.w3.org/2000/svg"
                                  fill="#000000">
@@ -68,7 +79,7 @@ const Main = () => {
                                 </g>
                             </svg>
                         </button>
-                        <button className={!isGrid ? styles.activeBtn : ''} onClick={() => setIsGrid(false)}>
+                        <button className={!isGrid ? styles.activeBtn : ''} onClick={() => setView(false)}>
                             <svg width={16} height={16} viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"
                                  fill="#000000">
                                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>

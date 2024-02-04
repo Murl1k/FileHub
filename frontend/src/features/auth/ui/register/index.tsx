@@ -3,8 +3,7 @@ import {avatarIcon} from "../../../../app/assets/images";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
-import {fetchLogin, fetchLoginMe, fetchRegister} from "../../model/auth.action.ts";
-import {IUser} from "../../../../shared/types";
+import {fetchLogin, fetchLoginMe, fetchRegister, IUser} from "../../";
 
 interface IRegister extends IUser {
     passwordAgain: string

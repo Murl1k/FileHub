@@ -9,7 +9,7 @@ import {
     fetchSetUsername,
     fetchUpdateMyAccount
 } from "./auth.action.ts";
-import {IUserData} from "../../../shared/types";
+import {IUserData} from "./";
 import {RootState} from "../../../shared/api/store";
 
 interface IInitialState {

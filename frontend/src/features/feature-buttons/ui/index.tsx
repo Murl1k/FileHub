@@ -1,11 +1,12 @@
-import {FC, MouseEvent} from "react";
+import {FC, KeyboardEvent, MouseEvent, useEffect} from "react";
 import {fetchDownloadFolderAsZip} from "../../../shared/api/folders/folders.action.ts";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useRemoveFileMutation, useRemoveFolderMutation} from "../../../shared/api/api.ts";
-import {setIsActive} from "../../item-template";
+import {initialTemplateState, setIsActive} from "../../item-template";
 import {getItemId} from "../../selection-bar";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {initialContextState, setContextMenu} from "../../context-menu";
+import {setIsPrivacyOpen} from "../../popup";
 
 interface IFeatureButtons {
     featureButtonsProps: {
@@ -29,16 +30,24 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
 
     const {type} = useAppSelector(state => state.contextMenu)
     const {id: objectId} = useAppSelector(state => state.selectionBar)
-    const isActive = useAppSelector(state => state.itemTemplate)
+    const {status, isFolder} = useAppSelector(state => state.itemTemplate)
 
     const [updateRemoveFolder] = useRemoveFolderMutation()
     const [updateRemoveFile] = useRemoveFileMutation()
 
+    const handleOpenPrivacy = (e: MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation()
+
+        dispatch(setIsPrivacyOpen(true))
+        dispatch(setContextMenu(initialContextState))
+        dispatch(setIsActive({id: id, isFolder: false, status: false}))
+    }
+
     const handleCopy = (e: MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
 
-        if (objectId !== isActive.id) {
-            dispatch(getItemId({id: isActive.id, isFolder: isActive.isFolder}))
+        if (objectId !== id) {
+            dispatch(getItemId({id: id, isFolder: isFolder}))
         }
 
         type === 'item' && dispatch(setContextMenu(initialContextState))
@@ -71,7 +80,7 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
         }
     };
 
-    const handleRemove = (e: MouseEvent<HTMLButtonElement>, id: string, title: string) => {
+    const handleRemove = (e: MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
         e.stopPropagation()
 
         if (title) {
@@ -80,22 +89,35 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
             updateRemoveFile(id)
         }
 
-        isActive.status && dispatch(setIsActive({
-            id: '',
-            isFolder: false,
-            status: false
-        }))
+        status && dispatch(setIsActive(initialTemplateState))
 
         type === 'item' && dispatch(setContextMenu(initialContextState))
     }
 
+    useEffect(() => {
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.code === "Delete") {
+                handleRemove(e)
+            }
+        }
+
+        document.addEventListener("keydown", onKeyDown as never)
+
+        return () => {
+            document.removeEventListener("keydown", onKeyDown as never)
+        }
+    }, [])
+
     return (
         <>
+            <button onClick={handleOpenPrivacy}>
+                Change privacy
+            </button>
             <button onClick={handleCopy}>Copy</button>
             <button onClick={(e) => handleDownload(e, id, url, title ? title : name)}>
                 Download
             </button>
-            <button onClick={(e) => handleRemove(e, id, title)}>
+            <button onClick={handleRemove}>
                 Delete
             </button>
         </>

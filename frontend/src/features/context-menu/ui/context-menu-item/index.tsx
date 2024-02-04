@@ -6,8 +6,12 @@ import {contextMenuPosition, initialContextState, setContextMenu} from "../../";
 import {FeatureButtons} from "../../../feature-buttons";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
+import {useNavigate} from "react-router-dom";
+import {initialTemplateState, setIsActive} from "../../../item-template";
 
 const ContextMenuItem: FC<{ item: IMergedData }> = ({item}) => {
+
+    const navigate = useNavigate()
 
     const dispatch = useAppDispatch()
 
@@ -15,13 +19,20 @@ const ContextMenuItem: FC<{ item: IMergedData }> = ({item}) => {
 
     const state = useAppSelector(state => state.contextMenu)
 
-    useOutsideClick(contextMenuRef, () => dispatch(setContextMenu(initialContextState)), state.type === 'item')
+    useOutsideClick(contextMenuRef, () => {
+        dispatch(setContextMenu(initialContextState))
+        dispatch(setIsActive(initialTemplateState))
+    }, state.type === 'item')
 
     const featureButtonsProps = {
         id: item.id,
         title: item.title,
         name: item.name,
         url: item.url
+    }
+
+    const handleOpenFolder = () => {
+        navigate(`/folder/${item.id}`)
     }
 
     return (
@@ -39,6 +50,7 @@ const ContextMenuItem: FC<{ item: IMergedData }> = ({item}) => {
             }}
             className={styles.contextMenu}
         >
+            {item.title && <button onClick={handleOpenFolder}>Open</button>}
             <FeatureButtons featureButtonsProps={featureButtonsProps}/>
         </div>
     );

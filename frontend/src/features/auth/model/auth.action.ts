@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {IChangePassword, IChangeUsername, IUser} from "../../../shared/types";
+import {IChangePassword, IChangeUsername, IUser} from "./";
 import axios from "axios";
 import axiosInstance from "../../../shared/api/axiosInstance.ts";
 import {toast} from "react-toastify";
