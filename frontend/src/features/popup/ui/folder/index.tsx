@@ -5,7 +5,7 @@ import {useAddFolderMutation} from "../../../../shared/api/api.ts";
 import {useParams} from "react-router-dom";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
-import {IPopup, IPopupAction} from "../../";
+import {IPopup} from "../../";
 
 const FolderPopup: FC<IPopup> = ({state, stateAction}) => {
 
@@ -17,7 +17,7 @@ const FolderPopup: FC<IPopup> = ({state, stateAction}) => {
 
     const popupRef = useRef<HTMLFormElement>(null)
 
-    useOutsideClick<IPopupAction>(popupRef, dispatch, stateAction(false), state)
+    useOutsideClick(popupRef, () => dispatch(stateAction(false)), state)
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)

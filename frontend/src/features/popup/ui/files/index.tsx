@@ -7,7 +7,7 @@ import {useParams} from "react-router-dom";
 import {SizeCalculate} from "../../../../shared/lib/size-calculate.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
-import {IPopup, IPopupAction} from "../../";
+import {IPopup} from "../../";
 import {toast} from "react-toastify";
 
 const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
@@ -23,7 +23,7 @@ const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
 
     const popupRef = useRef<HTMLDivElement>(null)
 
-    useOutsideClick<IPopupAction>(popupRef, dispatch, stateAction(false), state)
+    useOutsideClick(popupRef, () => dispatch(stateAction(false)), state)
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()

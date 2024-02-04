@@ -5,8 +5,7 @@ import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {FeatureButtons} from "../../feature-buttons";
 import {useOutsideClick} from "../../../shared/lib/hooks/useClickOutside.ts";
 import {PasteButton} from "../../paste-button";
-import {IIsActive, setIsActive} from "../../item-template";
-import {PayloadAction} from "@reduxjs/toolkit";
+import {initialTemplateState, setIsActive} from "../../item-template";
 
 interface ISelectionBar {
     selectionProps: {
@@ -29,15 +28,11 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
 
     const dispatch = useAppDispatch()
 
-    const isActive = useAppSelector(state => state.itemTemplate)
+    const {status} = useAppSelector(state => state.itemTemplate)
 
     const selectionBarRef = useRef<HTMLDivElement>(null)
 
-    useOutsideClick<PayloadAction<IIsActive>>(selectionBarRef, dispatch, setIsActive({
-        status: false,
-        id: '',
-        isFolder: false
-    }), isActive.status)
+    useOutsideClick(selectionBarRef, () => dispatch(setIsActive(initialTemplateState)), status)
 
     const featureButtonsProps = {
         title,

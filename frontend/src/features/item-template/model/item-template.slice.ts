@@ -19,4 +19,10 @@ export const itemTemplateSlice = createSlice({
     }
 })
 
+export const initialTemplateState: IIsActive = {
+    status: false,
+    id: '',
+    isFolder: false
+}
+
 export const {setIsActive} = itemTemplateSlice.actions

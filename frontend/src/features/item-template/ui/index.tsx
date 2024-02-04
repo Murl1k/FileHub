@@ -4,8 +4,9 @@ import {useNavigate} from "react-router-dom";
 import {ContextMenuItem, initialContextState, setContextMenu} from "../../context-menu";
 import {IMergedData} from "../../../shared/types";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
-import {setIsActive} from "../";
+import {initialTemplateState, setIsActive} from "../";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
+import {PrivacyPopup, setIsFoldersOpen} from "../../popup";
 
 interface IItemTemplate extends HTMLAttributes<HTMLDivElement> {
     itemProps: {
@@ -27,6 +28,7 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
 
     const [isClicked, setIsClicked] = useState(false);
 
+    const {isPrivacyOpen, isFoldersOpen} = useAppSelector(state => state.popup)
     const {type, x} = useAppSelector(state => state.contextMenu)
     const {id, status} = useAppSelector(state => state.itemTemplate)
 
@@ -53,21 +55,18 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
         e.stopPropagation()
         setIsClicked(true);
 
-        if (id !== item.id) {
+        if (id !== item.id || !status) {
             dispatch(setIsActive({status: true, id: item.id, isFolder: Boolean(item.title)}))
         }
 
+        isFoldersOpen && dispatch(setIsFoldersOpen(false))
         type === 'main' && dispatch(setContextMenu(initialContextState))
     };
 
     const handleDoubleClick = () => {
         if (item.title) {
             navigate(`/folder/${item.id}`)
-            dispatch(setIsActive({
-                status: false,
-                id: '',
-                isFolder: false
-            }))
+            dispatch(setIsActive(initialTemplateState))
         }
     };
 
@@ -80,34 +79,44 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
     };
 
     return (
-        <div
-            {...props}
-            onClick={handleSingleClick}
-            onDoubleClick={handleDoubleClick}
-            onContextMenu={handleRightClick}
-            className={templateClassnames()}
-            style={!x ? {position: 'relative'} : {}}
-        >
-            {children}
-            <div style={isGrid ? {position: 'relative'} : {position: 'absolute'}}>
-                <div
-                    style={x ? {right: '35px'} : {}}
-                    className={styles.contextMenuBtn}
-                    onClick={() => {
-                        dispatch(setContextMenu({
-                            type: "item",
-                            x: 0,
-                            y: 0
-                        }))
-                    }}
-                >
-                    <span></span>
-                    <span></span>
-                    <span></span>
+        <>
+            <div
+                {...props}
+                onClick={handleSingleClick}
+                onDoubleClick={handleDoubleClick}
+                onContextMenu={handleRightClick}
+                className={templateClassnames()}
+                style={!x ? {position: 'relative'} : {}}
+            >
+                {children}
+                <div style={isGrid ? {position: 'relative'} : {position: 'absolute'}}>
+                    <div
+                        style={x ? {right: '35px'} : {}}
+                        className={styles.contextMenuBtn}
+                        onClick={() => {
+                            dispatch(setContextMenu({
+                                type: "item",
+                                x: 0,
+                                y: 0
+                            }))
+                        }}
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </div>
+                {type === 'item' && id === item.id && <ContextMenuItem item={item}/>}
             </div>
-            {type === 'item' && id === item.id && <ContextMenuItem item={item}/>}
-        </div>
+            {isPrivacyOpen && id === item.id &&
+                <PrivacyPopup
+                    id={item.id}
+                    title={item.title}
+                    folder={item.folder}
+                    is_public={item.is_public}
+                />
+            }
+        </>
     );
 };
 

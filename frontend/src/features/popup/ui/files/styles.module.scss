@@ -3,7 +3,7 @@
 .popup {
   position: fixed;
   backdrop-filter: blur(2px);
-  z-index: 4;
+  z-index: 9;
   display: grid;
   place-items: center;
   width: calc(100% - $nav-width);

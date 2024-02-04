@@ -2,7 +2,7 @@ import styles from "./styles.module.scss";
 import Button from "../../../shared/UIKit/button";
 import {Link} from "react-router-dom";
 import {MouseEventHandler} from "react";
-import {FilesPopup, FolderPopup, setIsFilesOpen, setIsFoldersOpen} from "../../../features/popup";
+import {FilesPopup, FolderPopup, setIsFilesOpen, setIsFoldersOpen, setIsPrivacyOpen} from "../../../features/popup";
 import {UsersCount} from "../../users-count";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
@@ -11,7 +11,7 @@ const Header = () => {
 
     const dispatch = useAppDispatch()
 
-    const {isFoldersOpen, isFilesOpen} = useAppSelector(state => state.popup)
+    const {isFoldersOpen, isFilesOpen, isPrivacyOpen} = useAppSelector(state => state.popup)
 
     const handleOpenFolder: MouseEventHandler<HTMLButtonElement> = (e) => {
         e.stopPropagation()
@@ -19,6 +19,8 @@ const Header = () => {
 
         if (isFilesOpen) {
             dispatch(setIsFilesOpen(false))
+        } else if (isPrivacyOpen) {
+            dispatch(setIsPrivacyOpen(false))
         }
     }
 
@@ -28,6 +30,8 @@ const Header = () => {
 
         if (isFoldersOpen) {
             dispatch(setIsFoldersOpen(false))
+        } else if (isPrivacyOpen) {
+            dispatch(setIsPrivacyOpen(false))
         }
     }
 

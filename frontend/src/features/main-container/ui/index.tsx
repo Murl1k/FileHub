@@ -11,7 +11,7 @@ import {
 } from "../../../shared/api/api.ts";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useParams} from "react-router-dom";
-import {setIsActive} from "../../item-template";
+import {initialTemplateState, setIsActive} from "../../item-template";
 
 const MainContainer: FC<HTMLAttributes<HTMLDivElement>> = ({children}) => {
 
@@ -38,11 +38,7 @@ const MainContainer: FC<HTMLAttributes<HTMLDivElement>> = ({children}) => {
             y: e.pageY
         }))
 
-        isActive.status && dispatch(setIsActive({
-            status: false,
-            isFolder: false,
-            id: ''
-        }))
+        isActive.status && dispatch(setIsActive(initialTemplateState))
     }
 
     useEffect(() => {

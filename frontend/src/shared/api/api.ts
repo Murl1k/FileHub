@@ -38,6 +38,20 @@ export const api = createApi({
             },
             invalidatesTags: ["File"]
         }),
+        updateFilePrivacy: builder.mutation<IFileData[], { id: string, folder: string | null, is_public: boolean }>({
+            queryFn: async ({id, folder, is_public}) => {
+                try {
+                    const res = await axiosInstance.patch(`/cloud_storage/files/${id}/`, {
+                        folder: folder,
+                        is_public: is_public
+                    })
+                    return res.data
+                } catch (err) {
+                    return toast.error(err.message)
+                }
+            },
+            invalidatesTags: ["File"]
+        }),
         copyFile: builder.mutation<IFileData[], { id: string, folder: string }>({
             queryFn: async ({id, folder}) => {
                 try {
@@ -80,10 +94,10 @@ export const api = createApi({
             },
             invalidatesTags: ["Folder"]
         }),
-        updateFolderPrivacy: builder.mutation<IFolderData[], { id: string, title: string }>({
-            queryFn: async ({id, title}) => {
+        updateFolderPrivacy: builder.mutation<IFolderData[], string>({
+            queryFn: async (id) => {
                 try {
-                    const res = await axiosInstance.post(`/cloud_storage/folders/${id}/change_privacy/`, title)
+                    const res = await axiosInstance.post(`/cloud_storage/folders/${id}/change_privacy/`)
                     return res.data
                 } catch (err) {
                     return toast.error(err.message)
@@ -109,6 +123,7 @@ export const {
     useGetFoldersQuery,
     useAddFileMutation,
     useAddFolderMutation,
+    useUpdateFilePrivacyMutation,
     useUpdateFolderPrivacyMutation,
     useRemoveFolderMutation,
     useRemoveFileMutation,
