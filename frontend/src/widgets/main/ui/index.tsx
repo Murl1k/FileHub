@@ -146,7 +146,8 @@ const Main = () => {
                         name: item.name,
                         title: item.title,
                         itemId: item.id,
-                        url: item.url
+                        url: item.url,
+                        size: item.size
                     }
 
                     return <SelectionBar key={item.id} selectionProps={selectionProps}/>

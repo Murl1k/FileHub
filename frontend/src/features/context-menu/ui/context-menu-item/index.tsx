@@ -1,4 +1,4 @@
-import styles from './styles.module.scss'
+import styles from '../styles.module.scss'
 import {FC, useRef} from "react";
 import {IMergedData} from "../../../../shared/types";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
@@ -8,6 +8,7 @@ import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 import {useNavigate} from "react-router-dom";
 import {initialTemplateState, setIsActive} from "../../../item-template";
+import {folderIcon} from "../../../../app/assets/images";
 
 const ContextMenuItem: FC<{ item: IMergedData }> = ({item}) => {
 
@@ -28,7 +29,8 @@ const ContextMenuItem: FC<{ item: IMergedData }> = ({item}) => {
         id: item.id,
         title: item.title,
         name: item.name,
-        url: item.url
+        url: item.url,
+        size: item.size
     }
 
     const handleOpenFolder = () => {
@@ -44,13 +46,19 @@ const ContextMenuItem: FC<{ item: IMergedData }> = ({item}) => {
                 dispatch(setContextMenu(initialContextState))
             }}
             ref={contextMenuRef}
-            style={state.x ? contextMenuPosition(state.x, state.y, 118) : {
+            style={state.x ? item.title ? contextMenuPosition(state.x, state.y, 172, 307) :
+                contextMenuPosition(state.x, state.y, 172, 205) : {
                 top: '40px',
                 right: '35px'
             }}
             className={styles.contextMenu}
         >
-            {item.title && <button onClick={handleOpenFolder}>Open</button>}
+            {item.title && <section className={styles.open}>
+                <div onClick={handleOpenFolder}>
+                    <img src={folderIcon} alt="folder"/>
+                    <p>Open</p>
+                </div>
+            </section>}
             <FeatureButtons featureButtonsProps={featureButtonsProps}/>
         </div>
     );

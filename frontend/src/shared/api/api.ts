@@ -38,11 +38,10 @@ export const api = createApi({
             },
             invalidatesTags: ["File"]
         }),
-        updateFilePrivacy: builder.mutation<IFileData[], { id: string, folder: string | null, is_public: boolean }>({
-            queryFn: async ({id, folder, is_public}) => {
+        updateFilePrivacy: builder.mutation<IFileData[], { id: string, is_public: boolean }>({
+            queryFn: async ({id, is_public}) => {
                 try {
                     const res = await axiosInstance.patch(`/cloud_storage/files/${id}/`, {
-                        folder: folder,
                         is_public: is_public
                     })
                     return res.data
@@ -105,6 +104,17 @@ export const api = createApi({
             },
             invalidatesTags: ["Folder"]
         }),
+        renameFolder: builder.mutation<IFolderData[], { id: string, title: string }>({
+            queryFn: async ({id, title}) => {
+                try {
+                    const res = await axiosInstance.patch(`/cloud_storage/folders/${id}/`, {title: title})
+                    return res.data
+                } catch (err) {
+                    return toast.error(err.response.data.detail)
+                }
+            },
+            invalidatesTags: ["Folder"]
+        }),
         copyFolder: builder.mutation<IFolderData[], { id: string, folder: string }>({
             queryFn: async ({id, folder}) => {
                 try {
@@ -128,5 +138,6 @@ export const {
     useRemoveFolderMutation,
     useRemoveFileMutation,
     useCopyFolderMutation,
-    useCopyFileMutation
+    useCopyFileMutation,
+    useRenameFolderMutation
 } = api

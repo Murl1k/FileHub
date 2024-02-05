@@ -6,17 +6,15 @@ import {useUpdateFilePrivacyMutation, useUpdateFolderPrivacyMutation} from "../.
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {CloseBtn} from "../../../close-btn";
+import PopupTemplate from "../template";
 
 interface IPrivacyPopup {
     id: string
     title: string
-    folder: null | string
     is_public: boolean
 }
 
-const PrivacyPopup: FC<IPrivacyPopup> = ({id, title, folder, is_public}) => {
-
-    console.log(is_public)
+const PrivacyPopup: FC<IPrivacyPopup> = ({id, title, is_public}) => {
 
     const dispatch = useAppDispatch()
 
@@ -33,14 +31,14 @@ const PrivacyPopup: FC<IPrivacyPopup> = ({id, title, folder, is_public}) => {
         if (title) {
             updateFolderPrivacy(id)
         } else {
-            updateFilePrivacy({id: id, folder: folder, is_public: !is_public})
+            updateFilePrivacy({id: id, is_public: !is_public})
         }
 
         dispatch(setIsPrivacyOpen(false))
     }
 
     return (
-        <div className={styles.popup}>
+        <PopupTemplate onContextMenu={e => e.stopPropagation()}>
             <div onClick={e => e.stopPropagation()} ref={privacyRef} className={styles.privacy}>
                 <div className={styles.privacyHeadline}>
                     <h3>Confirmation</h3>
@@ -72,7 +70,7 @@ const PrivacyPopup: FC<IPrivacyPopup> = ({id, title, folder, is_public}) => {
                     </button>
                 </div>
             </div>
-        </div>
+        </PopupTemplate>
     );
 };
 

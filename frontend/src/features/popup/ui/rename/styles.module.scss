@@ -1,0 +1,50 @@
+@import '../../../../app/assets/styles/vars';
+
+.rename {
+  background-color: #fff;
+  box-shadow: 0 0 10px 5px #dce1e4;
+  width: 400px;
+  border-radius: 8px;
+
+  > div {
+    padding: 10px 30px;
+
+    &:first-child {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid $gray;
+    }
+
+    &:last-child {
+      input {
+        border-radius: 12px;
+        border: 1px solid $gray;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+      }
+
+      div {
+        display: flex;
+        justify-content: flex-end;
+        gap: 20px;
+
+        button {
+          border-radius: 6px;
+          font-weight: 600;
+
+          &:first-child {
+            color: $secondary;
+          }
+
+          &:last-child {
+            padding: 10px 30px;
+            background-color: $primary;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+}

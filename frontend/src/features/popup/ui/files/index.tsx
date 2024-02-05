@@ -9,6 +9,7 @@ import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {IPopup} from "../../";
 import {toast} from "react-toastify";
+import PopupTemplate from "../template";
 
 const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
 
@@ -71,7 +72,7 @@ const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
     }
 
     return (
-        <div className={styles.popup}>
+        <PopupTemplate>
             <div className={styles.container} ref={popupRef}>
                 <div className={styles.popupHeadline}>
                     <h3>Upload your file</h3>
@@ -125,7 +126,7 @@ const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
                     </form>
                 </div>
             </div>
-        </div>
+        </PopupTemplate>
     );
 };
 

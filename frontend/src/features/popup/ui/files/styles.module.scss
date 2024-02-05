@@ -1,15 +1,5 @@
 @import '../../../../app/assets/styles/vars';
 
-.popup {
-  position: fixed;
-  backdrop-filter: blur(2px);
-  z-index: 9;
-  display: grid;
-  place-items: center;
-  width: calc(100% - $nav-width);
-  height: 100%;
-}
-
 .container {
   width: 600px;
   border: 1px solid $gray;

@@ -1,42 +1,35 @@
 @import '../../../app/assets/styles/vars';
 
 .selectionBar {
-  position: fixed;
   display: flex;
-  gap: 20px;
-  width: calc(100% - $nav-width);
+  justify-content: space-between;
+  align-items: center;
   padding: 20px 40px;
-  left: $nav-width;
   background-color: #fff;
   border-top: 1px solid $gray;
-  bottom: 0;
-  z-index: 7;
+  height: $selection-bar-height;
 
-  button {
-    background-color: $primary;
-    border-radius: 12px;
-    padding: 10px 20px;
-    color: #fff;
+  > p {
     font-weight: 600;
+  }
 
-    &:first-child {
-      order: 3;
+  div {
+    display: flex;
+
+    p {
+      display: none;
     }
 
-    &:nth-child(2) {
-      order: 1;
+    img, svg {
+      cursor: pointer;
     }
 
-    &:nth-child(3) {
-      order: 2;
+    div:not(:last-child), section:not(:last-child) {
+      margin-right: 20px;
     }
 
-    &:nth-child(4) {
-      order: 4;
-    }
-
-    &:last-child {
-      order: 5;
+    section {
+      display: flex;
     }
   }
 }

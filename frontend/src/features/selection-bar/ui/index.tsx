@@ -1,17 +1,19 @@
 import styles from "./styles.module.scss";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {FC, useRef} from "react";
+import {FC, MouseEvent, useRef} from "react";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {FeatureButtons} from "../../feature-buttons";
 import {useOutsideClick} from "../../../shared/lib/hooks/useClickOutside.ts";
 import {PasteButton} from "../../paste-button";
 import {initialTemplateState, setIsActive} from "../../item-template";
+import {initialContextState, setContextMenu} from "../../context-menu";
 
 interface ISelectionBar {
     selectionProps: {
         name: string
         title: string
         url: string
+        size: number
         itemId: string
     }
 }
@@ -23,11 +25,13 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
         name,
         title,
         url,
+        size,
         itemId
     } = selectionProps
 
     const dispatch = useAppDispatch()
 
+    const {type} = useAppSelector(state => state.contextMenu)
     const {status} = useAppSelector(state => state.itemTemplate)
 
     const selectionBarRef = useRef<HTMLDivElement>(null)
@@ -38,17 +42,27 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
         title,
         url,
         name,
+        size,
         id: itemId
+    }
+
+    const handleClick = (e: MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation()
+
+        type === 'item' && dispatch(setContextMenu(initialContextState))
     }
 
     return (
         <div
-            onContextMenu={e => e.stopPropagation()}
+            onClick={handleClick}
             ref={selectionBarRef}
             className={styles.selectionBar}
         >
-            <PasteButton/>
-            <FeatureButtons featureButtonsProps={featureButtonsProps}/>
+            <p>{title ? title : name}</p>
+            <div>
+                <PasteButton/>
+                <FeatureButtons featureButtonsProps={featureButtonsProps}/>
+            </div>
         </div>
     );
 };

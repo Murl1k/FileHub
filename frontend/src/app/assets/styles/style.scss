@@ -42,12 +42,6 @@ input {
   outline: none;
 }
 
-.main {
-  position: relative;
-  top: $header-height;
-  height: 100%;
-}
-
 .page {
   display: grid;
   height: 100vh;

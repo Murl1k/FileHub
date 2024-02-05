@@ -7,9 +7,9 @@ const DefaultLayout = () => {
     return (
         <div style={{display: 'flex', minHeight: '100vh'}}>
             <Menu/>
-            <div style={{width: '100%', marginLeft: '280px'}}>
+            <div style={{width: '100%'}}>
                 <Header/>
-                <main className='main'>
+                <main>
                     <Outlet/>
                 </main>
             </div>

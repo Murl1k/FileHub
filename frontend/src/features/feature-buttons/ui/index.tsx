@@ -6,7 +6,9 @@ import {initialTemplateState, setIsActive} from "../../item-template";
 import {getItemId} from "../../selection-bar";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {initialContextState, setContextMenu} from "../../context-menu";
-import {setIsPrivacyOpen} from "../../popup";
+import {setIsFolderRenameOpen, setIsPrivacyOpen} from "../../popup";
+import {deleteIcon, privateIcon} from "../../../app/assets/images";
+import {toast} from "react-toastify";
 
 interface IFeatureButtons {
     featureButtonsProps: {
@@ -14,6 +16,7 @@ interface IFeatureButtons {
         title: string
         url: string
         name: string
+        size: number
     }
 }
 
@@ -23,64 +26,80 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
         id,
         title,
         url,
-        name
+        name,
+        size
     } = featureButtonsProps
 
     const dispatch = useAppDispatch()
 
-    const {type} = useAppSelector(state => state.contextMenu)
     const {id: objectId} = useAppSelector(state => state.selectionBar)
-    const {status, isFolder} = useAppSelector(state => state.itemTemplate)
+    const {isFolder} = useAppSelector(state => state.itemTemplate)
 
     const [updateRemoveFolder] = useRemoveFolderMutation()
     const [updateRemoveFile] = useRemoveFileMutation()
 
-    const handleOpenPrivacy = (e: MouseEvent<HTMLButtonElement>) => {
+    const handleTemplate = (e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation()
 
-        dispatch(setIsPrivacyOpen(true))
         dispatch(setContextMenu(initialContextState))
         dispatch(setIsActive({id: id, isFolder: false, status: false}))
     }
 
-    const handleCopy = (e: MouseEvent<HTMLButtonElement>) => {
+    const handleOpenPrivacy = (e: MouseEvent<HTMLDivElement>) => {
+        handleTemplate(e)
+        dispatch(setIsPrivacyOpen(true))
+    }
+
+    const handleOpenFolderRename = (e: MouseEvent<HTMLDivElement>) => {
+        handleTemplate(e)
+        dispatch(setIsFolderRenameOpen(true))
+    }
+
+    const handleCopy = (e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation()
 
         if (objectId !== id) {
             dispatch(getItemId({id: id, isFolder: isFolder}))
         }
 
-        type === 'item' && dispatch(setContextMenu(initialContextState))
+        dispatch(setContextMenu(initialContextState))
     }
 
-    const handleDownload = async (e: MouseEvent<HTMLButtonElement>, id: string, data: string, title: string) => {
+    const handleDownload = async (e: MouseEvent<HTMLDivElement>, id: string, data: string, title: string) => {
         try {
             e.stopPropagation()
-            let blobData
 
-            if (!data) {
-                blobData = (await dispatch(fetchDownloadFolderAsZip(id))).payload
-            }
+            if (!size) {
+                toast.error('The folder is empty with no downloadable files.')
 
-            if (blobData || data) {
-                const url = window.URL.createObjectURL(new Blob([blobData]))
+                dispatch(setContextMenu(initialContextState))
+            } else {
+                let blobData
 
-                const a = document.createElement('a')
-                a.href = data ? data : url
-                a.download = data ? title : `${title}.zip`
+                if (!data) {
+                    blobData = (await dispatch(fetchDownloadFolderAsZip(id))).payload
+                }
 
-                document.body.appendChild(a)
-                a.click()
+                if (blobData || data) {
+                    const url = window.URL.createObjectURL(new Blob([blobData]))
 
-                window.URL.revokeObjectURL(url)
-                document.body.removeChild(a)
+                    const a = document.createElement('a')
+                    a.href = data ? data : url
+                    a.download = data ? title : `${title}.zip`
+
+                    document.body.appendChild(a)
+                    a.click()
+
+                    window.URL.revokeObjectURL(url)
+                    document.body.removeChild(a)
+                }
             }
         } catch (err) {
             console.error(err)
         }
     };
 
-    const handleRemove = (e: MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
+    const handleRemove = (e: MouseEvent<HTMLDivElement> | KeyboardEvent) => {
         e.stopPropagation()
 
         if (title) {
@@ -89,9 +108,8 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
             updateRemoveFile(id)
         }
 
-        status && dispatch(setIsActive(initialTemplateState))
-
-        type === 'item' && dispatch(setContextMenu(initialContextState))
+        dispatch(setIsActive(initialTemplateState))
+        dispatch(setContextMenu(initialContextState))
     }
 
     useEffect(() => {
@@ -106,20 +124,59 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
         return () => {
             document.removeEventListener("keydown", onKeyDown as never)
         }
-    }, [])
+    })
 
     return (
         <>
-            <button onClick={handleOpenPrivacy}>
-                Change privacy
-            </button>
-            <button onClick={handleCopy}>Copy</button>
-            <button onClick={(e) => handleDownload(e, id, url, title ? title : name)}>
-                Download
-            </button>
-            <button onClick={handleRemove}>
-                Delete
-            </button>
+            <section>
+                <div onClick={handleOpenPrivacy}>
+                    <img src={privateIcon} alt="privacy"/>
+                    <p>Change privacy</p>
+                </div>
+                {title && <div onClick={handleOpenFolderRename}>
+                    <svg height="30" width="30" style={{color: '#808080'}} xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24">
+                        <path
+                            d="M18.41 5.8L17.2 4.59c-.78-.78-2.05-.78-2.83 0l-2.68 2.68L3 15.96V20h4.04l8.74-8.74 2.63-2.63c.79-.78.79-2.05 0-2.83zM6.21 18H5v-1.21l8.66-8.66 1.21 1.21L6.21 18zM11 20l4-4h6v4H11z"
+                            fill="#808080"></path>
+                    </svg>
+                    <p>Rename</p>
+                </div>}
+                <div onClick={handleCopy}>
+                    <svg height="30" width="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path fillRule="evenodd" clipRule="evenodd"
+                                  d="M21 8C21 6.34315 19.6569 5 18 5H10C8.34315 5 7 6.34315 7 8V20C7 21.6569 8.34315 23 10 23H18C19.6569 23 21 21.6569 21 20V8ZM19 8C19 7.44772 18.5523 7 18 7H10C9.44772 7 9 7.44772 9 8V20C9 20.5523 9.44772 21 10 21H18C18.5523 21 19 20.5523 19 20V8Z"
+                                  fill="#808080"></path>
+                            <path
+                                d="M6 3H16C16.5523 3 17 2.55228 17 2C17 1.44772 16.5523 1 16 1H6C4.34315 1 3 2.34315 3 4V18C3 18.5523 3.44772 19 4 19C4.55228 19 5 18.5523 5 18V4C5 3.44772 5.44772 3 6 3Z"
+                                fill="#808080"></path>
+                        </g>
+                    </svg>
+                    <p>Copy</p>
+                </div>
+                <div onClick={(e) => handleDownload(e, id, url, title ? title : name)}>
+                    <svg height="30" width="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <g id="Interface / Download">
+                                <path id="Vector" d="M6 21H18M12 3V17M12 17L17 12M12 17L7 12" stroke="#808080"
+                                      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+                            </g>
+                        </g>
+                    </svg>
+                    <p>Download</p>
+                </div>
+            </section>
+            <section>
+                <div onClick={handleRemove}>
+                    <img src={deleteIcon} alt="delete"/>
+                    <p>Delete</p>
+                </div>
+            </section>
         </>
     );
 };

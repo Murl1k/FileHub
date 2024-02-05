@@ -1,12 +1,12 @@
 import styles from "./styles.module.scss";
-import {FC, HTMLAttributes, MouseEvent, useState} from "react";
+import {FC, HTMLAttributes, MouseEvent} from "react";
 import {useNavigate} from "react-router-dom";
 import {ContextMenuItem, initialContextState, setContextMenu} from "../../context-menu";
 import {IMergedData} from "../../../shared/types";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {initialTemplateState, setIsActive} from "../";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {PrivacyPopup, setIsFoldersOpen} from "../../popup";
+import {PrivacyPopup, RenamePopup, setIsFoldersOpen} from "../../popup";
 
 interface IItemTemplate extends HTMLAttributes<HTMLDivElement> {
     itemProps: {
@@ -26,9 +26,7 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
 
     const navigate = useNavigate()
 
-    const [isClicked, setIsClicked] = useState(false);
-
-    const {isPrivacyOpen, isFoldersOpen} = useAppSelector(state => state.popup)
+    const {isPrivacyOpen, isFoldersOpen, isFolderRenameOpen} = useAppSelector(state => state.popup)
     const {type, x} = useAppSelector(state => state.contextMenu)
     const {id, status} = useAppSelector(state => state.itemTemplate)
 
@@ -51,13 +49,10 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
         if (id !== item.id || !status) {
             dispatch(setIsActive(setActiveState))
         }
-
-        setIsClicked(true)
     }
 
     const handleClickTemplate = (e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation()
-        setIsClicked(true);
 
         if (id !== item.id || !status) {
             dispatch(setIsActive(setActiveState))
@@ -79,7 +74,7 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
         }
     };
 
-    const condition = isClicked && status && id === item.id
+    const condition = status && id === item.id
 
     const templateClassnames = () => {
         return isGrid
@@ -125,9 +120,11 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
                 <PrivacyPopup
                     id={item.id}
                     title={item.title}
-                    folder={item.folder}
                     is_public={item.is_public}
                 />
+            }
+            {isFolderRenameOpen && id === item.id &&
+                <RenamePopup id={item.id}/>
             }
         </>
     );

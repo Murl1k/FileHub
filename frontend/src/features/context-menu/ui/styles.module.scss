@@ -1,0 +1,74 @@
+@import '../../../app/assets/styles/vars';
+
+.contextMenu {
+  background-color: $gray;
+  border: 1px solid $gray;
+  border-radius: 12px;
+  position: absolute;
+  z-index: 8;
+  display: grid !important;
+  gap: 0 !important;
+  box-shadow: 0 0 10px 5px #dce1e4;
+  cursor: auto;
+
+  section {
+    padding: 10px;
+
+    div {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 8px !important;
+      transition: background-color .2s ease-in-out, color .2s ease-in-out;
+      padding: 4px;
+
+      p {
+        font-weight: 600;
+        font-size: 14px;
+        color: #8a8989;
+      }
+
+      &:hover {
+        background-color: #e8e8e8;
+
+        p {
+          color: #969696;
+        }
+      }
+    }
+
+    &:not(.open) {
+      div {
+        &:hover {
+          path, img {
+            filter: brightness(0) saturate(100%) invert(23%) sepia(83%) saturate(1472%) hue-rotate(237deg) brightness(85%) contrast(88%);
+          }
+        }
+      }
+    }
+
+    &:not(.open, :last-child) {
+      display: grid;
+      gap: 5px;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #c9c9c9;
+    }
+  }
+}
+
+.open {
+  div {
+    img {
+      filter: invert(51%) sepia(0%) saturate(313%) hue-rotate(158deg) brightness(99%) contrast(81%);
+    }
+
+    &:hover {
+      img {
+        filter: none;
+      }
+    }
+  }
+}

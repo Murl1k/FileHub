@@ -1,0 +1,14 @@
+@import '../../../../app/assets/styles/vars';
+
+.popup {
+  position: fixed;
+  height: 100vh;
+  width: calc(100% - $nav-width);
+  left: $nav-width;
+  display: grid;
+  top: 0;
+  place-items: center;
+  backdrop-filter: blur(2px);
+  z-index: 8;
+  cursor: auto;
+}
