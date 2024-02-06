@@ -1,5 +1,5 @@
 import styles from './styles.module.scss';
-import {ChangeEvent, FC, MouseEvent, useRef, useState} from "react";
+import {ChangeEvent, FC, KeyboardEvent, MouseEvent, useRef, useState} from "react";
 import {CloseBtn} from "../../../close-btn";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {setIsFolderRenameOpen} from "../../model";
@@ -29,11 +29,17 @@ const RenamePopup: FC<{ id: string }> = ({id}) => {
         setTitle(e.target.value)
     }
 
-    const handleFolderRename = (e: MouseEvent<HTMLButtonElement>) => {
+    const handleFolderRename = (e: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLInputElement>) => {
         e.stopPropagation()
 
         updateResult({id: id, title: title})
         dispatch(setIsFolderRenameOpen(false))
+    }
+
+    const onKeyDownRename = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.code === 'Enter') {
+            handleFolderRename(e)
+        }
     }
 
     return (
@@ -44,7 +50,14 @@ const RenamePopup: FC<{ id: string }> = ({id}) => {
                     <CloseBtn onClick={handleCloseRename}/>
                 </div>
                 <div>
-                    <input placeholder="Enter a new title" value={title} onChange={handleTitleChange} type="text"/>
+                    <input
+                        placeholder="Enter a new title"
+                        type="text"
+                        autoFocus
+                        value={title}
+                        onChange={handleTitleChange}
+                        onKeyDown={onKeyDownRename}
+                    />
                     <div>
                         <button onClick={handleCloseRename}>Cancel</button>
                         <button onClick={handleFolderRename}>Rename</button>

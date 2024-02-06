@@ -7,6 +7,7 @@ import {useOutsideClick} from "../../../shared/lib/hooks/useClickOutside.ts";
 import {PasteButton} from "../../paste-button";
 import {initialTemplateState, setIsActive} from "../../item-template";
 import {initialContextState, setContextMenu} from "../../context-menu";
+import {initialFilterState, setFilter} from "../../popup";
 
 interface ISelectionBar {
     selectionProps: {
@@ -33,10 +34,13 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
 
     const {type} = useAppSelector(state => state.contextMenu)
     const {status} = useAppSelector(state => state.itemTemplate)
+    const {filter} = useAppSelector(state => state.popup)
 
     const selectionBarRef = useRef<HTMLDivElement>(null)
 
-    useOutsideClick(selectionBarRef, () => dispatch(setIsActive(initialTemplateState)), status)
+    useOutsideClick(selectionBarRef, () => {
+        !filter.isOpen ? dispatch(setIsActive(initialTemplateState)) : dispatch(setFilter(initialFilterState))
+    }, status)
 
     const featureButtonsProps = {
         title,

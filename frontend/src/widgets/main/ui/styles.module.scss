@@ -1,4 +1,5 @@
 @import '../../../app/assets/styles/vars';
+@import '../../../app/assets/styles/mixins';
 
 .storageHeadline {
   display: flex;
@@ -6,8 +7,33 @@
   justify-content: space-between;
   margin-bottom: 20px;
 
-  h2 {
-    margin-bottom: 20px;
+  > div:first-child {
+    position: relative;
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    > div {
+      display: flex;
+      align-items: center;
+
+      div {
+        cursor: pointer;
+        user-select: none;
+        display: flex;
+        align-items: center;
+      }
+
+      svg, button {
+        margin-left: 10px;
+      }
+
+      button {
+        color: $secondary;
+        font-weight: 600;
+      }
+    }
   }
 
   > div:last-child {
@@ -31,6 +57,23 @@
           fill: #fff;
         }
       }
+    }
+  }
+}
+
+.setSort {
+  p {
+    display: inline-block;
+    font-weight: 600;
+
+    &:first-child {
+      color: #8a8f98;
+      margin-right: 7px;
+    }
+
+    &:last-child {
+      text-transform: capitalize;
+      color: black;
     }
   }
 }

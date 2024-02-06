@@ -72,7 +72,7 @@ const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
     }
 
     return (
-        <PopupTemplate>
+        <PopupTemplate style={{height: 'calc(100vh - 83px)', top: '83px'}}>
             <div className={styles.container} ref={popupRef}>
                 <div className={styles.popupHeadline}>
                     <h3>Upload your file</h3>

@@ -2,25 +2,45 @@ import styles from "./styles.module.scss";
 import Button from "../../../shared/UIKit/button";
 import {Link} from "react-router-dom";
 import {MouseEventHandler} from "react";
-import {FilesPopup, FolderPopup, setIsFilesOpen, setIsFoldersOpen, setIsPrivacyOpen} from "../../../features/popup";
+import {
+    FilesPopup,
+    FolderPopup,
+    setFilter,
+    setIsFilesOpen,
+    setIsFoldersOpen,
+    setIsPrivacyOpen
+} from "../../../features/popup";
 import {UsersCount} from "../../users-count";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
+import {initialContextState, setContextMenu} from "../../../features/context-menu";
 
 const Header = () => {
 
     const dispatch = useAppDispatch()
 
-    const {isFoldersOpen, isFilesOpen, isPrivacyOpen} = useAppSelector(state => state.popup)
+    const {isFoldersOpen, isFilesOpen, isPrivacyOpen, filter} = useAppSelector(state => state.popup)
+    const {type} = useAppSelector(state => state.contextMenu)
 
     const handleOpenFolder: MouseEventHandler<HTMLButtonElement> = (e) => {
         e.stopPropagation()
         dispatch(setIsFoldersOpen(!isFoldersOpen))
 
-        if (isFilesOpen) {
-            dispatch(setIsFilesOpen(false))
-        } else if (isPrivacyOpen) {
-            dispatch(setIsPrivacyOpen(false))
+        switch (true) {
+            case isFilesOpen:
+                dispatch(setIsFilesOpen(false))
+                break
+            case isPrivacyOpen:
+                dispatch(setIsPrivacyOpen(false))
+                break
+            case filter.isOpen:
+                dispatch(setFilter({isOpen: false, sortBy: filter.sortBy}))
+                break
+            case type !== 'initial':
+                dispatch(setContextMenu(initialContextState))
+                break
+            default:
+                break
         }
     }
 
@@ -28,10 +48,21 @@ const Header = () => {
         e.stopPropagation()
         dispatch(setIsFilesOpen(!isFilesOpen))
 
-        if (isFoldersOpen) {
-            dispatch(setIsFoldersOpen(false))
-        } else if (isPrivacyOpen) {
-            dispatch(setIsPrivacyOpen(false))
+        switch (true) {
+            case isFoldersOpen:
+                dispatch(setIsFoldersOpen(false))
+                break
+            case isPrivacyOpen:
+                dispatch(setIsPrivacyOpen(false))
+                break
+            case filter.isOpen:
+                dispatch(setFilter({isOpen: false, sortBy: filter.sortBy}))
+                break
+            case type !== 'initial':
+                dispatch(setContextMenu(initialContextState))
+                break
+            default:
+                break
         }
     }
 

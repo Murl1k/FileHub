@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
 import {MainContainer} from "../../../features/main-container";
 import {GridItem} from "../../grid-item";
-import {useEffect, useState} from "react";
+import {MouseEvent, useEffect, useState} from "react";
 import {IMergedData} from "../../../shared/types";
 import {useNavigate, useParams} from "react-router-dom";
 import {useGetFilesQuery, useGetFoldersQuery} from "../../../shared/api/api.ts";
@@ -11,6 +11,7 @@ import {ItemTemplate} from "../../../features/item-template";
 import {ListItem} from "../../list-item";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {initialContextState, setContextMenu} from "../../../features/context-menu";
+import {FilterPopup, initialFilterState, setFilter} from "../../../features/popup";
 
 const Main = () => {
 
@@ -24,6 +25,7 @@ const Main = () => {
 
     const {type} = useAppSelector(state => state.contextMenu)
     const {id: activeId, status} = useAppSelector(state => state.itemTemplate)
+    const {filter} = useAppSelector(state => state.popup)
 
     const {data: folders, isError} = useGetFoldersQuery(id)
     const {data: files} = useGetFilesQuery(id)
@@ -34,13 +36,39 @@ const Main = () => {
     ] as IMergedData[]
 
     const sortedMergedData = mergedData
-        .sort((a, b) =>
-            new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+        .sort((a, b) => {
+            switch (filter.sortBy) {
+                case 'last updated':
+                    return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+                case 'size':
+                    return b.size - a.size
+                default:
+                    return 0
+            }
+        })
+        .filter(item => {
+            switch (filter.sortBy) {
+                case 'folder':
+                    return item.title
+                case 'file':
+                    return item.name
+                default:
+                    return item
+            }
+        })
 
     const selectionBarData = sortedMergedData.filter(item => item.id === activeId)
 
     const setView = (value: boolean) => {
         setIsGrid(value)
+
+        type !== 'initial' && dispatch(setContextMenu(initialContextState))
+    }
+
+    const handleOpenSort = (e: MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation()
+
+        dispatch(setFilter({isOpen: !filter.isOpen, sortBy: filter.sortBy}))
 
         type !== 'initial' && dispatch(setContextMenu(initialContextState))
     }
@@ -57,7 +85,31 @@ const Main = () => {
                 <div className={styles.storageHeadline}>
                     <div>
                         <h2>My Cloud</h2>
-                        <p>Sort by: Type</p>
+                        <div>
+                            <div onClick={handleOpenSort}>
+                                <div className={styles.setSort}>
+                                    <p>Sort by:</p>
+                                    <p>{filter.sortBy ? filter.sortBy : 'Type'}</p>
+                                </div>
+                                <svg style={filter.isOpen ? {rotate: '180deg'} : {}} height="24" width="24"
+                                     viewBox="0 0 24 24" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                            d="M18.2929 15.2893C18.6834 14.8988 18.6834 14.2656 18.2929 13.8751L13.4007 8.98766C12.6195 8.20726 11.3537 8.20757 10.5729 8.98835L5.68257 13.8787C5.29205 14.2692 5.29205 14.9024 5.68257 15.2929C6.0731 15.6835 6.70626 15.6835 7.09679 15.2929L11.2824 11.1073C11.673 10.7168 12.3061 10.7168 12.6966 11.1073L16.8787 15.2893C17.2692 15.6798 17.9024 15.6798 18.2929 15.2893Z"
+                                            fill="#0F0F0F"></path>
+                                    </g>
+                                </svg>
+                            </div>
+                            {Boolean(filter.sortBy) &&
+                                <button onClick={() => dispatch(setFilter(initialFilterState))}>
+                                    Reset filter
+                                </button>
+                            }
+                        </div>
+                        {filter.isOpen && <FilterPopup/>}
                     </div>
                     <div onClick={e => e.stopPropagation()}>
                         <button className={isGrid ? styles.activeBtn : ''} onClick={() => setView(true)}>

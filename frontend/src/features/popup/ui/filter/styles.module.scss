@@ -1,0 +1,25 @@
+@import '../../../../app/assets/styles/vars';
+@import '../../../../app/assets/styles/mixins';
+
+.sort {
+  width: 155px;
+  @include menu;
+
+  section {
+    div {
+      img[alt='file'], img[alt='folder'] {
+        filter: invert(51%) sepia(0%) saturate(313%) hue-rotate(158deg) brightness(99%) contrast(81%);
+      }
+
+      &:hover {
+        img {
+          filter: none;
+
+          &:not([alt='file'], [alt='folder']) {
+            filter: brightness(0) saturate(100%) invert(23%) sepia(83%) saturate(1472%) hue-rotate(237deg) brightness(85%) contrast(88%);
+          }
+        }
+      }
+    }
+  }
+}

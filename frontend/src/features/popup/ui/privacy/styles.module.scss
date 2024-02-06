@@ -6,7 +6,7 @@
   border-radius: 8px;
   transition: top .3s ease-in-out;
   display: grid;
-  box-shadow: 0 0 10px 5px #dce1e4;
+  box-shadow: $box-shadow;
 
   > div {
     display: flex;

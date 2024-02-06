@@ -6,7 +6,7 @@ import {IMergedData} from "../../../shared/types";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {initialTemplateState, setIsActive} from "../";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {PrivacyPopup, RenamePopup, setIsFoldersOpen} from "../../popup";
+import {initialFilterState, PrivacyPopup, RenamePopup, setFilter, setIsFoldersOpen} from "../../popup";
 
 interface IItemTemplate extends HTMLAttributes<HTMLDivElement> {
     itemProps: {
@@ -26,7 +26,7 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
 
     const navigate = useNavigate()
 
-    const {isPrivacyOpen, isFoldersOpen, isFolderRenameOpen} = useAppSelector(state => state.popup)
+    const {isPrivacyOpen, isFoldersOpen, isFolderRenameOpen, filter} = useAppSelector(state => state.popup)
     const {type, x} = useAppSelector(state => state.contextMenu)
     const {id, status} = useAppSelector(state => state.itemTemplate)
 
@@ -34,21 +34,6 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
         status: true,
         id: item.id,
         isFolder: Boolean(item.title)
-    }
-
-    const handleRightClick = (e: MouseEvent<HTMLDivElement>) => {
-        e.preventDefault()
-        e.stopPropagation()
-
-        dispatch(setContextMenu({
-            type: "item",
-            x: e.pageX,
-            y: e.pageY
-        }))
-
-        if (id !== item.id || !status) {
-            dispatch(setIsActive(setActiveState))
-        }
     }
 
     const handleClickTemplate = (e: MouseEvent<HTMLDivElement>) => {
@@ -59,6 +44,19 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
         }
 
         isFoldersOpen && dispatch(setIsFoldersOpen(false))
+        filter.isOpen && dispatch(setFilter(initialFilterState))
+    }
+
+    const handleRightClick = (e: MouseEvent<HTMLDivElement>) => {
+        e.preventDefault()
+
+        dispatch(setContextMenu({
+            type: "item",
+            x: e.pageX,
+            y: e.pageY
+        }))
+
+        handleClickTemplate(e)
     }
 
     const handleSingleClick = (e: MouseEvent<HTMLDivElement>) => {

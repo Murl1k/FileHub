@@ -12,6 +12,7 @@ import {
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useParams} from "react-router-dom";
 import {initialTemplateState, setIsActive} from "../../item-template";
+import {initialFilterState, setFilter, setIsFoldersOpen} from "../../popup";
 
 const MainContainer: FC<HTMLAttributes<HTMLDivElement>> = ({children}) => {
 
@@ -22,6 +23,7 @@ const MainContainer: FC<HTMLAttributes<HTMLDivElement>> = ({children}) => {
     const {id: objectId, isFolder} = useAppSelector(state => state.selectionBar)
     const {type} = useAppSelector(state => state.contextMenu)
     const isActive = useAppSelector(state => state.itemTemplate)
+    const {filter, isFoldersOpen} = useAppSelector(state => state.popup)
 
     const {refetch: foldersRefetch} = useGetFoldersQuery(id)
     const {refetch: filesRefetch} = useGetFilesQuery(id)
@@ -39,6 +41,8 @@ const MainContainer: FC<HTMLAttributes<HTMLDivElement>> = ({children}) => {
         }))
 
         isActive.status && dispatch(setIsActive(initialTemplateState))
+        isFoldersOpen && dispatch(setIsFoldersOpen(false))
+        filter.isOpen && dispatch(setFilter(initialFilterState))
     }
 
     useEffect(() => {
