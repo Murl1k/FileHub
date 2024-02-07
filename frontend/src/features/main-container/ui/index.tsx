@@ -61,7 +61,7 @@ const MainContainer: FC<HTMLAttributes<HTMLDivElement>> = ({children}) => {
 
     useEffect(() => {
         const handlePaste = async (e: KeyboardEvent) => {
-            if ((e.ctrlKey || e.metaKey) && e.code === 'KeyV') {
+            if (((e.ctrlKey || e.metaKey) && e.code === 'KeyV') && objectId) {
                 if (isFolder) {
                     await copyFolder({id: objectId, folder: id})
                     setTimeout(() => {

@@ -4,6 +4,7 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {fetchLogin, fetchLoginMe, fetchRegister, IUser} from "../../";
+import {toast} from "react-toastify";
 
 interface IRegister extends IUser {
     passwordAgain: string
@@ -27,24 +28,20 @@ const Register = () => {
     })
 
     const onSubmit: SubmitHandler<IRegister> = async (values) => {
-        try {
-            if (values.password !== values.passwordAgain) {
-                return alert('Passwords dont match')
-            }
+        if (values.password !== values.passwordAgain) {
+            return toast.error('Passwords dont match.')
+        }
 
-            const register = await dispatch(fetchRegister(values))
+        const register = await dispatch(fetchRegister(values))
 
-            if (typeof register.payload === "object") {
-                const data = await dispatch(fetchLogin({
-                    password: values.password,
-                    username: values.username
-                }))
-                dispatch(fetchLoginMe())
-                navigate('/')
-                localStorage.setItem('token', data.payload.auth_token)
-            }
-        } catch (err) {
-            console.log(err)
+        if (typeof register.payload === "object") {
+            const data = await dispatch(fetchLogin({
+                password: values.password,
+                username: values.username
+            }))
+            dispatch(fetchLoginMe())
+            navigate('/')
+            localStorage.setItem('token', data.payload.auth_token)
         }
     }
 
@@ -53,23 +50,32 @@ const Register = () => {
             <img src={avatarIcon} alt="avatar"/>
             <h3>SIGN UP</h3>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-                <input
-                    {...register('username', {required: true})}
-                    placeholder='Name'
-                    type="text"
-                />
-                <input
-                    {...register('password', {required: true})}
-                    placeholder='Password'
-                    type="password"
-                />
-                <input
-                    {...register('passwordAgain', {required: true})}
-                    placeholder='Password again'
-                    type="password"
-                />
+                <div>
+                    <p>Name</p>
+                    <input
+                        {...register('username', {required: true})}
+                        placeholder='Name'
+                        type="text"
+                    />
+                </div>
+                <div>
+                    <p>Password</p>
+                    <input
+                        {...register('password', {required: true})}
+                        placeholder='Password'
+                        type="password"
+                    />
+                </div>
+                <div>
+                    <p>Password again</p>
+                    <input
+                        {...register('passwordAgain', {required: true})}
+                        placeholder='Password again'
+                        type="password"
+                    />
+                </div>
                 <button type='submit'>
-                    SIGN UP
+                    Sign Up
                 </button>
             </form>
         </div>

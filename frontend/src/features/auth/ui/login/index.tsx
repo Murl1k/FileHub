@@ -12,7 +12,7 @@ const Login = () => {
 
     const {
         register,
-        handleSubmit,
+        handleSubmit
     } = useForm({
         defaultValues: {
             password: '',
@@ -38,20 +38,26 @@ const Login = () => {
     return (
         <div className={styles.auth}>
             <img src={avatarIcon} alt="avatar"/>
-            <h3>SIGN IN</h3>
+            <h3>Sign in to Account</h3>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-                <input
-                    {...register('username', {required: true})}
-                    placeholder='Name'
-                    type="text"
-                />
-                <input
-                    {...register('password', {required: true})}
-                    placeholder='Password'
-                    type="password"
-                />
+                <div>
+                    <p>Name</p>
+                    <input
+                        {...register('username', {required: true})}
+                        placeholder='Name'
+                        type="text"
+                    />
+                </div>
+                <div>
+                    <p>Password</p>
+                    <input
+                        {...register('password', {required: true})}
+                        placeholder='Password'
+                        type="password"
+                    />
+                </div>
                 <button type='submit'>
-                    SIGN IN
+                    Sign In
                 </button>
             </form>
         </div>

@@ -13,6 +13,7 @@ const ContextMenuMain = () => {
 
     const contextMenu = useAppSelector(state => state.contextMenu)
     const {isFoldersOpen} = useAppSelector(state => state.popup)
+    const {id} = useAppSelector(state => state.selectionBar)
 
     const contextMenuRef = useRef<HTMLDivElement>(null)
 
@@ -77,9 +78,9 @@ const ContextMenuMain = () => {
                     <p>Add files</p>
                 </div>
             </section>
-            <section>
+            {id && <section>
                 <PasteButton/>
-            </section>
+            </section>}
         </div>
     );
 };

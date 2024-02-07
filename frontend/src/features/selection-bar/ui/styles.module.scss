@@ -1,6 +1,8 @@
 @import '../../../app/assets/styles/vars';
 
 .selectionBar {
+  position: relative;
+  z-index: 3;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -30,6 +32,12 @@
 
     section {
       display: flex;
+    }
+
+    div:hover {
+      img, path {
+        filter: brightness(0) saturate(100%) invert(23%) sepia(83%) saturate(1472%) hue-rotate(237deg) brightness(85%) contrast(88%);
+      }
     }
   }
 }

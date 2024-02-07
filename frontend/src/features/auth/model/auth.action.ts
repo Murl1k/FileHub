@@ -11,7 +11,16 @@ export const fetchRegister = createAsyncThunk(
             const res = await axios.post('http://localhost:8000/api/v1/users/', params)
             return res.data
         } catch (err) {
-            return toast.error(err.response.data.password[0])
+            const responseData = err.response.data
+
+            switch (true) {
+                case responseData.username && responseData.username.length > 0:
+                    return toast.error(responseData.username[0])
+                case responseData.password && responseData.password.length > 0:
+                    return toast.error(responseData.password[0])
+                default:
+                    return toast.error(err.message)
+            }
         }
     }
 )
@@ -83,7 +92,16 @@ export const fetchSetUsername = createAsyncThunk(
             const res = await axiosInstance.post('/users/set_username/', params)
             return res.data
         } catch (err) {
-            return toast.error(err.response.data.new_username[0])
+            const responseData = err.response.data
+
+            switch (true) {
+                case responseData.current_password && responseData.current_password.length > 0:
+                    return toast.error(responseData.current_password[0])
+                case responseData.new_username && responseData.new_username.length > 0:
+                    return toast.error(responseData.new_username[0])
+                default:
+                    return toast.error(err.message)
+            }
         }
     }
 )
@@ -95,7 +113,18 @@ export const fetchSetPassword = createAsyncThunk(
             const res = await axiosInstance.post('/users/set_password/', params)
             return res.data
         } catch (err) {
-            return toast.error(err.response.data.new_password[0])
+            const responseData = err.response.data
+
+            switch (true) {
+                case responseData.new_password && responseData.new_password.length > 0:
+                    return toast.error(responseData.new_password[0])
+                case responseData.non_field_errors && responseData.non_field_errors.length > 0:
+                    return toast.error(responseData.non_field_errors[0])
+                case responseData.current_password && responseData.current_password.length > 0:
+                    return toast.error(responseData.current_password[0])
+                default:
+                    return toast.error(err.message)
+            }
         }
     }
 )

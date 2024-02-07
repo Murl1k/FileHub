@@ -35,6 +35,7 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
     const {type} = useAppSelector(state => state.contextMenu)
     const {status} = useAppSelector(state => state.itemTemplate)
     const {filter} = useAppSelector(state => state.popup)
+    const {id} = useAppSelector(state => state.selectionBar)
 
     const selectionBarRef = useRef<HTMLDivElement>(null)
 
@@ -64,7 +65,7 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
         >
             <p>{title ? title : name}</p>
             <div>
-                <PasteButton/>
+                {id && <PasteButton/>}
                 <FeatureButtons featureButtonsProps={featureButtonsProps}/>
             </div>
         </div>

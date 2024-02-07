@@ -1,15 +1,30 @@
 @import '../../../app/assets/styles/vars';
 
 .auth {
-  background: $primary;
+  background: #fff;
   border-radius: 6px;
   padding: 40px;
   display: grid;
   gap: 10px;
   place-items: center;
+  box-shadow: $box-shadow;
 
   h3 {
-    color: #fff;
+    color: $primary;
+    position: relative;
+    margin-bottom: 20px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 30px;
+      right: 0;
+      left: 0;
+      margin: 0 auto;
+      width: 30px;
+      height: 2px;
+      background-color: $primary;
+    }
   }
 }
 
@@ -19,17 +34,54 @@
 
   button {
     width: 100%;
-    background: $secondary;
-    border-radius: 6px;
-    padding: 10px 24px;
+    background: $primary;
+    border-radius: 24px;
+    padding: 10px;
     font-weight: 600;
     color: #fff;
   }
 
-  input {
-    padding: 10px;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
+  div {
+    position: relative;
+
+    p {
+      opacity: 0;
+      padding: 0 4px;
+      display: block;
+      position: absolute;
+      font-size: 12px;
+      color: $primary;
+      font-weight: 600;
+      background-color: #fff;
+      top: -5px;
+      left: 8px;
+      transition: opacity .2s ease-in-out;
+    }
+
+    &:focus-within {
+      p {
+        opacity: 1;
+      }
+
+      input {
+        border: 2px solid $primary !important;
+
+        &::placeholder {
+          opacity: 0;
+        }
+      }
+    }
+
+    input {
+      transition: border .2s ease-in-out;
+      padding: 10px;
+      font-weight: 600;
+      border: 2px solid $gray;
+      border-radius: 6px;
+
+      &::placeholder {
+        transition: opacity .2s ease-in-out;
+      }
+    }
   }
 }

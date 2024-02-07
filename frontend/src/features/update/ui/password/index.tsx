@@ -26,7 +26,9 @@ const UpdatePassword = () => {
     const onSubmit: SubmitHandler<IChangePassword> = async (values) => {
         const data = await dispatch(fetchSetPassword(values))
 
-        if (!data.payload) {
+        console.log(data)
+
+        if (data.payload === "") {
             navigate('/')
         }
     }

@@ -10,10 +10,10 @@ import {
     sharedIcon
 } from '../../../app/assets/images/'
 import {Link, NavLink} from "react-router-dom";
-import {fetchLogout} from "../../../features/auth/model/auth.action.ts";
+import {fetchLogout, selectIsAuth} from "../../../features/auth";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
-import {selectIsAuth} from "../../../features/auth/model/auth.slice.ts";
+import {api} from "../../../shared/api/api.ts";
 
 const Menu = () => {
 
@@ -21,17 +21,18 @@ const Menu = () => {
 
     const isAuth = useAppSelector(selectIsAuth)
 
-    const logout = () => {
+    const logout = async () => {
         if (!isAuth) {
             return alert('You are not authorized')
         }
 
-        dispatch(fetchLogout())
+        await dispatch(fetchLogout())
+        dispatch(api.util.resetApiState())
     }
 
     return (
         <aside className={styles.nav}>
-            <Link style={{marginLeft: '20px',}} to='/'>
+            <Link style={{marginLeft: '20px'}} to='/'>
                 <img height={40} src="/vite.svg" alt="logo"/>
             </Link>
             <ul>
