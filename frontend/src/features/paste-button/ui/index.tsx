@@ -18,15 +18,15 @@ const PasteButton = () => {
     const {type} = useAppSelector(state => state.contextMenu)
     const {isFolder, id: objectId} = useAppSelector(state => state.selectionBar)
 
-    const {refetch: foldersRefetch} = useGetFoldersQuery(id)
-    const {refetch: filesRefetch} = useGetFilesQuery(id)
-
     const [copyFolder] = useCopyFolderMutation()
     const [copyFile] = useCopyFileMutation()
 
+    const {refetch: foldersRefetch} = useGetFoldersQuery(id)
+    const {refetch: filesRefetch} = useGetFilesQuery(id)
+
     const handlePaste = async () => {
         if (isFolder) {
-            await copyFolder({id: objectId, folder: id})
+            await copyFolder({id: objectId, folder: id});
             setTimeout(() => {
                 foldersRefetch()
                 type === "main" && dispatch(setContextMenu(initialContextState))
@@ -41,7 +41,7 @@ const PasteButton = () => {
     }
 
     return (
-        <div style={!objectId ? {pointerEvents: 'none'} : {}} onClick={handlePaste}>
+        <div onClick={handlePaste}>
             <svg height="30" width="30" fill="#808080" viewBox="-32 0 512 512" xmlns="http://www.w3.org/2000/svg"
                  stroke="#808080">
                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>

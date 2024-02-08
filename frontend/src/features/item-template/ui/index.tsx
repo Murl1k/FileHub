@@ -12,6 +12,7 @@ interface IItemTemplate extends HTMLAttributes<HTMLDivElement> {
     itemProps: {
         item: IMergedData
         isGrid: boolean
+        index: number
     }
 }
 
@@ -19,7 +20,8 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
 
     const {
         isGrid,
-        item
+        item,
+        index
     } = itemProps
 
     const dispatch = useAppDispatch()
@@ -112,7 +114,8 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
                         <span></span>
                     </div>
                 </div>
-                {type === 'item' && id === item.id && <ContextMenuItem item={item}/>}
+                {type === 'item' && id === item.id &&
+                    <ContextMenuItem item={item} index={index} maxIndex={isGrid ? 8 : 3}/>}
             </div>
             {isPrivacyOpen && id === item.id &&
                 <PrivacyPopup

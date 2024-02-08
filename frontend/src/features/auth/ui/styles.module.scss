@@ -82,6 +82,10 @@
       &::placeholder {
         transition: opacity .2s ease-in-out;
       }
+
+      &:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0 50px white inset;
+      }
     }
   }
 }

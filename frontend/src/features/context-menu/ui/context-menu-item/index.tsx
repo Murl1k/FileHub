@@ -10,7 +10,13 @@ import {useNavigate} from "react-router-dom";
 import {initialTemplateState, setIsActive} from "../../../item-template";
 import {folderIcon} from "../../../../app/assets/images";
 
-const ContextMenuItem: FC<{ item: IMergedData }> = ({item}) => {
+interface IContextMenuItem {
+    item: IMergedData
+    index: number
+    maxIndex: number
+}
+
+const ContextMenuItem: FC<IContextMenuItem> = ({item, index, maxIndex}) => {
 
     const navigate = useNavigate()
 
@@ -37,6 +43,24 @@ const ContextMenuItem: FC<{ item: IMergedData }> = ({item}) => {
         navigate(`/folder/${item.id}`)
     }
 
+    const contextMenuStyles = () => {
+        const defaultPosition: { right: string, top?: string, bottom?: string } = {
+            top: '45px',
+            right: '45px'
+        }
+
+        const position = state.x ? item.title ? contextMenuPosition(state.x, state.y, 172, 307) :
+            contextMenuPosition(state.x, state.y, 172, 205) : defaultPosition
+
+        if (index >= maxIndex) {
+            delete defaultPosition.top
+            defaultPosition.bottom = '40px'
+            defaultPosition.right = '40px'
+        }
+
+        return position
+    }
+
     return (
         <div
             onContextMenu={(e) => {
@@ -46,11 +70,7 @@ const ContextMenuItem: FC<{ item: IMergedData }> = ({item}) => {
                 dispatch(setContextMenu(initialContextState))
             }}
             ref={contextMenuRef}
-            style={state.x ? item.title ? contextMenuPosition(state.x, state.y, 172, 307) :
-                contextMenuPosition(state.x, state.y, 172, 205) : {
-                top: '40px',
-                right: '35px'
-            }}
+            style={contextMenuStyles()}
             className={styles.contextMenu}
         >
             {item.title && <section className={styles.open}>

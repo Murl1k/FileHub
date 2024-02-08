@@ -43,7 +43,7 @@ const ContextMenuMain = () => {
         <div
             className={styles.contextMenu}
             ref={contextMenuRef}
-            style={contextMenuPosition(contextMenu.x, contextMenu.y, 138, 162)}
+            style={contextMenuPosition(contextMenu.x, contextMenu.y, 138, 96)}
         >
             <section>
                 <div onClick={handleOpenFolders}>
