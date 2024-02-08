@@ -1,10 +1,10 @@
 import styles from './styles.module.scss';
-import {folderIcon} from "../../../app/assets/images";
+import {FolderSvg} from "../../../app/assets/images";
 
 const EmptyFolder = () => {
     return (
         <div className={styles.emptyFolder}>
-            <img src={folderIcon} alt="folder"/>
+            <FolderSvg/>
             <p>Empty folder 😢</p>
         </div>
     );

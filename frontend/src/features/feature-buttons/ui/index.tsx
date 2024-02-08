@@ -7,7 +7,7 @@ import {getItemId} from "../../selection-bar";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {initialContextState, setContextMenu} from "../../context-menu";
 import {setIsFolderRenameOpen, setIsPrivacyOpen} from "../../popup";
-import {deleteIcon, privateIcon} from "../../../app/assets/images";
+import {DeleteSvg, PrivateSvg} from "../../../app/assets/images"
 import {toast} from "react-toastify";
 
 interface IFeatureButtons {
@@ -130,7 +130,7 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
         <>
             <section>
                 <div onClick={handleOpenPrivacy}>
-                    <img src={privateIcon} alt="privacy"/>
+                    <PrivateSvg/>
                     <p>Change privacy</p>
                 </div>
                 {title && <div onClick={handleOpenFolderRename}>
@@ -158,14 +158,15 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
                     <p>Copy</p>
                 </div>
                 <div onClick={(e) => handleDownload(e, id, url, title ? title : name)}>
-                    <svg height="30" width="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="30" height="30" fill="#808080" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                         id="download-alt"
+                         className="icon glyph">
                         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                         <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
                         <g id="SVGRepo_iconCarrier">
-                            <g id="Interface / Download">
-                                <path id="Vector" d="M6 21H18M12 3V17M12 17L17 12M12 17L7 12" stroke="#808080"
-                                      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
-                            </g>
+                            <path
+                                d="M11.29,16.71h0a1.15,1.15,0,0,0,.33.21.94.94,0,0,0,.76,0,1.15,1.15,0,0,0,.33-.21h0l4-4a1,1,0,0,0-1.42-1.42L13,13.59V3a1,1,0,0,0-2,0V13.59l-2.29-2.3a1,1,0,1,0-1.42,1.42Z"></path>
+                            <path d="M19,20H5a1,1,0,0,0,0,2H19a1,1,0,0,0,0-2Z"></path>
                         </g>
                     </svg>
                     <p>Download</p>
@@ -173,7 +174,7 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
             </section>
             <section>
                 <div onClick={handleRemove}>
-                    <img src={deleteIcon} alt="delete"/>
+                    <DeleteSvg/>
                     <p>Delete</p>
                 </div>
             </section>

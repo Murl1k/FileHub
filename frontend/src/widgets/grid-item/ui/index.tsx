@@ -1,5 +1,5 @@
 import styles from './styles.module.scss'
-import {fileIcon, folderIcon} from "../../../app/assets/images";
+import {FileSvg, FolderSvg} from "../../../app/assets/images";
 import {SizeCalculate} from "../../../shared/lib/size-calculate.ts";
 import {FC} from "react";
 import {IMergedData} from "../../../shared/types";
@@ -9,12 +9,7 @@ const GridItem: FC<{ item: IMergedData }> = ({item}) => {
         <>
             <div className={styles.itemInfo}>
                 <div className={styles.itemHeadline}>
-                    <img
-                        height='40'
-                        width='40'
-                        src={item.title ? folderIcon : fileIcon}
-                        alt="item"
-                    />
+                    {item.title ? <FolderSvg/> : <FileSvg/>}
                 </div>
                 <h4>{item.name ? item.name : item.title}</h4>
                 <p>last updated at<br/>{new Date(item.updated_at).toLocaleString()}</p>

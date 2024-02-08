@@ -5,16 +5,6 @@
   @include menu;
 
   section {
-    &:not(.open) {
-      div {
-        &:hover {
-          path, img {
-            filter: brightness(0) saturate(100%) invert(23%) sepia(83%) saturate(1472%) hue-rotate(237deg) brightness(85%) contrast(88%);
-          }
-        }
-      }
-    }
-
     &:not(.open, :last-child) {
       display: grid;
       gap: 5px;
@@ -24,14 +14,8 @@
 
 .open {
   div {
-    img {
-      filter: invert(51%) sepia(0%) saturate(313%) hue-rotate(158deg) brightness(99%) contrast(81%);
-    }
-
-    &:hover {
-      img {
-        filter: none;
-      }
+    path {
+      fill: #808080;
     }
   }
 }

@@ -1,5 +1,5 @@
 import styles from './styles.module.scss'
-import {deleteIcon} from '../../../../app/assets/images/'
+import {DeleteSvg} from '../../../../app/assets/images/'
 import {ChangeEvent, DragEventHandler, FC, useRef, useState} from "react";
 import {CloseBtn} from "../../../close-btn";
 import {useAddFileMutation} from "../../../../shared/api/api.ts";
@@ -114,7 +114,7 @@ const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
                                         <p>{SizeCalculate(item.size)}</p>
                                     </div>
                                     <button type='reset'>
-                                        <img src={deleteIcon} alt="trash"/>
+                                        <DeleteSvg/>
                                     </button>
                                 </div>
                             ))}

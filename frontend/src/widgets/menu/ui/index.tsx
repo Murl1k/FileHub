@@ -1,13 +1,13 @@
 import styles from "./styles.module.scss";
 import {
-    deleteIcon,
-    favoritesIcon,
-    fileIcon,
-    folderIcon,
-    helpIcon,
-    logoutIcon,
-    privateIcon,
-    sharedIcon
+    DeleteSvg,
+    FavoritesSvg,
+    FileSvg,
+    FolderSvg,
+    HelpSvg,
+    LogoutSvg,
+    PrivateSvg,
+    SharedSvg
 } from '../../../app/assets/images/'
 import {Link, NavLink} from "react-router-dom";
 import {fetchLogout, selectIsAuth} from "../../../features/auth";
@@ -38,37 +38,37 @@ const Menu = () => {
             <ul>
                 <li>
                     <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/'>
-                        <img src={folderIcon} alt="folder"/>
+                        <FolderSvg/>
                         <p>My Cloud</p>
                     </NavLink>
                 </li>
                 <li>
                     <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/shared'>
-                        <img src={sharedIcon} alt="shared"/>
+                        <SharedSvg/>
                         <p>Shared</p>
                     </NavLink>
                 </li>
                 <li>
                     <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/all-files'>
-                        <img src={fileIcon} alt="file"/>
+                        <FileSvg/>
                         <p>All files</p>
                     </NavLink>
                 </li>
                 <li>
                     <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/favorites'>
-                        <img src={favoritesIcon} alt="favorites"/>
+                        <FavoritesSvg/>
                         <p>Favorites</p>
                     </NavLink>
                 </li>
                 <li>
                     <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/private-files'>
-                        <img src={privateIcon} alt="private"/>
+                        <PrivateSvg/>
                         <p>Private files</p>
                     </NavLink>
                 </li>
                 <li>
                     <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/deleted-files'>
-                        <img src={deleteIcon} alt="delete"/>
+                        <DeleteSvg/>
                         <p>Deleted files</p>
                     </NavLink>
                 </li>
@@ -76,12 +76,12 @@ const Menu = () => {
             <ul>
                 <li>
                     <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/help'>
-                        <img src={helpIcon} alt="help"/>
+                        <HelpSvg/>
                         <p>Help & Support</p>
                     </NavLink>
                 </li>
                 <li className={styles.logoutBtn} onClick={logout}>
-                    <img src={logoutIcon} alt="logout"/>
+                    <LogoutSvg/>
                     <p>Log out</p>
                 </li>
             </ul>

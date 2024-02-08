@@ -29,11 +29,19 @@
         transition: color .2s ease-in-out;
       }
 
+      path {
+        transition: fill .2s ease-in-out;
+      }
+
       &:hover {
         background-color: #e8e8e8;
 
         p {
           color: #969696;
+        }
+
+        path {
+          fill: $primary;
         }
       }
     }

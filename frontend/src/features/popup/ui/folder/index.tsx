@@ -1,5 +1,5 @@
 import styles from './styles.module.scss';
-import {folderIcon} from '../../../../app/assets/images'
+import {FolderSvg} from '../../../../app/assets/images'
 import {ChangeEvent, FC, FormEvent, KeyboardEvent, useRef, useState} from "react";
 import {useAddFolderMutation} from "../../../../shared/api/api.ts";
 import {useParams} from "react-router-dom";
@@ -50,7 +50,7 @@ const FolderPopup: FC<IPopup> = ({state, stateAction}) => {
         <div className={styles.popup}>
             <form onSubmit={handleSubmit} onReset={() => dispatch(stateAction(false))} ref={popupRef}>
                 <label>
-                    <img src={folderIcon} alt="folder"/>
+                    <FolderSvg/>
                     <input
                         type="text"
                         placeholder='Title'

@@ -1,5 +1,5 @@
 import styles from './styles.module.scss'
-import avatarIcon from '../../app/assets/images/avatar.svg'
+import {avatarIcon} from '../../app/assets/images'
 import {Link} from "react-router-dom";
 import {useState} from "react";
 import {PersonalDetails} from "../../widgets/personal-details";

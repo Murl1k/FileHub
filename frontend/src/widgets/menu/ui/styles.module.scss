@@ -10,24 +10,24 @@
   align-items: flex-start;
   padding: 40px;
 
-  > ul {
+  ul {
     display: grid;
     gap: 10px;
-
-    &:nth-child(2) {
-      li:first-child, li:nth-child(3) {
-        img {
-          filter: invert(51%) sepia(0%) saturate(313%) hue-rotate(158deg) brightness(99%) contrast(81%);
-        }
-      }
-    }
   }
 
-  a, .logoutBtn, img {
+  a, .logoutBtn {
     transition: background-color 80ms ease-in-out;
   }
 
   ul {
+    li {
+      &:first-child, &:nth-child(3) {
+        path {
+          fill: #808080;
+        }
+      }
+    }
+
     a, .logoutBtn {
       padding: 20px;
       width: 200px;
@@ -36,11 +36,15 @@
       align-items: center;
       gap: 20px;
 
+      path {
+        transition: fill 80ms ease-in-out;
+      }
+
       &:hover {
         background-color: $primary;
 
-        img {
-          filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7446%) hue-rotate(91deg) brightness(120%) contrast(89%) !important;
+        path {
+          fill: #fff
         }
       }
     }
@@ -50,8 +54,8 @@
 .active {
   background: $primary;
 
-  img {
-    filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7446%) hue-rotate(91deg) brightness(120%) contrast(89%) !important;
+  path {
+    fill: #fff !important;
   }
 }
 

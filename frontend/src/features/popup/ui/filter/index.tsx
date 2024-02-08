@@ -4,13 +4,13 @@ import {useRef} from "react";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
-import {fileIcon, folderIcon, folderSize, lastUpdated} from "../../../../app/assets/images";
+import {FileSvg, FolderSizeSvg, FolderSvg, LastUpdatedSvg} from "../../../../app/assets/images";
 
 const filterArray = [
-    {title: "folder", src: folderIcon},
-    {title: "file", src: fileIcon},
-    {title: "size", src: folderSize},
-    {title: "last updated", src: lastUpdated}
+    {title: "folder", svg: <FolderSvg/>},
+    {title: "file", svg: <FileSvg/>},
+    {title: "size", svg: <FolderSizeSvg/>},
+    {title: "last updated", svg: <LastUpdatedSvg/>}
 ]
 
 const FilterPopup = () => {
@@ -30,7 +30,7 @@ const FilterPopup = () => {
                         key={i}
                         onClick={() => dispatch(setFilter({isOpen: false, sortBy: item.title}))}
                     >
-                        <img src={item.src} alt={item.title}/>
+                        {item.svg}
                         <p>{item.title}</p>
                     </div>
                 ))}

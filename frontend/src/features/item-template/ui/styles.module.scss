@@ -38,6 +38,15 @@
   transition: background-color .2s ease-in-out, box-shadow .2s ease-in-out;
 }
 
+.gridItem, .listItem {
+  > div:not(:last-child) {
+    svg {
+      height: 40px;
+      width: 40px;
+    }
+  }
+}
+
 .gridItem {
   background-color: #fff;
   border-radius: 24px;

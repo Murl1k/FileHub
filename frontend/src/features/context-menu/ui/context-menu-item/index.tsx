@@ -1,5 +1,5 @@
 import styles from '../styles.module.scss'
-import {FC, useRef} from "react";
+import {FC, useRef} from 'react'
 import {IMergedData} from "../../../../shared/types";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {contextMenuPosition, initialContextState, setContextMenu} from "../../";
@@ -8,7 +8,7 @@ import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 import {useNavigate} from "react-router-dom";
 import {initialTemplateState, setIsActive} from "../../../item-template";
-import {folderIcon} from "../../../../app/assets/images";
+import {FolderSvg} from '../../../../app/assets/images'
 
 interface IContextMenuItem {
     item: IMergedData
@@ -75,7 +75,7 @@ const ContextMenuItem: FC<IContextMenuItem> = ({item, index, maxIndex}) => {
         >
             {item.title && <section className={styles.open}>
                 <div onClick={handleOpenFolder}>
-                    <img src={folderIcon} alt="folder"/>
+                    <FolderSvg/>
                     <p>Open</p>
                 </div>
             </section>}
