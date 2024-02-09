@@ -102,20 +102,4 @@
   justify-content: flex-end;
   gap: 30px;
   margin-top: 20px;
-
-  button {
-    font-weight: 600;
-
-    &:first-child {
-      background: #fff;
-      color: #1c87e1;
-    }
-
-    &:last-child {
-      background: $primary;
-      border-radius: 6px;
-      padding: 10px 30px;
-      color: #fff;
-    }
-  }
 }

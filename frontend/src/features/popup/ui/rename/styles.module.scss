@@ -30,21 +30,6 @@
         display: flex;
         justify-content: flex-end;
         gap: 20px;
-
-        button {
-          border-radius: 6px;
-          font-weight: 600;
-
-          &:first-child {
-            color: $secondary;
-          }
-
-          &:last-child {
-            padding: 10px 30px;
-            background-color: $primary;
-            color: #fff;
-          }
-        }
       }
     }
   }

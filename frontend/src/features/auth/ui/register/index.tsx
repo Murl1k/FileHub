@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {fetchLogin, fetchLoginMe, fetchRegister, IUser} from "../../";
 import {toast} from "react-toastify";
+import {PrimaryButton} from "../../../../shared/UIKit/buttons";
 
 interface IRegister extends IUser {
     passwordAgain: string
@@ -74,9 +75,9 @@ const Register = () => {
                         type="password"
                     />
                 </label>
-                <button type='submit'>
+                <PrimaryButton type='submit'>
                     Sign Up
-                </button>
+                </PrimaryButton>
             </form>
         </div>
     );

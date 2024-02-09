@@ -16,8 +16,7 @@ import NotFound from "../pages/not-found";
 import {DefaultLayout} from "../widgets/default-layout";
 import {PageLayout} from "../widgets/page-layout";
 import {NotAuth} from "../widgets/not-auth";
-import {fetchLoginMe} from "../features/auth/model/auth.action.ts";
-import {selectIsAuth} from "../features/auth/model/auth.slice.ts";
+import {fetchLoginMe} from "../features/auth";
 import {useAppDispatch} from "../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../shared/lib/hooks/useAppSelector.ts";
 
@@ -25,7 +24,7 @@ const Router = () => {
 
     const dispatch = useAppDispatch()
 
-    const isAuth = useAppSelector(selectIsAuth)
+    const {data} = useAppSelector(state => state.auth)
 
     useEffect(() => {
         localStorage.getItem('token') && dispatch(fetchLoginMe())
@@ -35,7 +34,7 @@ const Router = () => {
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<DefaultLayout/>}>
-                    {isAuth ?
+                    {!(!data && !localStorage.getItem('token')) ?
                         <>
                             <Route index element={<Home/>}/>
                             <Route path='/folder/:id' element={<Home/>}/>
@@ -49,6 +48,7 @@ const Router = () => {
                         </> :
                         <>
                             <Route index element={<NotAuth/>}/>
+                            <Route path='/folder/:id' element={<NotAuth/>}/>
                             <Route path='/shared' element={<NotAuth/>}/>
                             <Route path='/all-files' element={<NotAuth/>}/>
                             <Route path='/favorites' element={<NotAuth/>}/>

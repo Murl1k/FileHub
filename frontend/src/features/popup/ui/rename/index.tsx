@@ -1,5 +1,5 @@
 import styles from './styles.module.scss';
-import {ChangeEvent, FC, KeyboardEvent, MouseEvent, useRef, useState} from "react";
+import {ChangeEvent, FC, FormEvent, KeyboardEvent, useRef, useState} from "react";
 import {CloseBtn} from "../../../close-btn";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {IPopupTransition, setIsFolderRenameOpen} from "../../model";
@@ -8,6 +8,7 @@ import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 import PopupTemplate from "../template";
 import {transitionStyles} from "../../index.ts";
+import {CancelButton, PrimaryButton} from "../../../../shared/UIKit/buttons";
 
 interface IRenamePopup extends IPopupTransition {
     id: string
@@ -27,15 +28,15 @@ const RenamePopup: FC<IRenamePopup> = ({id, transitionState}) => {
         dispatch(setIsFolderRenameOpen(false))
     }
 
-    const renameRef = useRef<HTMLDivElement>(null)
+    const renameRef = useRef<HTMLFormElement>(null)
     useOutsideClick(renameRef, handleCloseRename, isFolderRenameOpen)
 
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)
     }
 
-    const handleFolderRename = (e: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLInputElement>) => {
-        e.stopPropagation()
+    const handleFolderRename = (e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>) => {
+        e.preventDefault()
 
         updateResult({id: id, title: title})
         dispatch(setIsFolderRenameOpen(false))
@@ -52,10 +53,11 @@ const RenamePopup: FC<IRenamePopup> = ({id, transitionState}) => {
             onContextMenu={e => e.stopPropagation()}
             style={transitionStyles[transitionState as keyof typeof transitionStyles]}
         >
-            <div
+            <form
                 ref={renameRef}
                 className={styles.rename}
                 style={transitionStyles[transitionState as keyof typeof transitionStyles]}
+                onSubmit={handleFolderRename}
             >
                 <div>
                     <h3>Rename a folder</h3>
@@ -71,11 +73,11 @@ const RenamePopup: FC<IRenamePopup> = ({id, transitionState}) => {
                         onKeyDown={onKeyDownRename}
                     />
                     <div>
-                        <button onClick={handleCloseRename}>Cancel</button>
-                        <button onClick={handleFolderRename}>Rename</button>
+                        <CancelButton onClick={handleCloseRename}/>
+                        <PrimaryButton type='submit'>Rename</PrimaryButton>
                     </div>
                 </div>
-            </div>
+            </form>
         </PopupTemplate>
     );
 };

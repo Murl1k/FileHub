@@ -4,7 +4,7 @@ import {GridItem} from "../../grid-item";
 import {MouseEvent, useEffect, useState} from "react";
 import {IMergedData} from "../../../shared/types";
 import {useNavigate, useParams} from "react-router-dom";
-import {useGetFilesQuery, useGetFoldersQuery} from "../../../shared/api/api.ts";
+import {useGetFilesQuery, useGetFoldersQuery, useGetParentFolderQuery} from "../../../shared/api/api.ts";
 import {SelectionBar} from "../../../features/selection-bar";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {ItemTemplate} from "../../../features/item-template";
@@ -30,6 +30,7 @@ const Main = () => {
     const {filter} = useAppSelector(state => state.popup)
 
     const {data: folders, isLoading: foldersLoading, isError} = useGetFoldersQuery(id)
+    const {data: parentFolder, isLoading: parentFolderLoading} = useGetParentFolderQuery(id)
     const {data: files, isLoading: filesLoading} = useGetFilesQuery(id)
 
     const mergedData: IMergedData[] = [
@@ -79,6 +80,14 @@ const Main = () => {
         e.stopPropagation()
 
         dispatch(setFilter(initialFilterState))
+    }
+
+    const handleNavigate = () => {
+        if (parentFolder === null) {
+            navigate('/')
+        } else {
+            navigate(`/folder/${parentFolder}`)
+        }
     }
 
     useEffect(() => {
@@ -170,6 +179,18 @@ const Main = () => {
                             </div>
                             {isGrid ?
                                 <div className={styles.grid}>
+                                    {id && !parentFolderLoading &&
+                                        <div
+                                            onContextMenu={e => e.stopPropagation()}
+                                            onDoubleClick={handleNavigate}
+                                            className={styles.navigate}
+                                        >
+                                            <div>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                            </div>
+                                        </div>}
                                     {sortedMergedData.map((item, index) => {
                                         const itemProps = {
                                             isGrid,

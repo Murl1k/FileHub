@@ -81,17 +81,23 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
                 }
 
                 if (blobData || data) {
-                    const url = window.URL.createObjectURL(new Blob([blobData]))
+                    const response = await fetch(data, {
+                        method: 'GET'
+                    })
 
-                    const a = document.createElement('a')
-                    a.href = data ? data : url
-                    a.download = data ? title : `${title}.zip`
+                    if (response.status === 200) {
+                        const blob = await response.blob()
+                        const downloadUrl = window.URL.createObjectURL(data ? blob : new Blob([blobData]))
+                        const a = document.createElement('a')
+                        a.href = downloadUrl
+                        a.download = data ? title : `${title}.zip`
 
-                    document.body.appendChild(a)
-                    a.click()
+                        document.body.appendChild(a)
+                        a.click()
 
-                    window.URL.revokeObjectURL(url)
-                    document.body.removeChild(a)
+                        document.body.removeChild(a)
+                        window.URL.revokeObjectURL(url)
+                    }
                 }
             }
         } catch (err) {

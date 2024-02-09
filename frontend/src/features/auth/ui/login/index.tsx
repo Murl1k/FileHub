@@ -4,6 +4,7 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {fetchLogin, fetchLoginMe, IUser} from "../../";
+import {PrimaryButton} from "../../../../shared/UIKit/buttons";
 
 const Login = () => {
 
@@ -56,9 +57,9 @@ const Login = () => {
                         type="password"
                     />
                 </label>
-                <button type='submit'>
+                <PrimaryButton type='submit'>
                     Sign In
-                </button>
+                </PrimaryButton>
             </form>
         </div>
     );

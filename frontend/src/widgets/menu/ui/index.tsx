@@ -10,9 +10,8 @@ import {
     SharedSvg
 } from '../../../app/assets/images/'
 import {Link, NavLink} from "react-router-dom";
-import {fetchLogout, selectIsAuth} from "../../../features/auth";
+import {fetchLogout} from "../../../features/auth";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {api} from "../../../shared/api/api.ts";
 import {toast} from "react-toastify";
 
@@ -20,10 +19,8 @@ const Menu = () => {
 
     const dispatch = useAppDispatch()
 
-    const isAuth = useAppSelector(selectIsAuth)
-
     const logout = async () => {
-        if (!isAuth) {
+        if (!localStorage.getItem('token')) {
             return toast.error('You are not authorized.')
         }
 

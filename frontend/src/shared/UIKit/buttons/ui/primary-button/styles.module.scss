@@ -1,0 +1,9 @@
+@import '../../../../../app/assets/styles/vars';
+
+.primaryButton {
+  background-color: $primary;
+  border-radius: 6px;
+  padding: 10px 30px;
+  color: #fff;
+  font-weight: 600;
+}

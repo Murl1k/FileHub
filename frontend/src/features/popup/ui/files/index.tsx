@@ -10,6 +10,7 @@ import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {IPopup, transitionStyles} from "../../";
 import {toast} from "react-toastify";
 import PopupTemplate from "../template";
+import {CancelButton, PrimaryButton} from "../../../../shared/UIKit/buttons";
 
 const FilesPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
 
@@ -67,7 +68,14 @@ const FilesPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
 
         const loading = toast.loading('Uploading the file...')
         await updateResult(data)
-        toast.update(loading, {render: "The file is uploaded", type: "success", isLoading: false, autoClose: undefined})
+        toast.update(loading, {
+            render: "The file is uploaded",
+            type: "success",
+            isLoading: false,
+            autoClose: undefined,
+            closeButton: true,
+            closeOnClick: true
+        })
         dispatch(stateAction(false))
     }
 
@@ -132,8 +140,8 @@ const FilesPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
                             ))}
                         </div>}
                         <div className={styles.btns}>
-                            <button onClick={() => dispatch(stateAction(false))} type='button'>Cancel</button>
-                            <button type='submit'>Add files</button>
+                            <CancelButton onClick={() => dispatch(stateAction(false))} type='button'/>
+                            <PrimaryButton type='submit'>Add files</PrimaryButton>
                         </div>
                     </form>
                 </div>

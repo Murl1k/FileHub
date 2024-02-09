@@ -6,6 +6,7 @@ import {useParams} from "react-router-dom";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {IPopup, transitionStyles} from "../../";
+import {CancelButton, PrimaryButton} from "../../../../shared/UIKit/buttons";
 
 const FolderPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
 
@@ -63,8 +64,8 @@ const FolderPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
                     />
                 </label>
                 <div className={styles.btns}>
-                    <button type='reset'>Cancel</button>
-                    <button type='submit'>Create</button>
+                    <CancelButton type='reset'/>
+                    <PrimaryButton type='submit'>Create</PrimaryButton>
                 </div>
             </form>
         </div>

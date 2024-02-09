@@ -10,7 +10,6 @@ import {
     fetchUpdateMyAccount
 } from "./auth.action.ts";
 import {IUserData} from "./";
-import {RootState} from "../../../shared/api/store";
 
 interface IInitialState {
     data: IUserData | null
@@ -130,5 +129,3 @@ export const authSlice = createSlice({
             })
     }
 })
-
-export const selectIsAuth = (state: RootState) => !(!state.auth.data && !localStorage.getItem('token'))

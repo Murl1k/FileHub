@@ -1,6 +1,6 @@
 import styles from "./styles.module.scss";
 import {Transition} from "react-transition-group";
-import Button from "../../../shared/UIKit/button";
+import {HeaderButton} from "../../../shared/UIKit/buttons";
 
 const File = ({view}: { view: boolean }) => {
     return (
@@ -11,7 +11,7 @@ const File = ({view}: { view: boolean }) => {
                          src="https://masterpiecer-images.s3.yandex.net/3fa445469f7711eebf685a76f5576984:upscaled"
                          alt="img"/>
                     <div className={styles.btns}>
-                        <Button>
+                        <HeaderButton>
                             <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_blackgCarrier" strokeWidth="0"></g>
@@ -26,8 +26,8 @@ const File = ({view}: { view: boolean }) => {
                                         fill="black"></path>
                                 </g>
                             </svg>
-                        </Button>
-                        <Button>
+                        </HeaderButton>
+                        <HeaderButton>
                             <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -38,8 +38,8 @@ const File = ({view}: { view: boolean }) => {
                                         fill="#000000"></path>
                                 </g>
                             </svg>
-                        </Button>
-                        <Button>
+                        </HeaderButton>
+                        <HeaderButton>
                             <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -54,8 +54,8 @@ const File = ({view}: { view: boolean }) => {
                                           fill="#000000"></path>
                                 </g>
                             </svg>
-                        </Button>
-                        <Button>
+                        </HeaderButton>
+                        <HeaderButton>
                             <svg width="30px" height="30px" viewBox="-4 0 30 30" version="1.1"
                                  xmlns="http://www.w3.org/2000/svg"
                                  fill="#000000">
@@ -76,8 +76,8 @@ const File = ({view}: { view: boolean }) => {
                                     </g>
                                 </g>
                             </svg>
-                        </Button>
-                        <Button>
+                        </HeaderButton>
+                        <HeaderButton>
                             <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -89,7 +89,7 @@ const File = ({view}: { view: boolean }) => {
                                           fill="#000000"></path>
                                 </g>
                             </svg>
-                        </Button>
+                        </HeaderButton>
                     </div>
                     <div className={styles.tags}>
                         <h4>My first render</h4>
@@ -138,7 +138,7 @@ const File = ({view}: { view: boolean }) => {
                                 alt="avatar"/>
                         </span>
                             <span>
-                            <Button>
+                            <HeaderButton>
                                 <svg width="28" height="28" viewBox="0 0 24 20" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -149,7 +149,7 @@ const File = ({view}: { view: boolean }) => {
                                               fill="#000000"></path>
                                     </g>
                                 </svg>
-                            </Button>
+                            </HeaderButton>
                         </span>
                         </div>
                     </div>

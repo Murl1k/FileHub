@@ -1,5 +1,5 @@
 import styles from "./styles.module.scss";
-import Button from "../../../shared/UIKit/button";
+import {HeaderButton} from "../../../shared/UIKit/buttons";
 import {Link} from "react-router-dom";
 import {MouseEventHandler} from "react";
 import {
@@ -82,7 +82,7 @@ const Header = () => {
             <header className={styles.header}>
                 <div style={{display: 'flex', gap: '30px'}}>
                     <div className={styles.addBtn}>
-                        <Button onClick={handleOpenFolder}>
+                        <HeaderButton onClick={handleOpenFolder}>
                             <svg width="28" height="28" viewBox="0 0 24 20" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -93,11 +93,11 @@ const Header = () => {
                                           fill="#583DA1"></path>
                                 </g>
                             </svg>
-                        </Button>
+                        </HeaderButton>
                         <p>Add Folder</p>
                     </div>
                     <div className={styles.addBtn}>
-                        <Button onClick={handleOpenFiles}>
+                        <HeaderButton onClick={handleOpenFiles}>
                             <svg width="28" height="28" viewBox="0 0 64 58" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -108,14 +108,14 @@ const Header = () => {
                                         fill="#1560A7"></path>
                                 </g>
                             </svg>
-                        </Button>
+                        </HeaderButton>
                         <p>Add Files</p>
                     </div>
                 </div>
                 <div className={styles.info}>
                     <UsersCount/>
                     <Link to='/profile'>
-                        <Button>
+                        <HeaderButton>
                             <svg viewBox="0 0 20 20" width='20' height='20' version="1.1"
                                  xmlns="http://www.w3.org/2000/svg"
                                  fill="#000000">
@@ -136,7 +136,7 @@ const Header = () => {
                                     </g>
                                 </g>
                             </svg>
-                        </Button>
+                        </HeaderButton>
                     </Link>
                 </div>
             </header>

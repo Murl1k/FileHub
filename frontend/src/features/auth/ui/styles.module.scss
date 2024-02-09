@@ -8,6 +8,7 @@
   gap: 10px;
   place-items: center;
   box-shadow: $box-shadow;
+  width: 300px;
 
   h3 {
     color: $primary;
@@ -31,14 +32,10 @@
 .form {
   display: grid;
   gap: 20px;
+  width: 100%;
 
   button {
-    width: 100%;
-    background: $primary;
     border-radius: 24px;
-    padding: 10px;
-    font-weight: 600;
-    color: #fff;
   }
 
   label {
@@ -78,6 +75,7 @@
       font-weight: 600;
       border: 2px solid $gray;
       border-radius: 6px;
+      width: 100%;
 
       &::placeholder {
         transition: opacity .2s ease-in-out;
