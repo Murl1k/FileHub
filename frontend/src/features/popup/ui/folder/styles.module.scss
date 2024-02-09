@@ -4,6 +4,7 @@
   position: fixed;
   z-index: 7;
   top: 90px;
+  transition: opacity .2s ease-in-out;
 
   form {
     position: relative;
@@ -15,6 +16,7 @@
     display: grid;
     width: 400px;
     box-shadow: 0 0 5px 0 #dce1e4;
+    transition: opacity .2s ease-in-out;
 
     &:before {
       content: '';

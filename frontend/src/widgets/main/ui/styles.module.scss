@@ -15,18 +15,14 @@
     }
 
     > div {
+      cursor: pointer;
+      user-select: none;
       display: flex;
       align-items: center;
+      gap: 10px;
 
-      div {
-        cursor: pointer;
-        user-select: none;
-        display: flex;
-        align-items: center;
-      }
-
-      svg, button {
-        margin-left: 10px;
+      > svg {
+        transition: rotate .2s ease-in-out;
       }
 
       button {

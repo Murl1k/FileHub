@@ -5,9 +5,9 @@ import {useAddFolderMutation} from "../../../../shared/api/api.ts";
 import {useParams} from "react-router-dom";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
-import {IPopup} from "../../";
+import {IPopup, transitionStyles} from "../../";
 
-const FolderPopup: FC<IPopup> = ({state, stateAction}) => {
+const FolderPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
 
     const dispatch = useAppDispatch()
 
@@ -47,8 +47,10 @@ const FolderPopup: FC<IPopup> = ({state, stateAction}) => {
     }
 
     return (
-        <div className={styles.popup}>
-            <form onSubmit={handleSubmit} onReset={() => dispatch(stateAction(false))} ref={popupRef}>
+        <div className={styles.popup} style={transitionStyles[transitionState as keyof typeof transitionStyles]}>
+            <form onSubmit={handleSubmit} onReset={() => dispatch(stateAction(false))} ref={popupRef}
+                  style={transitionStyles[transitionState as keyof typeof transitionStyles]}
+            >
                 <label>
                     <FolderSvg/>
                     <input

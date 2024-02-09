@@ -50,30 +50,30 @@ const Register = () => {
             <img src={avatarIcon} alt="avatar"/>
             <h3>SIGN UP</h3>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-                <div>
+                <label>
                     <p>Name</p>
                     <input
                         {...register('username', {required: true})}
                         placeholder='Name'
                         type="text"
                     />
-                </div>
-                <div>
+                </label>
+                <label>
                     <p>Password</p>
                     <input
                         {...register('password', {required: true})}
                         placeholder='Password'
                         type="password"
                     />
-                </div>
-                <div>
+                </label>
+                <label>
                     <p>Password again</p>
                     <input
                         {...register('passwordAgain', {required: true})}
                         placeholder='Password again'
                         type="password"
                     />
-                </div>
+                </label>
                 <button type='submit'>
                     Sign Up
                 </button>

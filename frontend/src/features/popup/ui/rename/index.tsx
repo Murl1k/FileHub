@@ -2,13 +2,18 @@ import styles from './styles.module.scss';
 import {ChangeEvent, FC, KeyboardEvent, MouseEvent, useRef, useState} from "react";
 import {CloseBtn} from "../../../close-btn";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
-import {setIsFolderRenameOpen} from "../../model";
+import {IPopupTransition, setIsFolderRenameOpen} from "../../model";
 import {useRenameFolderMutation} from "../../../../shared/api/api.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 import PopupTemplate from "../template";
+import {transitionStyles} from "../../index.ts";
 
-const RenamePopup: FC<{ id: string }> = ({id}) => {
+interface IRenamePopup extends IPopupTransition {
+    id: string
+}
+
+const RenamePopup: FC<IRenamePopup> = ({id, transitionState}) => {
 
     const dispatch = useAppDispatch()
 
@@ -43,8 +48,15 @@ const RenamePopup: FC<{ id: string }> = ({id}) => {
     }
 
     return (
-        <PopupTemplate onContextMenu={e => e.stopPropagation()}>
-            <div ref={renameRef} className={styles.rename}>
+        <PopupTemplate
+            onContextMenu={e => e.stopPropagation()}
+            style={transitionStyles[transitionState as keyof typeof transitionStyles]}
+        >
+            <div
+                ref={renameRef}
+                className={styles.rename}
+                style={transitionStyles[transitionState as keyof typeof transitionStyles]}
+            >
                 <div>
                     <h3>Rename a folder</h3>
                     <CloseBtn onClick={handleCloseRename}/>

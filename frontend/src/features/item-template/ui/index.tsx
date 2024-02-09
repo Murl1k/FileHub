@@ -7,6 +7,7 @@ import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {initialTemplateState, setIsActive} from "../";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {initialFilterState, PrivacyPopup, RenamePopup, setFilter, setIsFoldersOpen} from "../../popup";
+import {Transition} from "react-transition-group";
 
 interface IItemTemplate extends HTMLAttributes<HTMLDivElement> {
     itemProps: {
@@ -117,15 +118,24 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
                 {type === 'item' && id === item.id &&
                     <ContextMenuItem item={item} index={index} maxIndex={isGrid ? 8 : 3}/>}
             </div>
-            {isPrivacyOpen && id === item.id &&
-                <PrivacyPopup
-                    id={item.id}
-                    title={item.title}
-                    is_public={item.is_public}
-                />
+            {id === item.id &&
+                <Transition in={isPrivacyOpen} timeout={200} unmountOnExit>
+                    {state => (
+                        <PrivacyPopup
+                            id={item.id}
+                            title={item.title}
+                            is_public={item.is_public}
+                            transitionState={state}
+                        />
+                    )}
+                </Transition>
             }
-            {isFolderRenameOpen && id === item.id &&
-                <RenamePopup id={item.id}/>
+            {id === item.id &&
+                <Transition in={isFolderRenameOpen} timeout={200} unmountOnExit>
+                    {state => (
+                        <RenamePopup id={item.id} transitionState={state}/>
+                    )}
+                </Transition>
             }
         </>
     );

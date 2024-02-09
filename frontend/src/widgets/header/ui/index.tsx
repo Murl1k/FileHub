@@ -14,6 +14,7 @@ import {UsersCount} from "../../users-count";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {initialContextState, setContextMenu} from "../../../features/context-menu";
+import {Transition} from "react-transition-group";
 
 const Header = () => {
 
@@ -68,8 +69,16 @@ const Header = () => {
 
     return (
         <>
-            {isFoldersOpen && <FolderPopup state={isFoldersOpen} stateAction={setIsFoldersOpen}/>}
-            {isFilesOpen && <FilesPopup state={isFilesOpen} stateAction={setIsFilesOpen}/>}
+            <Transition in={isFoldersOpen} timeout={200} unmountOnExit>
+                {state => (
+                    <FolderPopup state={isFoldersOpen} stateAction={setIsFoldersOpen} transitionState={state}/>
+                )}
+            </Transition>
+            <Transition in={isFilesOpen} timeout={200} unmountOnExit>
+                {state => (
+                    <FilesPopup state={isFilesOpen} stateAction={setIsFilesOpen} transitionState={state}/>
+                )}
+            </Transition>
             <header className={styles.header}>
                 <div style={{display: 'flex', gap: '30px'}}>
                     <div className={styles.addBtn}>

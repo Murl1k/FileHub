@@ -19,7 +19,6 @@ interface ISelectionBar {
     }
 }
 
-
 const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
 
     const {

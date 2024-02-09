@@ -14,6 +14,7 @@ import {fetchLogout, selectIsAuth} from "../../../features/auth";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {api} from "../../../shared/api/api.ts";
+import {toast} from "react-toastify";
 
 const Menu = () => {
 
@@ -23,7 +24,7 @@ const Menu = () => {
 
     const logout = async () => {
         if (!isAuth) {
-            return alert('You are not authorized')
+            return toast.error('You are not authorized.')
         }
 
         await dispatch(fetchLogout())

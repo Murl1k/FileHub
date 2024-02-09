@@ -1,5 +1,5 @@
 import styles from "./styles.module.scss";
-import {setIsPrivacyOpen} from "../../model";
+import {IPopupTransition, setIsPrivacyOpen} from "../../model";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 import {FC, MouseEvent, useRef} from "react";
 import {useUpdateFilePrivacyMutation, useUpdateFolderPrivacyMutation} from "../../../../shared/api/api.ts";
@@ -7,14 +7,15 @@ import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {CloseBtn} from "../../../close-btn";
 import PopupTemplate from "../template";
+import {transitionStyles} from "../../index.ts";
 
-interface IPrivacyPopup {
+interface IPrivacyPopup extends IPopupTransition {
     id: string
     title: string
     is_public: boolean
 }
 
-const PrivacyPopup: FC<IPrivacyPopup> = ({id, title, is_public}) => {
+const PrivacyPopup: FC<IPrivacyPopup> = ({id, title, is_public, transitionState}) => {
 
     const dispatch = useAppDispatch()
 
@@ -38,8 +39,16 @@ const PrivacyPopup: FC<IPrivacyPopup> = ({id, title, is_public}) => {
     }
 
     return (
-        <PopupTemplate onContextMenu={e => e.stopPropagation()}>
-            <div onClick={e => e.stopPropagation()} ref={privacyRef} className={styles.privacy}>
+        <PopupTemplate
+            onContextMenu={e => e.stopPropagation()}
+            style={transitionStyles[transitionState as keyof typeof transitionStyles]}
+        >
+            <div
+                onClick={e => e.stopPropagation()}
+                ref={privacyRef}
+                style={transitionStyles[transitionState as keyof typeof transitionStyles]}
+                className={styles.privacy}
+            >
                 <div className={styles.privacyHeadline}>
                     <h3>Confirmation</h3>
                     <CloseBtn onClick={() => dispatch(setIsPrivacyOpen(false))}/>

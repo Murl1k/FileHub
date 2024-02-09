@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
-import {setFilter} from "../../model";
-import {useRef} from "react";
+import {IPopupTransition, setFilter} from "../../model";
+import {FC, useRef} from "react";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
@@ -13,7 +13,7 @@ const filterArray = [
     {title: "last updated", svg: <LastUpdatedSvg/>}
 ]
 
-const FilterPopup = () => {
+const FilterPopup: FC<IPopupTransition> = ({transitionState}) => {
 
     const dispatch = useAppDispatch()
 
@@ -22,8 +22,19 @@ const FilterPopup = () => {
     const filterRef = useRef<HTMLDivElement>(null)
     useOutsideClick(filterRef, () => dispatch(setFilter({isOpen: false, sortBy: filter.sortBy})), filter.isOpen)
 
+    const transitionStyles = {
+        entering: {opacity: 1, translate: '0 5px'},
+        entered: {opacity: 1, translate: '0 5px'},
+        exiting: {opacity: 0, translate: '0 -20px'},
+        exited: {opacity: 0, translate: '0 -20px'},
+    }
+
     return (
-        <div ref={filterRef} className={styles.sort}>
+        <div
+            ref={filterRef}
+            className={styles.sort}
+            style={transitionStyles[transitionState as keyof typeof transitionStyles]}
+        >
             <section>
                 {filterArray.map((item, i) => (
                     <div

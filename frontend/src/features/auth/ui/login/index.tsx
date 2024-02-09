@@ -40,22 +40,22 @@ const Login = () => {
             <img src={avatarIcon} alt="avatar"/>
             <h3>Sign in to Account</h3>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-                <div>
+                <label>
                     <p>Name</p>
                     <input
                         {...register('username', {required: true})}
                         placeholder='Name'
                         type="text"
                     />
-                </div>
-                <div>
+                </label>
+                <label>
                     <p>Password</p>
                     <input
                         {...register('password', {required: true})}
                         placeholder='Password'
                         type="password"
                     />
-                </div>
+                </label>
                 <button type='submit'>
                     Sign In
                 </button>

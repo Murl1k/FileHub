@@ -7,11 +7,11 @@ import {useParams} from "react-router-dom";
 import {SizeCalculate} from "../../../../shared/lib/size-calculate.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
-import {IPopup} from "../../";
+import {IPopup, transitionStyles} from "../../";
 import {toast} from "react-toastify";
 import PopupTemplate from "../template";
 
-const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
+const FilesPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
 
     const dispatch = useAppDispatch()
 
@@ -71,9 +71,21 @@ const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
         dispatch(stateAction(false))
     }
 
+    console.log()
+
     return (
-        <PopupTemplate style={{height: 'calc(100vh - 83px)', top: '83px'}}>
-            <div className={styles.container} ref={popupRef}>
+        <PopupTemplate
+            style={{
+                height: 'calc(100vh - 83px)',
+                top: '83px',
+                ...transitionStyles[transitionState as keyof typeof transitionStyles]
+            }}
+        >
+            <div
+                className={styles.container}
+                ref={popupRef}
+                style={transitionStyles[transitionState as keyof typeof transitionStyles]}
+            >
                 <div className={styles.popupHeadline}>
                     <h3>Upload your file</h3>
                     <CloseBtn onClick={() => dispatch(stateAction(false))}/>
@@ -120,7 +132,7 @@ const FilesPopup: FC<IPopup> = ({state, stateAction}) => {
                             ))}
                         </div>}
                         <div className={styles.btns}>
-                            <button onClick={() => dispatch(stateAction(false))}>Cancel</button>
+                            <button onClick={() => dispatch(stateAction(false))} type='button'>Cancel</button>
                             <button type='submit'>Add files</button>
                         </div>
                     </form>
