@@ -2,24 +2,46 @@
 
 .nav {
   height: 100vh;
-  width: $nav-width;
+  width: 150px;
   background-color: #12131a;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   padding: 40px;
+  transition: width .2s ease-in-out;
+
+  div:first-child {
+    display: grid;
+    gap: 10px;
+    justify-items: center;
+
+    div {
+      cursor: pointer;
+      display: flex;
+      justify-items: flex-end;
+      padding: 10px;
+      gap: 5px;
+      border-radius: 12px;
+      transition: background-color .2s ease-in-out;
+
+      span {
+        width: 10px;
+        height: 10px;
+        background-color: #23a267;
+        border-radius: 50%;
+      }
+
+      &:hover {
+        background-color: #8B96A5;
+      }
+    }
+  }
 
   ul {
     display: grid;
     gap: 10px;
-  }
 
-  a, .logoutBtn {
-    transition: background-color 80ms ease-in-out;
-  }
-
-  ul {
     li {
       &:first-child, &:nth-child(3) {
         path {
@@ -30,14 +52,24 @@
 
     a, .logoutBtn {
       padding: 20px;
-      width: 200px;
       border-radius: 24px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
+      display: block;
+      width: 70px;
+      height: 70px;
+      transition: background-color 80ms ease-in-out, width .2s ease-in-out;
+      position: relative;
 
       path {
-        transition: fill 80ms ease-in-out;
+        transition: fill 80ms ease-in;
+      }
+
+      p {
+        position: absolute;
+        transition: opacity .2s ease-in-out;
+        opacity: 0;
+        left: 70px;
+        top: 39%;
+        width: 110px;
       }
 
       &:hover {
@@ -47,6 +79,20 @@
           fill: #fff
         }
       }
+    }
+  }
+}
+
+.navActive {
+  width: $nav-width;
+
+  ul {
+    a, .logoutBtn {
+      width: 200px;
+    }
+
+    p {
+      opacity: 1 !important;
     }
   }
 }

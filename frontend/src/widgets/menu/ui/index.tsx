@@ -14,10 +14,13 @@ import {fetchLogout} from "../../../features/auth";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {api} from "../../../shared/api/api.ts";
 import {toast} from "react-toastify";
+import {useState} from "react";
 
 const Menu = () => {
 
     const dispatch = useAppDispatch()
+
+    const [isOpen, setIsOpen] = useState(false)
 
     const logout = async () => {
         if (!localStorage.getItem('token')) {
@@ -29,10 +32,17 @@ const Menu = () => {
     }
 
     return (
-        <aside className={styles.nav}>
-            <Link style={{marginLeft: '20px'}} to='/'>
-                <img height={40} src="/vite.svg" alt="logo"/>
-            </Link>
+        <aside className={isOpen ? `${styles.nav} ${styles.navActive}` : styles.nav}>
+            <div>
+                <Link to='/'>
+                    <img height={40} src="/vite.svg" alt="logo"/>
+                </Link>
+                <div onClick={() => setIsOpen(!isOpen)}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
             <ul>
                 <li>
                     <NavLink className={({isActive}) => isActive ? styles.active : ''} to='/'>

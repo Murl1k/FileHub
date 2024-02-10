@@ -71,11 +71,11 @@ export const api = createApi({
             },
             providesTags: ["Folder"]
         }),
-        getParentFolder: builder.query<IFolderData, string>({
+        getFoldersAncestors: builder.query<IFolderData[], string>({
             queryFn: async (id) => {
                 if (location.pathname !== '/') {
-                    const res = await axiosInstance.get(`/cloud_storage/folders/${id}`)
-                    return {data: res.data.parent_folder}
+                    const res = await axiosInstance.get(`/cloud_storage/folders/${id}/ancestors/`)
+                    return {data: res.data}
                 } else {
                     return {data: undefined}
                 }
@@ -142,7 +142,7 @@ export const api = createApi({
 export const {
     useGetFilesQuery,
     useGetFoldersQuery,
-    useGetParentFolderQuery,
+    useGetFoldersAncestorsQuery,
     useAddFileMutation,
     useAddFolderMutation,
     useUpdateFilePrivacyMutation,

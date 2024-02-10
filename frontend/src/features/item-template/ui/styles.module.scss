@@ -39,6 +39,8 @@
 }
 
 .gridItem, .listItem {
+  user-select: none;
+
   > div:not(:last-child) {
     svg {
       height: 40px;

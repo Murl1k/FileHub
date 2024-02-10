@@ -66,6 +66,17 @@ class FolderViewSet(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_202_ACCEPTED)
 
+    @action(detail=True, methods=['get'])
+    def ancestors(self, request, pk):
+        """Returns folders ancestors."""
+
+        folder = self.get_object()
+        ancestors = folder.get_ancestors(include_self=True, ascending=False)
+
+        serializer = self.get_serializer_class()(ancestors, many=True)
+
+        return Response(serializer.data)
+
     @action(detail=True, methods=['post'])
     def change_privacy(self, request, pk):
         """Runs task to change the privacy of the folder, and its descendants include files."""

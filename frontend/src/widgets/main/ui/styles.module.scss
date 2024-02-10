@@ -9,27 +9,6 @@
 
   > div:first-child {
     position: relative;
-
-    h2 {
-      margin-bottom: 20px;
-    }
-
-    > div {
-      cursor: pointer;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      > svg {
-        transition: rotate .2s ease-in-out;
-      }
-
-      button {
-        color: $secondary;
-        font-weight: 600;
-      }
-    }
   }
 
   > div:last-child {
@@ -58,19 +37,43 @@
 }
 
 .setSort {
-  p {
-    display: inline-block;
+  display: flex;
+  align-items: center;
+  width: max-content;
+
+  > div {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+
+    p {
+      display: inline-block;
+      font-weight: 600;
+
+      &:first-child {
+        color: #8a8f98;
+        margin-right: 7px;
+      }
+
+      &:last-child {
+        text-transform: capitalize;
+        color: black;
+      }
+    }
+
+    svg {
+      transition: rotate .2s ease-in-out;
+    }
+  }
+
+  button, svg {
+    margin-left: 10px;
+  }
+
+  button {
+    color: $secondary;
     font-weight: 600;
-
-    &:first-child {
-      color: #8a8f98;
-      margin-right: 7px;
-    }
-
-    &:last-child {
-      text-transform: capitalize;
-      color: black;
-    }
   }
 }
 
@@ -93,43 +96,41 @@
   gap: 10px;
 }
 
-.listContainer {
+.listContainer, .listNavigation {
   border-bottom: 2px solid $primary;
+
 }
 
-.navigate {
-  background-color: #fff;
-  border-radius: 24px;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: box-shadow .2s ease-in-out, background-color .2s ease-in-out;
-
-  &:hover {
-    box-shadow: $box-shadow;
-    background-color: #efefef;
-  }
-
-  div {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
+.listNavigation {
+  > div {
     padding: 10px;
-    transition: background-color .2s ease-in-out;
-
-    span {
-      height: 20px;
-      width: 20px;
-      border-radius: 50%;
-      background-color: #c7c3c3;
-      margin: 0 auto;
-    }
+    margin-bottom: 10px;
+    background: transparent;
 
     &:hover {
-      background-color: #3f3e3e;
+      background-color: #fff;
+      box-shadow: none;
+    }
+
+    div {
+      &:first-child {
+        padding: 0;
+
+        button {
+          height: 60px;
+          width: 60px;
+          padding: 6px;
+
+          span {
+            height: 12px;
+            width: 12px;
+          }
+        }
+      }
+
+      &:last-child {
+        display: none;
+      }
     }
   }
 }

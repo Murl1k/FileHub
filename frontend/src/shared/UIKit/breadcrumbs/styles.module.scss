@@ -1,33 +1,98 @@
+@import '../../../app/assets/styles/vars';
+@import '../../../app/assets/styles/mixins';
+
 .breadcrumbs {
   margin-bottom: 20px;
 
   ul {
     display: flex;
+    position: relative;
   }
 }
 
 .crumb {
   color: #8B96A5;
+  display: flex;
+  align-items: center;
+  max-width: 150px;
 
-  &:first-child {
+  &:last-child {
     a {
       color: #8B96A5;
     }
   }
 
-  &:not(:last-child)::after {
+  &:not(:first-child)::before {
     display: inline-block;
     margin: 0 0.5rem;
-    content: "-->";
+    content: ">";
     color: #8B96A5;
-    position: relative;
-    bottom: 2px;
+  }
+
+  &:last-child {
+    pointer-events: none;
   }
 
   a {
+    display: block;
     text-transform: capitalize;
     color: #1c1c1c;
     font-weight: 600;
-    font-size: 1.5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 16px;
+    transition: color .2s ease-in-out;
+
+    &:hover {
+      color: $primary;
+    }
+  }
+}
+
+.openPopupCrumbs, .openPopupCrumbs span {
+  transition: background-color .2s ease-in-out;
+}
+
+.openPopupCrumbs {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  border-radius: 12px;
+  padding: 6px;
+  cursor: pointer;
+
+  span {
+    height: 4px;
+    width: 4px;
+    background-color: #c7c3c3;
+    border-radius: 50%;
+  }
+
+  &:hover {
+    background-color: #e0e0e0;
+
+    span {
+      background-color: #b0afaf;
+    }
+  }
+}
+
+.popupCrumbs {
+  @include menu;
+  top: 30px;
+  transition: opacity .2s ease-in-out;
+
+  div:not(:last-child) {
+    path {
+      fill: #808080;
+    }
+  }
+
+  p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100px;
   }
 }
