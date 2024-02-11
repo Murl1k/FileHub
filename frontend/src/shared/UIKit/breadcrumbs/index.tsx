@@ -1,13 +1,18 @@
 import {Link, useNavigate} from "react-router-dom";
 import styles from './styles.module.scss'
-import {FC, MouseEvent, useRef, useState} from "react";
+import {FC, HTMLAttributes, MouseEvent, useRef, useState} from "react";
 import {IFolderData} from "../../types";
 import {useOutsideClick} from "../../lib/hooks/useClickOutside.ts";
 import {FolderSvg} from "../../../app/assets/images";
 import {Transition} from "react-transition-group";
 import {transitionStyles} from "../../../features/popup";
+import {OptionButton} from "../buttons";
 
-const Breadcrumbs: FC<{ foldersAncestors: IFolderData[] | undefined }> = ({foldersAncestors}) => {
+interface IBreadCrumbs extends HTMLAttributes<HTMLElement> {
+    foldersAncestors: IFolderData[] | undefined
+}
+
+const Breadcrumbs: FC<IBreadCrumbs> = ({foldersAncestors, ...props}) => {
 
     const navigate = useNavigate()
 
@@ -40,20 +45,18 @@ const Breadcrumbs: FC<{ foldersAncestors: IFolderData[] | undefined }> = ({folde
             </div>
         ))
 
-    const handleOpenCrumbs = (e: MouseEvent<HTMLLIElement>) => {
+    const handleOpenCrumbs = (e: MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
 
-        setIsOpen(true)
+        setIsOpen(!isOpen)
     }
 
     return (
-        <nav className={styles.breadcrumbs}>
+        <nav {...props} className={styles.breadcrumbs}>
             <ul>
                 {start > 0 ?
-                    <li className={styles.openPopupCrumbs} onClick={handleOpenCrumbs}>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                    <li className={styles.openPopupCrumbs}>
+                        <OptionButton onClick={handleOpenCrumbs}/>
                     </li> :
                     <li className={styles.crumb}>
                         <Link to='/'>My Cloud</Link>

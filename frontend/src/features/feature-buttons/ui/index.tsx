@@ -74,7 +74,7 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
 
                 dispatch(setContextMenu(initialContextState))
             } else {
-                let blobData
+                let blobData = ''
 
                 if (!data) {
                     blobData = (await dispatch(fetchDownloadFolderAsZip(id))).payload

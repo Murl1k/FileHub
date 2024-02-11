@@ -85,6 +85,10 @@ const Main = () => {
         dispatch(setFilter(initialFilterState))
     }
 
+    const handleStopPropagation = (e: MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+    }
+
     useEffect(() => {
         if (isError) {
             navigate('/')
@@ -98,8 +102,8 @@ const Main = () => {
                     <>
                         <div className={styles.storageHeadline}>
                             <div>
-                                <Breadcrumbs foldersAncestors={foldersAncestors}/>
-                                <div className={styles.setSort}>
+                                <Breadcrumbs onContextMenu={handleStopPropagation} foldersAncestors={foldersAncestors}/>
+                                <div onContextMenu={handleStopPropagation} className={styles.setSort}>
                                     <div onClick={handleOpenSort}>
                                         <div>
                                             <p>Sort by:</p>
@@ -131,7 +135,7 @@ const Main = () => {
                                     )}
                                 </Transition>
                             </div>
-                            <div onClick={e => e.stopPropagation()}>
+                            <div onClick={handleStopPropagation} onContextMenu={handleStopPropagation}>
                                 <button className={isGrid ? styles.activeBtn : ''}
                                         onClick={() => setView(true)}>
                                     <svg width={16} height={16} viewBox="0 0 28 28" version="1.1"

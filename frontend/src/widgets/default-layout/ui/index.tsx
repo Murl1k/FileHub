@@ -12,12 +12,17 @@ const DefaultLayout = () => {
     return (
         <div style={{display: 'flex', minHeight: '100vh'}}>
             <Menu/>
-            <div style={{width: '100%'}}>
-                {!(!data && !localStorage.getItem('token')) ? <><Header/>
-                    <main>
-                        <Outlet/>
-                    </main>
-                </> : <NotAuth/>}
+            <div style={{width: '100%', position: 'relative'}}>
+                {
+                    !(!data && !localStorage.getItem('token')) ?
+                        <>
+                            <Header/>
+                            <main>
+                                <Outlet/>
+                            </main>
+                        </> :
+                        <NotAuth/>
+                }
             </div>
         </div>
     );

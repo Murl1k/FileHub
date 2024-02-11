@@ -1,13 +1,12 @@
 @import '../../../app/assets/styles/vars';
+@import '../../../app/assets/styles/mixins';
 
 .itemInfo {
   padding: 20px;
 
   h4 {
-    overflow: hidden;
+    @include textOverflow;
     width: 200px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 }
 

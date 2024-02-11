@@ -82,6 +82,17 @@ export const api = createApi({
             },
             providesTags: ["Folder"]
         }),
+        getUsedSize: builder.query<{ used_size: number }, null>({
+            queryFn: async () => {
+                if (localStorage.getItem('token')) {
+                    const res = await axiosInstance.get(`/cloud_storage/info`)
+                    return {data: res.data}
+                } else {
+                    return {data: undefined}
+                }
+            },
+            providesTags: ["Folder", "File"]
+        }),
         addFolder: builder.mutation<IFolderData[], IFolder>({
             queryFn: async (params) => {
                 try {
@@ -142,6 +153,7 @@ export const api = createApi({
 export const {
     useGetFilesQuery,
     useGetFoldersQuery,
+    useGetUsedSizeQuery,
     useGetFoldersAncestorsQuery,
     useAddFileMutation,
     useAddFolderMutation,

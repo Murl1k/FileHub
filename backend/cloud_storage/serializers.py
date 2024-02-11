@@ -83,3 +83,9 @@ class FolderCopySerializer(serializers.ModelSerializer, ValidateFolderSerializer
 
     def validate_parent_folder(self, value):
         return self.validate_folder(value)
+
+
+class CloudStorageSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('used_size', )
+        model = CloudStorage

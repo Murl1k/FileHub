@@ -7,17 +7,20 @@ import {useParams} from "react-router-dom";
 import {SizeCalculate} from "../../../../shared/lib/size-calculate.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
-import {IPopup, transitionStyles} from "../../";
+import {IPopupTransition, setIsFilesOpen, transitionStyles} from "../../";
 import {toast} from "react-toastify";
 import PopupTemplate from "../template";
 import {CancelButton, PrimaryButton} from "../../../../shared/UIKit/buttons";
+import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 
-const FilesPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
+const FilesPopup: FC<IPopupTransition> = ({transitionState}) => {
 
     const dispatch = useAppDispatch()
 
     const [files, setFiles] = useState<File[]>([])
     const [isDrag, setIsDrag] = useState(false)
+
+    const {isFilesOpen} = useAppSelector(state => state.popup)
 
     const {id} = useParams()
 
@@ -25,7 +28,11 @@ const FilesPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
 
     const popupRef = useRef<HTMLDivElement>(null)
 
-    useOutsideClick(popupRef, () => dispatch(stateAction(false)), state)
+    const handleCloseFilesPopup = () => {
+        dispatch(setIsFilesOpen(false))
+    }
+
+    useOutsideClick(popupRef, handleCloseFilesPopup, isFilesOpen)
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -76,7 +83,7 @@ const FilesPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
             closeButton: true,
             closeOnClick: true
         })
-        dispatch(stateAction(false))
+        handleCloseFilesPopup()
     }
 
     console.log()
@@ -96,7 +103,7 @@ const FilesPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
             >
                 <div className={styles.popupHeadline}>
                     <h3>Upload your file</h3>
-                    <CloseBtn onClick={() => dispatch(stateAction(false))}/>
+                    <CloseBtn onClick={handleCloseFilesPopup}/>
                 </div>
                 <div style={{padding: '20px'}}>
                     <form
@@ -140,7 +147,7 @@ const FilesPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
                             ))}
                         </div>}
                         <div className={styles.btns}>
-                            <CancelButton onClick={() => dispatch(stateAction(false))} type='button'/>
+                            <CancelButton onClick={handleCloseFilesPopup} type='button'/>
                             <PrimaryButton type='submit'>Add files</PrimaryButton>
                         </div>
                     </form>

@@ -1,4 +1,5 @@
 @import '../../../../app/assets/styles/vars';
+@import '../../../../app/assets/styles/mixins';
 
 .container {
   position: relative;
@@ -84,10 +85,8 @@
 
     p {
       &:first-child {
-        overflow: hidden;
-        white-space: nowrap;
+        @include textOverflow;
         width: 220px;
-        text-overflow: ellipsis;
       }
 
       &:last-child {

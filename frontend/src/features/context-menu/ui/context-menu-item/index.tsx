@@ -49,8 +49,11 @@ const ContextMenuItem: FC<IContextMenuItem> = ({item, index, maxIndex}) => {
             right: '45px'
         }
 
-        const position = state.x ? item.title ? contextMenuPosition(state.x, state.y, 172, 307) :
-            contextMenuPosition(state.x, state.y, 172, 205) : defaultPosition
+        const position = state.x ?
+            item.title ?
+                contextMenuPosition(state.x, state.y, 172, 307) :
+                contextMenuPosition(state.x, state.y, 172, 205) :
+            defaultPosition
 
         if (index >= maxIndex) {
             delete defaultPosition.top

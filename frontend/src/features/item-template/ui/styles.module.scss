@@ -1,32 +1,26 @@
 @import '../../../app/assets/styles/vars';
 
 .contextMenuBtn {
-  position: absolute;
-  cursor: pointer;
-  display: flex;
-  gap: 4px;
-  height: max-content;
-
-  &:before {
-    content: '';
+  button {
     position: absolute;
-    height: 25px;
-    width: 25px;
-    right: -10px;
-    bottom: -3px;
-  }
+    gap: 4px;
+    height: max-content;
 
-  span {
-    display: block;
-    border-radius: 50%;
-    width: 4px;
-    height: 4px;
-    background-color: #c7c3c3;
+    span {
+      width: 4px;
+      height: 4px;
+    }
   }
 }
 
 .active {
   box-shadow: 0 0 5px 2px $primary;
+
+  &:has(section) div:nth-child(3) {
+    button {
+      background-color: #e0e0e0;
+    }
+  }
 
   &List {
     @extend .active;
@@ -75,19 +69,16 @@
     color: #8a8989;
   }
 
-  div {
-    &:first-child {
-      border-radius: 12px 12px 0 0;
+  > div:nth-child(3) {
+    button {
+      display: grid;
+      right: 15px !important;
+      top: -210px;
     }
+  }
 
-    &:nth-child(3) {
-      div {
-        display: grid;
-        position: absolute;
-        right: 25px !important;
-        top: -200px;
-      }
-    }
+  > div:first-child {
+    border-radius: 12px 12px 0 0;
   }
 }
 
@@ -115,13 +106,7 @@
 
   div:nth-child(3) {
     right: 40px;
-
-    div {
-      &:before {
-        right: -3px;
-        bottom: -10px;
-      }
-    }
+    margin-right: 10px;
   }
 
   &:not(.activeList):hover {

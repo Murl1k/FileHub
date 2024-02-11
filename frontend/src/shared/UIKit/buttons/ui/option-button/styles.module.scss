@@ -1,0 +1,27 @@
+.optionButton, .optionButton span {
+  transition: background-color .2s ease-in-out;
+}
+
+.optionButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+
+  span {
+    border-radius: 50%;
+    background-color: #c7c3c3;
+    height: 10px;
+    width: 10px;
+  }
+
+  &:hover {
+    background-color: #e0e0e0;
+
+    span {
+      background-color: #b0afaf;
+    }
+  }
+}

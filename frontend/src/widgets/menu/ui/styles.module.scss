@@ -2,39 +2,27 @@
 
 .nav {
   height: 100vh;
-  width: 150px;
+  width: $nav-width;
   background-color: #12131a;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 40px;
-  transition: width .2s ease-in-out;
+  padding: 40px 13px;
+  transition: width .2s ease-in-out, padding .2s ease-in-out;
 
-  div:first-child {
+  > div:first-child {
     display: grid;
-    gap: 10px;
-    justify-items: center;
+    justify-items: flex-start;
 
     div {
-      cursor: pointer;
-      display: flex;
-      justify-items: flex-end;
-      padding: 10px;
-      gap: 5px;
-      border-radius: 12px;
-      transition: background-color .2s ease-in-out;
-
-      span {
-        width: 10px;
-        height: 10px;
-        background-color: #23a267;
-        border-radius: 50%;
-      }
-
-      &:hover {
-        background-color: #8B96A5;
-      }
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+      position: relative;
+      left: 5px;
+      transition: left .2s ease-in-out;
+      margin-bottom: 40px;
     }
   }
 
@@ -43,10 +31,8 @@
     gap: 10px;
 
     li {
-      &:first-child, &:nth-child(3) {
-        path {
-          fill: #808080;
-        }
+      path {
+        fill: #808080;
       }
     }
 
@@ -65,7 +51,8 @@
 
       p {
         position: absolute;
-        transition: opacity .2s ease-in-out;
+        translate: -40px;
+        transition: opacity .2s ease-in-out, translate .2s ease-in-out;
         opacity: 0;
         left: 70px;
         top: 39%;
@@ -83,8 +70,17 @@
   }
 }
 
+
 .navActive {
+  $nav-width: 280px !global;
   width: $nav-width;
+  padding: 40px;
+
+  > div:first-child {
+    div {
+      left: 0;
+    }
+  }
 
   ul {
     a, .logoutBtn {
@@ -93,6 +89,7 @@
 
     p {
       opacity: 1 !important;
+      translate: 0 !important;
     }
   }
 }
@@ -102,6 +99,36 @@
 
   path {
     fill: #fff !important;
+  }
+}
+
+.memoryUsed {
+  z-index: 0;
+  margin: 0 auto;
+
+  span {
+    display: grid;
+    place-items: center;
+    background: #fff;
+    border-radius: 50%;
+    position: relative;
+    bottom: 10px;
+    color: $primary;
+    font-weight: 600;
+    text-align: center;
+    height: 50px;
+    width: 50px;
+    font-size: 14px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      margin: -7px;
+      border-radius: inherit;
+      background-image: linear-gradient(180deg, #0ed9b1, #06b17a);
+    }
   }
 }
 

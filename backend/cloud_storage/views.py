@@ -5,11 +5,12 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .models import File, Folder
+from .models import File, Folder, CloudStorage
 from .permissions import IsStorageOwnerOrIsObjectPublic
 from .serializers import FolderSerializer, FolderCreateEditSerializer, FolderCopySerializer, FileSerializer, \
-    FileCreateSerializer, FileEditSerializer, FileCopySerializer
+    FileCreateSerializer, FileEditSerializer, FileCopySerializer, CloudStorageSerializer
 from .tasks import copy_folder_task, change_folder_privacy_task, get_zip_from_folder_task, copy_file_task
 
 
@@ -161,3 +162,12 @@ class FileViewSet(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_202_ACCEPTED)
 
+
+class CloudStorageInfo(APIView):
+    def get(self, request):
+        """Returns info about cloud storage"""
+
+        cloud_storage = CloudStorage.objects.get(owner=request.user)
+        serializer = CloudStorageSerializer(cloud_storage)
+
+        return Response(serializer.data)

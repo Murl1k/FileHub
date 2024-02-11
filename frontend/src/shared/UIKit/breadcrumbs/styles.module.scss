@@ -34,13 +34,11 @@
   }
 
   a {
+    @include textOverflow;
     display: block;
     text-transform: capitalize;
     color: #1c1c1c;
     font-weight: 600;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     font-size: 16px;
     transition: color .2s ease-in-out;
 
@@ -50,30 +48,16 @@
   }
 }
 
-.openPopupCrumbs, .openPopupCrumbs span {
-  transition: background-color .2s ease-in-out;
-}
-
 .openPopupCrumbs {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  border-radius: 12px;
-  padding: 6px;
-  cursor: pointer;
+  margin: auto 0;
 
-  span {
-    height: 4px;
-    width: 4px;
-    background-color: #c7c3c3;
-    border-radius: 50%;
-  }
-
-  &:hover {
-    background-color: #e0e0e0;
+  button {
+    gap: 3px;
+    padding: 6px;
 
     span {
-      background-color: #b0afaf;
+      height: 4px;
+      width: 4px;
     }
   }
 }
@@ -90,9 +74,7 @@
   }
 
   p {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    @include textOverflow;
     width: 100px;
   }
 }

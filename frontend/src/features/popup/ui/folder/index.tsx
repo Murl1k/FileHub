@@ -5,20 +5,27 @@ import {useAddFolderMutation} from "../../../../shared/api/api.ts";
 import {useParams} from "react-router-dom";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
-import {IPopup, transitionStyles} from "../../";
+import {IPopupTransition, setIsFoldersOpen, transitionStyles} from "../../";
 import {CancelButton, PrimaryButton} from "../../../../shared/UIKit/buttons";
+import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 
-const FolderPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
+const FolderPopup: FC<IPopupTransition> = ({transitionState}) => {
 
     const dispatch = useAppDispatch()
 
     const [title, setTitle] = useState('')
 
+    const {isFoldersOpen} = useAppSelector(state => state.popup)
+
     const {id} = useParams()
 
     const popupRef = useRef<HTMLFormElement>(null)
 
-    useOutsideClick(popupRef, () => dispatch(stateAction(false)), state)
+    const handleCloseFoldersPopup = () => {
+        dispatch(setIsFoldersOpen(false))
+    }
+
+    useOutsideClick(popupRef, handleCloseFoldersPopup, isFoldersOpen)
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)
@@ -32,7 +39,7 @@ const FolderPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
             title,
             parent_folder: id ? id : null
         })
-        dispatch(stateAction(false))
+        handleCloseFoldersPopup()
     }
 
     const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -43,13 +50,13 @@ const FolderPopup: FC<IPopup> = ({state, stateAction, transitionState}) => {
 
     const onKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.code === 'Escape') {
-            dispatch(stateAction(false))
+            handleCloseFoldersPopup()
         }
     }
 
     return (
         <div className={styles.popup} style={transitionStyles[transitionState as keyof typeof transitionStyles]}>
-            <form onSubmit={handleSubmit} onReset={() => dispatch(stateAction(false))} ref={popupRef}
+            <form onSubmit={handleSubmit} onReset={handleCloseFoldersPopup} ref={popupRef}
                   style={transitionStyles[transitionState as keyof typeof transitionStyles]}
             >
                 <label>

@@ -8,6 +8,7 @@ import {initialTemplateState, setIsActive} from "../";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {initialFilterState, PrivacyPopup, RenamePopup, setFilter, setIsFoldersOpen} from "../../popup";
 import {Transition} from "react-transition-group";
+import {OptionButton} from "../../../shared/UIKit/buttons";
 
 interface IItemTemplate extends HTMLAttributes<HTMLDivElement> {
     itemProps: {
@@ -39,7 +40,7 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
         isFolder: Boolean(item.title)
     }
 
-    const handleClickTemplate = (e: MouseEvent<HTMLDivElement>) => {
+    const handleClickTemplate = (e: MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
         e.stopPropagation()
 
         if (id !== item.id || !status) {
@@ -73,7 +74,19 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
             navigate(`/folder/${item.id}`)
             dispatch(setIsActive(initialTemplateState))
         }
-    };
+    }
+
+    const handleOpenContextMenu = (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+        handleClickTemplate(e)
+
+        if (type !== 'item' || x !== 0) {
+            dispatch(setContextMenu({
+                type: "item",
+                x: 0,
+                y: 0
+            }))
+        }
+    }
 
     const condition = status && id === item.id
 
@@ -94,26 +107,15 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
                 style={!x ? {position: 'relative'} : {}}
             >
                 {children}
-                <div style={isGrid ? {position: 'relative'} : {position: 'absolute'}}>
-                    <div
-                        style={x ? {right: '35px'} : {}}
-                        className={styles.contextMenuBtn}
-                        onClick={(e) => {
-                            handleClickTemplate(e)
-
-                            if (type !== 'item' || x !== 0) {
-                                dispatch(setContextMenu({
-                                    type: "item",
-                                    x: 0,
-                                    y: 0
-                                }))
-                            }
-                        }}
+                <div className={styles.contextMenuBtn} style={isGrid ? {position: 'relative'} : {position: 'absolute'}}>
+                    <OptionButton
+                        style={x ? {right: '15px'} : {}}
+                        onClick={handleOpenContextMenu}
                     >
                         <span></span>
                         <span></span>
                         <span></span>
-                    </div>
+                    </OptionButton>
                 </div>
                 {type === 'item' && id === item.id &&
                     <ContextMenuItem item={item} index={index} maxIndex={isGrid ? 8 : 3}/>}
