@@ -81,9 +81,11 @@ const ContextMenuMain = () => {
                     <p>Add files</p>
                 </div>
             </section>
-            {id && <section>
-                <PasteButton/>
-            </section>}
+            {id &&
+                <section>
+                    <PasteButton/>
+                </section>
+            }
         </div>
     );
 };

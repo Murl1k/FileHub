@@ -16,6 +16,7 @@ interface ISelectionBar {
         url: string
         size: number
         itemId: string
+        isOwner: boolean
     }
 }
 
@@ -26,7 +27,8 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
         title,
         url,
         size,
-        itemId
+        itemId,
+        isOwner
     } = selectionProps
 
     const dispatch = useAppDispatch()
@@ -47,7 +49,8 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
         url,
         name,
         size,
-        id: itemId
+        id: itemId,
+        isOwner
     }
 
     const handleClick = (e: MouseEvent<HTMLDivElement>) => {
@@ -64,7 +67,7 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
         >
             <p>{title ? title : name}</p>
             <div>
-                {id && <PasteButton/>}
+                {isOwner && id && <PasteButton/>}
                 <FeatureButtons featureButtonsProps={featureButtonsProps}/>
             </div>
         </div>

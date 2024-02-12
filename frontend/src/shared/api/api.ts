@@ -84,12 +84,8 @@ export const api = createApi({
         }),
         getUsedSize: builder.query<{ used_size: number }, null>({
             queryFn: async () => {
-                if (localStorage.getItem('token')) {
-                    const res = await axiosInstance.get(`/cloud_storage/info`)
-                    return {data: res.data}
-                } else {
-                    return {data: undefined}
-                }
+                const res = await axiosInstance.get(`/cloud_storage/info`)
+                return {data: res.data}
             },
             providesTags: ["Folder", "File"]
         }),

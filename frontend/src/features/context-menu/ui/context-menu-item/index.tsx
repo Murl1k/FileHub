@@ -1,24 +1,19 @@
 import styles from '../styles.module.scss'
-import {FC, useRef} from 'react'
+import {FC, HTMLAttributes, useRef} from 'react'
 import {IMergedData} from "../../../../shared/types";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {contextMenuPosition, initialContextState, setContextMenu} from "../../";
-import {FeatureButtons} from "../../../feature-buttons";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
-import {useNavigate} from "react-router-dom";
 import {initialTemplateState, setIsActive} from "../../../item-template";
-import {FolderSvg} from '../../../../app/assets/images'
 
-interface IContextMenuItem {
+interface IContextMenuItem extends HTMLAttributes<HTMLDivElement> {
     item: IMergedData
     index: number
     maxIndex: number
 }
 
-const ContextMenuItem: FC<IContextMenuItem> = ({item, index, maxIndex}) => {
-
-    const navigate = useNavigate()
+const ContextMenuItem: FC<IContextMenuItem> = ({children, item, index, maxIndex}) => {
 
     const dispatch = useAppDispatch()
 
@@ -30,18 +25,6 @@ const ContextMenuItem: FC<IContextMenuItem> = ({item, index, maxIndex}) => {
         dispatch(setContextMenu(initialContextState))
         dispatch(setIsActive(initialTemplateState))
     }, state.type === 'item')
-
-    const featureButtonsProps = {
-        id: item.id,
-        title: item.title,
-        name: item.name,
-        url: item.url,
-        size: item.size
-    }
-
-    const handleOpenFolder = () => {
-        navigate(`/folder/${item.id}`)
-    }
 
     const contextMenuStyles = () => {
         const defaultPosition: { right: string, top?: string, bottom?: string } = {
@@ -76,13 +59,7 @@ const ContextMenuItem: FC<IContextMenuItem> = ({item, index, maxIndex}) => {
             style={contextMenuStyles()}
             className={styles.contextMenu}
         >
-            {item.title && <section className={styles.open}>
-                <div onClick={handleOpenFolder}>
-                    <FolderSvg/>
-                    <p>Open</p>
-                </div>
-            </section>}
-            <FeatureButtons featureButtonsProps={featureButtonsProps}/>
+            {children}
         </div>
     );
 };

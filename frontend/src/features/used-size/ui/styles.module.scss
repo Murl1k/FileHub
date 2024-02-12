@@ -1,0 +1,54 @@
+@import '../../../app/assets/styles/vars';
+
+.usedSize {
+  z-index: 0;
+  margin: 0 auto;
+
+  span {
+    display: grid;
+    place-items: center;
+    background: #fff;
+    border-radius: 50%;
+    position: relative;
+    bottom: 10px;
+    color: $primary;
+    font-weight: 600;
+    text-align: center;
+    height: 50px;
+    width: 50px;
+    font-size: 14px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      margin: -7px;
+      border-radius: inherit;
+    }
+  }
+}
+
+.lowSize {
+  span {
+    &:before {
+      background: linear-gradient(90deg, rgba(6, 177, 122, 1) 35%, rgba(33, 208, 173, 1) 100%);
+    }
+  }
+}
+
+.mediumSize {
+  span {
+    &:before {
+      background: linear-gradient(90deg, rgba(219, 181, 45, 1) 35%, rgba(209, 226, 18, 1) 100%);
+    }
+  }
+}
+
+.largeSize {
+  span {
+    &:before {
+      background: linear-gradient(90deg, rgba(234, 45, 45, 1) 35%, rgba(218, 123, 123, 1) 100%);
+    }
+  }
+}

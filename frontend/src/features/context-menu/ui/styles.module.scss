@@ -9,13 +9,11 @@
       display: grid;
       gap: 5px;
     }
-  }
-}
 
-.open {
-  div {
-    path {
-      fill: #808080;
+    &:first-child {
+      path {
+        fill: #808080;
+      }
     }
   }
 }

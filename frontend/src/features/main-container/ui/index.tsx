@@ -14,11 +14,17 @@ import {useParams} from "react-router-dom";
 import {initialTemplateState, setIsActive} from "../../item-template";
 import {initialFilterState, setFilter, setIsFoldersOpen} from "../../popup";
 
-const MainContainer: FC<HTMLAttributes<HTMLDivElement>> = ({children}) => {
+interface IMainContainer extends HTMLAttributes<HTMLDivElement> {
+    isOwner: boolean
+}
+
+const MainContainer: FC<IMainContainer> = ({children, isOwner}) => {
 
     const dispatch = useAppDispatch()
 
     const {id} = useParams() as { id: string }
+
+    console.log(id)
 
     const {id: objectId, isFolder} = useAppSelector(state => state.selectionBar)
     const {type} = useAppSelector(state => state.contextMenu)
@@ -57,11 +63,11 @@ const MainContainer: FC<HTMLAttributes<HTMLDivElement>> = ({children}) => {
         document.addEventListener('keydown', handleCopy as never)
 
         return () => document.removeEventListener('keydown', handleCopy as never)
-    }, [dispatch, isActive.id, isActive.isFolder, objectId]);
+    }, [dispatch, isActive.id, isActive.isFolder, isOwner, objectId]);
 
     useEffect(() => {
         const handlePaste = async (e: KeyboardEvent) => {
-            if (((e.ctrlKey || e.metaKey) && e.code === 'KeyV') && objectId) {
+            if (((e.ctrlKey || e.metaKey) && e.code === 'KeyV') && objectId && isOwner) {
                 if (isFolder) {
                     await copyFolder({id: objectId, folder: id})
                     setTimeout(() => {
@@ -79,11 +85,11 @@ const MainContainer: FC<HTMLAttributes<HTMLDivElement>> = ({children}) => {
         document.addEventListener('keydown', handlePaste as never)
 
         return () => document.removeEventListener('keydown', handlePaste as never)
-    }, [copyFile, copyFolder, filesRefetch, foldersRefetch, id, isFolder, objectId]);
+    }, [copyFile, copyFolder, filesRefetch, foldersRefetch, id, isFolder, isOwner, objectId]);
 
     return (
         <>
-            {type === "main" && <ContextMenuMain/>}
+            {type === "main" && isOwner && <ContextMenuMain/>}
             <div
                 onContextMenu={handleRightClick}
                 className={isActive.status ? `${styles.container} ${styles.active}` : styles.container}

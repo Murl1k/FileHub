@@ -26,6 +26,7 @@ const Main = () => {
 
     const [isGrid, setIsGrid] = useState(true)
 
+    const {data: userData} = useAppSelector(state => state.auth)
     const {type} = useAppSelector(state => state.contextMenu)
     const {id: activeId, status} = useAppSelector(state => state.itemTemplate)
     const {filter} = useAppSelector(state => state.popup)
@@ -89,6 +90,8 @@ const Main = () => {
         e.stopPropagation()
     }
 
+    const isOwner = userData?.id === foldersAncestors?.[0].owner || location.pathname === '/'
+
     useEffect(() => {
         if (isError) {
             navigate('/')
@@ -97,12 +100,18 @@ const Main = () => {
 
     return (
         <>
-            <MainContainer>
+            <MainContainer isOwner={isOwner}>
                 {!foldersLoading && !filesLoading ?
                     <>
                         <div className={styles.storageHeadline}>
                             <div>
-                                <Breadcrumbs onContextMenu={handleStopPropagation} foldersAncestors={foldersAncestors}/>
+                                {isOwner ?
+                                    <Breadcrumbs
+                                        onContextMenu={handleStopPropagation}
+                                        foldersAncestors={foldersAncestors}
+                                    />
+                                    : ''
+                                }
                                 <div onContextMenu={handleStopPropagation} className={styles.setSort}>
                                     <div onClick={handleOpenSort}>
                                         <div>
@@ -185,6 +194,7 @@ const Main = () => {
                                     const itemProps = {
                                         isGrid,
                                         item,
+                                        isOwner,
                                         index
                                     }
 
@@ -217,6 +227,7 @@ const Main = () => {
                                     const itemProps = {
                                         isGrid,
                                         item,
+                                        isOwner,
                                         index
                                     }
 
@@ -240,7 +251,8 @@ const Main = () => {
                         title: item.title,
                         itemId: item.id,
                         url: item.url,
-                        size: item.size
+                        size: item.size,
+                        isOwner,
                     }
 
                     return <SelectionBar key={item.id} selectionProps={selectionProps}/>

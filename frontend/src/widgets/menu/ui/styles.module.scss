@@ -102,36 +102,6 @@
   }
 }
 
-.memoryUsed {
-  z-index: 0;
-  margin: 0 auto;
-
-  span {
-    display: grid;
-    place-items: center;
-    background: #fff;
-    border-radius: 50%;
-    position: relative;
-    bottom: 10px;
-    color: $primary;
-    font-weight: 600;
-    text-align: center;
-    height: 50px;
-    width: 50px;
-    font-size: 14px;
-
-    &:before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      margin: -7px;
-      border-radius: inherit;
-      background-image: linear-gradient(180deg, #0ed9b1, #06b17a);
-    }
-  }
-}
-
 .logoutBtn {
   cursor: pointer;
 }

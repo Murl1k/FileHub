@@ -6,4 +6,9 @@
   padding: 10px 30px;
   color: #fff;
   font-weight: 600;
+  transition: background-color .2s ease-in-out;
+
+  &:hover {
+    background-color: #6646bd;
+  }
 }

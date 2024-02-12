@@ -3,19 +3,17 @@ import {AvatarSvg, FolderSvg, LogoutSvg} from '../../../app/assets/images/'
 import {Link, NavLink} from "react-router-dom";
 import {fetchLogout} from "../../../features/auth";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {api, useGetUsedSizeQuery} from "../../../shared/api/api.ts";
+import {api} from "../../../shared/api/api.ts";
 import {toast} from "react-toastify";
 import {useState} from "react";
 import {OptionButton} from "../../../shared/UIKit/buttons";
-import {SizeCalculate} from "../../../shared/lib/size-calculate.ts";
+import {UsedSize} from "../../../features/used-size";
 
 const Menu = () => {
 
     const dispatch = useAppDispatch()
 
     const [isOpen, setIsOpen] = useState(false)
-
-    const {data} = useGetUsedSizeQuery(null)
 
     const logout = async () => {
         if (!localStorage.getItem('token')) {
@@ -31,7 +29,7 @@ const Menu = () => {
             <div>
                 <div>
                     <Link to='/'>
-                        <img height={40} src="/vite.svg" alt="logo"/>
+                        <img height={40} width={40} src="/vite.svg" alt="logo"/>
                     </Link>
                     <OptionButton onClick={() => setIsOpen(!isOpen)}/>
                 </div>
@@ -51,9 +49,7 @@ const Menu = () => {
                 </ul>
             </div>
             <ul>
-                {localStorage.getItem('token') && <li className={styles.memoryUsed}>
-                    <span>{data ? SizeCalculate(data.used_size) : ''}</span>
-                </li>}
+                {localStorage.getItem('token') && <UsedSize/>}
                 <li className={styles.logoutBtn} onClick={logout}>
                     <LogoutSvg/>
                     <p>Log out</p>

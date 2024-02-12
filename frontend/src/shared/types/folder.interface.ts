@@ -7,6 +7,7 @@ export interface IFolder {
 
 export interface IFolderData {
     id: string
+    owner: number
     title: string
     size: number
     parent_folder: string

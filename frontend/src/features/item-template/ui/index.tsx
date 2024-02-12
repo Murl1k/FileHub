@@ -9,11 +9,15 @@ import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {initialFilterState, PrivacyPopup, RenamePopup, setFilter, setIsFoldersOpen} from "../../popup";
 import {Transition} from "react-transition-group";
 import {OptionButton} from "../../../shared/UIKit/buttons";
+import {toast} from "react-toastify";
+import {FeatureButtons} from "../../feature-buttons";
+import {FolderSvg} from "../../../app/assets/images";
 
 interface IItemTemplate extends HTMLAttributes<HTMLDivElement> {
     itemProps: {
         item: IMergedData
         isGrid: boolean
+        isOwner: boolean
         index: number
     }
 }
@@ -23,6 +27,7 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
     const {
         isGrid,
         item,
+        isOwner,
         index
     } = itemProps
 
@@ -69,10 +74,16 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
         type !== 'initial' && dispatch(setContextMenu(initialContextState))
     };
 
+    const handleOpenFolder = () => {
+        navigate(`/folder/${item.id}`)
+    }
+
     const handleDoubleClick = () => {
-        if (item.title) {
-            navigate(`/folder/${item.id}`)
+        if (item.title && isOwner || item.is_public) {
+            handleOpenFolder()
             dispatch(setIsActive(initialTemplateState))
+        } else {
+            toast.error('You dont have permission to view this folder.')
         }
     }
 
@@ -96,6 +107,15 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
             : condition ? `${styles.listItem} ${styles.activeList}` : styles.listItem;
     };
 
+    const featureButtonsProps = {
+        id: item.id,
+        title: item.title,
+        name: item.name,
+        url: item.url,
+        size: item.size,
+        isOwner
+    }
+
     return (
         <>
             <div
@@ -118,7 +138,18 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
                     </OptionButton>
                 </div>
                 {type === 'item' && id === item.id &&
-                    <ContextMenuItem item={item} index={index} maxIndex={isGrid ? 8 : 3}/>}
+                    <ContextMenuItem item={item} index={index} maxIndex={isGrid ? 8 : 3}>
+                        {isOwner && item.title &&
+                            <section>
+                                <div onClick={handleOpenFolder}>
+                                    <FolderSvg/>
+                                    <p>Open</p>
+                                </div>
+                            </section>
+                        }
+                        <FeatureButtons featureButtonsProps={featureButtonsProps}/>
+                    </ContextMenuItem>
+                }
             </div>
             {id === item.id &&
                 <Transition in={isPrivacyOpen} timeout={200} unmountOnExit>

@@ -2,4 +2,9 @@
   background-color: #fff;
   color: #1c87e1;
   font-weight: 600;
+  transition: color .2s ease-in-out;
+
+  &:hover {
+    color: #4296de;
+  }
 }
