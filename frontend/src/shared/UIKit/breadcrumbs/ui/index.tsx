@@ -1,12 +1,12 @@
 import {Link, useNavigate} from "react-router-dom";
 import styles from './styles.module.scss'
 import {FC, HTMLAttributes, MouseEvent, useRef, useState} from "react";
-import {IFolderData} from "../../types";
-import {useOutsideClick} from "../../lib/hooks/useClickOutside.ts";
-import {FolderSvg} from "../../../app/assets/images";
+import {IFolderData} from "../../../types";
+import {useOutsideClick} from "../../../lib/hooks/useClickOutside.ts";
+import {FolderSvg} from "../../../../app/assets/images";
 import {Transition} from "react-transition-group";
-import {transitionStyles} from "../../../features/popup";
-import {OptionButton} from "../buttons";
+import {transitionStyles} from "../../../../features/popup";
+import {OptionButton} from "../../buttons";
 
 interface IBreadCrumbs extends HTMLAttributes<HTMLElement> {
     foldersAncestors: IFolderData[] | undefined

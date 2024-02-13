@@ -14,7 +14,7 @@ import {initialContextState, setContextMenu} from "../../../features/context-men
 import {FilterPopup, initialFilterState, setFilter} from "../../../features/popup";
 import {Transition} from "react-transition-group";
 import {NavigationButton} from "../../../features/navigation-button";
-import Breadcrumbs from "../../../shared/UIKit/breadcrumbs";
+import {Breadcrumbs, BreadcrumbsLoading} from "../../../shared/UIKit/breadcrumbs";
 
 const Main = () => {
 
@@ -110,7 +110,7 @@ const Main = () => {
                                         onContextMenu={handleStopPropagation}
                                         foldersAncestors={foldersAncestors}
                                     />
-                                    : <p style={{marginBottom: '20px'}}>loading...</p>
+                                    : <BreadcrumbsLoading/>
                                 }
                                 <div onContextMenu={handleStopPropagation} className={styles.setSort}>
                                     <div onClick={handleOpenSort}>

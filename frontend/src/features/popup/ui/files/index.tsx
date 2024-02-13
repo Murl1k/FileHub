@@ -68,10 +68,10 @@ const FilesPopup: FC<IPopupTransition> = ({transitionState}) => {
         const data = new FormData()
 
         data.append('file', files[0])
+
         if (id) {
             data.append('folder', id)
         }
-        console.log(data)
 
         const loading = toast.loading('Uploading the file...')
         await updateResult(data)
