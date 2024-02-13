@@ -25,7 +25,7 @@ export const api = createApi({
                     return toast.error(err.response.data.file[0])
                 }
             },
-            invalidatesTags: ["File"]
+            invalidatesTags: ["File", "Folder"]
         }),
         removeFile: builder.mutation<IFileData[], string>({
             queryFn: async (id) => {

@@ -25,7 +25,7 @@ const Menu = () => {
     }
 
     return (
-        <aside className={isOpen ? `${styles.nav} ${styles.navActive}` : styles.nav}>
+        <aside className={isOpen ? `${styles.sidebar} ${styles.sidebarActive}` : styles.sidebar}>
             <div>
                 <div>
                     <Link to='/'>

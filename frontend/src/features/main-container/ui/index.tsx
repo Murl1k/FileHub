@@ -24,8 +24,6 @@ const MainContainer: FC<IMainContainer> = ({children, isOwner}) => {
 
     const {id} = useParams() as { id: string }
 
-    console.log(id)
-
     const {id: objectId, isFolder} = useAppSelector(state => state.selectionBar)
     const {type} = useAppSelector(state => state.contextMenu)
     const isActive = useAppSelector(state => state.itemTemplate)
@@ -40,7 +38,7 @@ const MainContainer: FC<IMainContainer> = ({children, isOwner}) => {
     const handleRightClick = (e: MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
 
-        dispatch(setContextMenu({
+        isOwner && dispatch(setContextMenu({
             type: "main",
             x: e.pageX,
             y: e.pageY
@@ -87,16 +85,28 @@ const MainContainer: FC<IMainContainer> = ({children, isOwner}) => {
         return () => document.removeEventListener('keydown', handlePaste as never)
     }, [copyFile, copyFolder, filesRefetch, foldersRefetch, id, isFolder, isOwner, objectId]);
 
+    useEffect(() => {
+        if (isActive.status) {
+            const handleHistoryChange = () => {
+                dispatch(setIsActive(initialTemplateState))
+            }
+
+            window.addEventListener('popstate', handleHistoryChange)
+
+            return () => window.removeEventListener('popstate', handleHistoryChange)
+        }
+    }, [dispatch, isActive.status]);
+
     return (
         <>
             {type === "main" && isOwner && <ContextMenuMain/>}
-            <div
+            <section
                 onContextMenu={handleRightClick}
                 className={isActive.status ? `${styles.container} ${styles.active}` : styles.container}
                 style={type === "item" ? {overflow: "hidden"} : {overflow: "auto"}}
             >
                 {children}
-            </div>
+            </section>
         </>
     );
 };

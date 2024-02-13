@@ -17,6 +17,7 @@ interface IFeatureButtons {
         url: string
         name: string
         size: number
+        is_public: boolean
         isOwner: boolean
     }
 }
@@ -29,6 +30,7 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
         url,
         name,
         size,
+        is_public,
         isOwner
     } = featureButtonsProps
 
@@ -73,10 +75,16 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
 
             if (!size) {
                 toast.error('The folder is empty with no downloadable files.')
-
-                dispatch(setContextMenu(initialContextState))
+            } else if (!(isOwner || is_public)) {
+                toast.error('You dont have permission to download this folder')
             } else {
                 let blobData = ''
+
+                dispatch(setContextMenu(initialContextState))
+                const loading = toast.loading(`${data ? 'The file' : 'Folder'} is downloading...`, {
+                    closeOnClick: true,
+                    closeButton: true
+                })
 
                 if (!data) {
                     blobData = (await dispatch(fetchDownloadFolderAsZip(id))).payload
@@ -97,13 +105,23 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
                         document.body.appendChild(a)
                         a.click()
 
+                        toast.update(loading, {
+                            render: `The ${data ? 'file' : 'folder'} has been downloaded.`,
+                            type: "success",
+                            isLoading: false,
+                            autoClose: undefined,
+                            closeButton: true,
+                            closeOnClick: true
+                        })
+
                         document.body.removeChild(a)
                         window.URL.revokeObjectURL(url)
                     }
                 }
+
             }
         } catch (err) {
-            console.error(err)
+            console.log(err)
         }
     };
 
@@ -134,8 +152,6 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
         }
     })
 
-    console.log(isOwner)
-
     return (
         <>
             <section>
@@ -154,23 +170,24 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
                             </svg>
                             <p>Rename</p>
                         </div>}
+                        <div onClick={handleCopy}>
+                            <svg height="30" width="30" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                                <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <path fillRule="evenodd" clipRule="evenodd"
+                                          d="M21 8C21 6.34315 19.6569 5 18 5H10C8.34315 5 7 6.34315 7 8V20C7 21.6569 8.34315 23 10 23H18C19.6569 23 21 21.6569 21 20V8ZM19 8C19 7.44772 18.5523 7 18 7H10C9.44772 7 9 7.44772 9 8V20C9 20.5523 9.44772 21 10 21H18C18.5523 21 19 20.5523 19 20V8Z"
+                                          fill="#808080"></path>
+                                    <path
+                                        d="M6 3H16C16.5523 3 17 2.55228 17 2C17 1.44772 16.5523 1 16 1H6C4.34315 1 3 2.34315 3 4V18C3 18.5523 3.44772 19 4 19C4.55228 19 5 18.5523 5 18V4C5 3.44772 5.44772 3 6 3Z"
+                                        fill="#808080"></path>
+                                </g>
+                            </svg>
+                            <p>Copy</p>
+                        </div>
                     </>
                 }
-                <div onClick={handleCopy}>
-                    <svg height="30" width="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                        <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <path fillRule="evenodd" clipRule="evenodd"
-                                  d="M21 8C21 6.34315 19.6569 5 18 5H10C8.34315 5 7 6.34315 7 8V20C7 21.6569 8.34315 23 10 23H18C19.6569 23 21 21.6569 21 20V8ZM19 8C19 7.44772 18.5523 7 18 7H10C9.44772 7 9 7.44772 9 8V20C9 20.5523 9.44772 21 10 21H18C18.5523 21 19 20.5523 19 20V8Z"
-                                  fill="#808080"></path>
-                            <path
-                                d="M6 3H16C16.5523 3 17 2.55228 17 2C17 1.44772 16.5523 1 16 1H6C4.34315 1 3 2.34315 3 4V18C3 18.5523 3.44772 19 4 19C4.55228 19 5 18.5523 5 18V4C5 3.44772 5.44772 3 6 3Z"
-                                fill="#808080"></path>
-                        </g>
-                    </svg>
-                    <p>Copy</p>
-                </div>
                 <div onClick={(e) => handleDownload(e, id, url, title ? title : name)}>
                     <svg width="30" height="30" fill="#808080" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
                          id="download-alt"

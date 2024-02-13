@@ -86,8 +86,6 @@ const FilesPopup: FC<IPopupTransition> = ({transitionState}) => {
         handleCloseFilesPopup()
     }
 
-    console.log()
-
     return (
         <PopupTemplate
             style={{

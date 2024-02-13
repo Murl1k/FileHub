@@ -15,6 +15,7 @@ interface ISelectionBar {
         title: string
         url: string
         size: number
+        is_public: boolean
         itemId: string
         isOwner: boolean
     }
@@ -27,6 +28,7 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
         title,
         url,
         size,
+        is_public,
         itemId,
         isOwner
     } = selectionProps
@@ -49,6 +51,7 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
         url,
         name,
         size,
+        is_public,
         id: itemId,
         isOwner
     }
@@ -60,7 +63,7 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
     }
 
     return (
-        <div
+        <section
             onClick={handleClick}
             ref={selectionBarRef}
             className={styles.selectionBar}
@@ -70,7 +73,7 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
                 {isOwner && id && <PasteButton/>}
                 <FeatureButtons featureButtonsProps={featureButtonsProps}/>
             </div>
-        </div>
+        </section>
     );
 };
 

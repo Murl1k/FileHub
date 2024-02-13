@@ -1,6 +1,6 @@
 @import '../../../app/assets/styles/vars';
 
-.nav {
+.sidebar {
   height: 100vh;
   width: $nav-width;
   background-color: #12131a;
@@ -71,7 +71,7 @@
 }
 
 
-.navActive {
+.sidebarActive {
   $nav-width: 280px !global;
   width: $nav-width;
   padding: 40px;

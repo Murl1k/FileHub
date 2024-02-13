@@ -1,5 +1,5 @@
 import styles from '../styles.module.scss'
-import {FC, HTMLAttributes, useRef} from 'react'
+import {FC, HTMLAttributes, MouseEvent, useRef} from 'react'
 import {IMergedData} from "../../../../shared/types";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {contextMenuPosition, initialContextState, setContextMenu} from "../../";
@@ -26,6 +26,13 @@ const ContextMenuItem: FC<IContextMenuItem> = ({children, item, index, maxIndex}
         dispatch(setIsActive(initialTemplateState))
     }, state.type === 'item')
 
+    const handleCloseContextMenu = (e: MouseEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        dispatch(setContextMenu(initialContextState))
+    }
+
     const contextMenuStyles = () => {
         const defaultPosition: { right: string, top?: string, bottom?: string } = {
             top: '45px',
@@ -49,12 +56,7 @@ const ContextMenuItem: FC<IContextMenuItem> = ({children, item, index, maxIndex}
 
     return (
         <div
-            onContextMenu={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-
-                dispatch(setContextMenu(initialContextState))
-            }}
+            onContextMenu={handleCloseContextMenu}
             ref={contextMenuRef}
             style={contextMenuStyles()}
             className={styles.contextMenu}

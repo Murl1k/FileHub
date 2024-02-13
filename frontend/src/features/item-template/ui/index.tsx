@@ -79,11 +79,13 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
     }
 
     const handleDoubleClick = () => {
-        if (item.title && isOwner || item.is_public) {
-            handleOpenFolder()
-            dispatch(setIsActive(initialTemplateState))
-        } else {
-            toast.error('You dont have permission to view this folder.')
+        if (item.title) {
+            if (isOwner || item.is_public) {
+                handleOpenFolder()
+                dispatch(setIsActive(initialTemplateState))
+            } else {
+                toast.error('You dont have permission to view this folder.')
+            }
         }
     }
 
@@ -113,12 +115,13 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
         name: item.name,
         url: item.url,
         size: item.size,
+        is_public: item.is_public,
         isOwner
     }
 
     return (
         <>
-            <div
+            <article
                 {...props}
                 onClick={handleSingleClick}
                 onDoubleClick={handleDoubleClick}
@@ -150,7 +153,7 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
                         <FeatureButtons featureButtonsProps={featureButtonsProps}/>
                     </ContextMenuItem>
                 }
-            </div>
+            </article>
             {id === item.id &&
                 <Transition in={isPrivacyOpen} timeout={200} unmountOnExit>
                     {state => (

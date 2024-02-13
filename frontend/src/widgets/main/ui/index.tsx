@@ -33,7 +33,7 @@ const Main = () => {
 
     const {data: folders, isLoading: foldersLoading, isError} = useGetFoldersQuery(id)
     const {data: files, isLoading: filesLoading} = useGetFilesQuery(id)
-    const {data: foldersAncestors} = useGetFoldersAncestorsQuery(id)
+    const {data: foldersAncestors, isLoading: ancestorsLoading} = useGetFoldersAncestorsQuery(id)
 
     const parentFolder = foldersAncestors?.[foldersAncestors.length - 1]?.parent_folder
 
@@ -103,14 +103,14 @@ const Main = () => {
             <MainContainer isOwner={isOwner}>
                 {!foldersLoading && !filesLoading ?
                     <>
-                        <div className={styles.storageHeadline}>
+                        <section className={styles.storageHeadline}>
                             <div>
-                                {isOwner ?
+                                {!ancestorsLoading ? isOwner &&
                                     <Breadcrumbs
                                         onContextMenu={handleStopPropagation}
                                         foldersAncestors={foldersAncestors}
                                     />
-                                    : ''
+                                    : <p style={{marginBottom: '20px'}}>loading...</p>
                                 }
                                 <div onContextMenu={handleStopPropagation} className={styles.setSort}>
                                     <div onClick={handleOpenSort}>
@@ -186,9 +186,9 @@ const Main = () => {
                                     </svg>
                                 </button>
                             </div>
-                        </div>
+                        </section>
                         {isGrid ?
-                            <div className={styles.grid}>
+                            <section className={styles.grid}>
                                 {id && <NavigationButton parentFolder={parentFolder}/>}
                                 {sortedMergedData.map((item, index) => {
                                     const itemProps = {
@@ -204,8 +204,8 @@ const Main = () => {
                                         </ItemTemplate>
                                     )
                                 })}
-                            </div>
-                            : <div className={styles.list}>
+                            </section>
+                            : <section className={styles.list}>
                                 <div style={{
                                     padding: '20px',
                                     display: 'flex',
@@ -239,7 +239,7 @@ const Main = () => {
                                         </div>
                                     )
                                 })}
-                            </div>
+                            </section>
                         }
                     </>
                     : ''}
@@ -252,6 +252,7 @@ const Main = () => {
                         itemId: item.id,
                         url: item.url,
                         size: item.size,
+                        is_public: item.is_public,
                         isOwner,
                     }
 
