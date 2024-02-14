@@ -64,7 +64,7 @@ const UpdatePassword = () => {
                         {...register('re_new_password', {required: true})}
                     />
                 </label>
-                <button className={!isValid ? styles.disabledBtn : ''} type='submit' disabled={!isValid}>
+                <button type='submit' disabled={!isValid}>
                     Change my password
                 </button>
             </form>

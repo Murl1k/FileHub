@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {ContextMenuItem, initialContextState, setContextMenu} from "../../context-menu";
 import {IMergedData} from "../../../shared/types";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
-import {initialTemplateState, setIsActive} from "../";
+import {setIsActive} from "../";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {initialFilterState, PrivacyPopup, RenamePopup, setFilter, setIsFoldersOpen} from "../../popup";
 import {Transition} from "react-transition-group";
@@ -17,7 +17,6 @@ interface IItemTemplate extends HTMLAttributes<HTMLDivElement> {
     itemProps: {
         item: IMergedData
         isGrid: boolean
-        isOwner: boolean
         index: number
     }
 }
@@ -27,7 +26,6 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
     const {
         isGrid,
         item,
-        isOwner,
         index
     } = itemProps
 
@@ -37,7 +35,7 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
 
     const {isPrivacyOpen, isFoldersOpen, isFolderRenameOpen, filter} = useAppSelector(state => state.popup)
     const {type, x} = useAppSelector(state => state.contextMenu)
-    const {id, status} = useAppSelector(state => state.itemTemplate)
+    const {id, status, isOwner} = useAppSelector(state => state.itemTemplate)
 
     const setActiveState = {
         status: true,
@@ -82,9 +80,8 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
         if (item.title) {
             if (isOwner || item.is_public) {
                 handleOpenFolder()
-                dispatch(setIsActive(initialTemplateState))
             } else {
-                toast.error('You dont have permission to view this folder.')
+                toast.error("You don't have permission to view this folder.")
             }
         }
     }
@@ -115,8 +112,7 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
         name: item.name,
         url: item.url,
         size: item.size,
-        is_public: item.is_public,
-        isOwner
+        is_public: item.is_public
     }
 
     return (

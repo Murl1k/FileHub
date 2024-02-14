@@ -52,8 +52,8 @@ const UpdateUsername = () => {
                         {...register('new_username', {required: true})}
                     />
                 </label>
-                <button className={!isValid ? styles.disabledBtn : ''} type='submit' disabled={!isValid}>Change my
-                    username
+                <button type='submit' disabled={!isValid}>
+                    Change my username
                 </button>
             </form>
             <div className={styles.alert}>

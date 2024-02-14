@@ -14,6 +14,7 @@ const ListItem: FC<{ item: IMergedData }> = ({item}) => {
             <div style={{marginRight: '35px'}}>
                 <h5>{SizeCalculate(item.size)}</h5>
                 <p>{item.title ? 'Folder' : 'File'}</p>
+                <h5>{new Date(item.created_at).toLocaleString()}</h5>
             </div>
         </>
     );

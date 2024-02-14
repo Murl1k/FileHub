@@ -18,7 +18,6 @@ interface IFeatureButtons {
         name: string
         size: number
         is_public: boolean
-        isOwner: boolean
     }
 }
 
@@ -30,14 +29,13 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
         url,
         name,
         size,
-        is_public,
-        isOwner
+        is_public
     } = featureButtonsProps
 
     const dispatch = useAppDispatch()
 
     const {id: objectId} = useAppSelector(state => state.selectionBar)
-    const {isFolder} = useAppSelector(state => state.itemTemplate)
+    const {isFolder, isOwner} = useAppSelector(state => state.itemTemplate)
 
     const [updateRemoveFolder] = useRemoveFolderMutation()
     const [updateRemoveFile] = useRemoveFileMutation()
@@ -76,7 +74,7 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
             if (!size) {
                 toast.error('The folder is empty with no downloadable files.')
             } else if (!(isOwner || is_public)) {
-                toast.error('You dont have permission to download this folder')
+                toast.error("You don't have permission to download this folder.")
             } else {
                 let blobData = ''
 
@@ -147,9 +145,7 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
 
         document.addEventListener("keydown", onKeyDown as never)
 
-        return () => {
-            document.removeEventListener("keydown", onKeyDown as never)
-        }
+        return () => document.removeEventListener("keydown", onKeyDown as never)
     })
 
     return (

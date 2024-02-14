@@ -96,6 +96,28 @@
   gap: 10px;
 }
 
+.listHeadline {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid $primary;
+
+  div {
+    display: flex;
+    margin-right: 35px;
+
+    h4 {
+      &:not(:last-child) {
+        width: 80px;
+      }
+
+      &:last-child {
+        width: 140px;
+      }
+    }
+  }
+}
+
 .listContainer, .listNavigation {
   border-bottom: 2px solid $primary;
 

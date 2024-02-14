@@ -17,7 +17,6 @@ interface ISelectionBar {
         size: number
         is_public: boolean
         itemId: string
-        isOwner: boolean
     }
 }
 
@@ -29,14 +28,13 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
         url,
         size,
         is_public,
-        itemId,
-        isOwner
+        itemId
     } = selectionProps
 
     const dispatch = useAppDispatch()
 
     const {type} = useAppSelector(state => state.contextMenu)
-    const {status} = useAppSelector(state => state.itemTemplate)
+    const {status, isOwner} = useAppSelector(state => state.itemTemplate)
     const {filter} = useAppSelector(state => state.popup)
     const {id} = useAppSelector(state => state.selectionBar)
 
@@ -52,8 +50,7 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
         name,
         size,
         is_public,
-        id: itemId,
-        isOwner
+        id: itemId
     }
 
     const handleClick = (e: MouseEvent<HTMLDivElement>) => {

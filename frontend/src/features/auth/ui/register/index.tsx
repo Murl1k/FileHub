@@ -30,7 +30,7 @@ const Register = () => {
 
     const onSubmit: SubmitHandler<IRegister> = async (values) => {
         if (values.password !== values.passwordAgain) {
-            return toast.error('Passwords dont match.')
+            return toast.error("Passwords don't match.")
         }
 
         const register = await dispatch(fetchRegister(values))

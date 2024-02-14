@@ -22,7 +22,16 @@ export const api = createApi({
                     const res = await axiosInstance.post('/cloud_storage/files/', data)
                     return res.data
                 } catch (err) {
-                    return toast.error(err.response.data.file[0])
+                    const responseData = err.response.data
+
+                    switch (true) {
+                        case responseData.file && responseData.file.length > 0:
+                            return toast.error(responseData.file[0])
+                        case responseData.detail && responseData.detail.length > 0:
+                            return toast.error(responseData.detail)
+                        default:
+                            return toast.error(responseData.file[0])
+                    }
                 }
             },
             invalidatesTags: ["File", "Folder"]
@@ -95,7 +104,16 @@ export const api = createApi({
                     const res = await axiosInstance.post('/cloud_storage/folders/', params)
                     return res.data
                 } catch (err) {
-                    return toast.error(err.response.data.title[0])
+                    const responseData = err.response.data
+
+                    switch (true) {
+                        case responseData.title && responseData.title.length > 0:
+                            return toast.error(responseData.title[0])
+                        case responseData.detail && responseData.detail.length > 0:
+                            return toast.error(responseData.detail)
+                        default:
+                            return toast.error(err.message)
+                    }
                 }
             },
             invalidatesTags: ["Folder"]

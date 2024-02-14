@@ -10,19 +10,17 @@ import {
     useGetFoldersQuery
 } from "../../../shared/api/api.ts";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import {initialTemplateState, setIsActive} from "../../item-template";
 import {initialFilterState, setFilter, setIsFoldersOpen} from "../../popup";
 
-interface IMainContainer extends HTMLAttributes<HTMLDivElement> {
-    isOwner: boolean
-}
-
-const MainContainer: FC<IMainContainer> = ({children, isOwner}) => {
+const MainContainer: FC<HTMLAttributes<HTMLDivElement>> = ({children}) => {
 
     const dispatch = useAppDispatch()
 
     const {id} = useParams() as { id: string }
+
+    const location = useLocation()
 
     const {id: objectId, isFolder} = useAppSelector(state => state.selectionBar)
     const {type} = useAppSelector(state => state.contextMenu)
@@ -38,7 +36,7 @@ const MainContainer: FC<IMainContainer> = ({children, isOwner}) => {
     const handleRightClick = (e: MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
 
-        isOwner && dispatch(setContextMenu({
+        isActive.isOwner && dispatch(setContextMenu({
             type: "main",
             x: e.pageX,
             y: e.pageY
@@ -51,7 +49,7 @@ const MainContainer: FC<IMainContainer> = ({children, isOwner}) => {
 
     useEffect(() => {
         const handleCopy = (e: KeyboardEvent) => {
-            if ((e.ctrlKey || e.metaKey) && e.code === 'KeyC') {
+            if ((e.ctrlKey || e.metaKey) && e.code === 'KeyC' && isActive.isOwner) {
                 if (objectId !== isActive.id) {
                     dispatch(getItemId({id: isActive.id, isFolder: isActive.isFolder}))
                 }
@@ -61,11 +59,11 @@ const MainContainer: FC<IMainContainer> = ({children, isOwner}) => {
         document.addEventListener('keydown', handleCopy as never)
 
         return () => document.removeEventListener('keydown', handleCopy as never)
-    }, [dispatch, isActive.id, isActive.isFolder, isOwner, objectId]);
+    }, [dispatch, isActive.id, isActive.isFolder, isActive.isOwner, objectId]);
 
     useEffect(() => {
         const handlePaste = async (e: KeyboardEvent) => {
-            if (((e.ctrlKey || e.metaKey) && e.code === 'KeyV') && objectId && isOwner) {
+            if (((e.ctrlKey || e.metaKey) && e.code === 'KeyV') && objectId && isActive.isOwner) {
                 if (isFolder) {
                     await copyFolder({id: objectId, folder: id})
                     setTimeout(() => {
@@ -83,23 +81,17 @@ const MainContainer: FC<IMainContainer> = ({children, isOwner}) => {
         document.addEventListener('keydown', handlePaste as never)
 
         return () => document.removeEventListener('keydown', handlePaste as never)
-    }, [copyFile, copyFolder, filesRefetch, foldersRefetch, id, isFolder, isOwner, objectId]);
+    }, [copyFile, copyFolder, filesRefetch, foldersRefetch, id, isFolder, isActive.isOwner, objectId]);
 
     useEffect(() => {
         if (isActive.status) {
-            const handleHistoryChange = () => {
-                dispatch(setIsActive(initialTemplateState))
-            }
-
-            window.addEventListener('popstate', handleHistoryChange)
-
-            return () => window.removeEventListener('popstate', handleHistoryChange)
+            dispatch(setIsActive(initialTemplateState))
         }
-    }, [dispatch, isActive.status]);
+    }, [dispatch, location]);
 
     return (
         <>
-            {type === "main" && isOwner && <ContextMenuMain/>}
+            {type === "main" && isActive.isOwner && <ContextMenuMain/>}
             <section
                 onContextMenu={handleRightClick}
                 className={isActive.status ? `${styles.container} ${styles.active}` : styles.container}

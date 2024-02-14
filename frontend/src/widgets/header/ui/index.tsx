@@ -22,6 +22,7 @@ const Header = () => {
     const dispatch = useAppDispatch()
 
     const {isFoldersOpen, isFilesOpen, isPrivacyOpen, filter} = useAppSelector(state => state.popup)
+    const {isOwner} = useAppSelector(state => state.itemTemplate)
     const {type} = useAppSelector(state => state.contextMenu)
 
     const handleOpenFolder: MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -83,7 +84,7 @@ const Header = () => {
             <header className={styles.header}>
                 <div style={{display: 'flex', gap: '30px'}}>
                     <div className={styles.addBtn}>
-                        <HeaderButton onClick={handleOpenFolder}>
+                        <HeaderButton onClick={handleOpenFolder} disabled={!isOwner}>
                             <svg width="28" height="28" viewBox="0 0 24 20" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -98,7 +99,7 @@ const Header = () => {
                         <p>Add Folder</p>
                     </div>
                     <div className={styles.addBtn}>
-                        <HeaderButton onClick={handleOpenFiles}>
+                        <HeaderButton onClick={handleOpenFiles} disabled={!isOwner}>
                             <svg width="28" height="28" viewBox="0 0 64 58" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>

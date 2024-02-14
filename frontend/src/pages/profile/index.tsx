@@ -10,12 +10,12 @@ const Profile = () => {
     const [isActive, setIsActive] = useState(true)
 
     return (
-        <div className={styles.profile}>
+        <section className={styles.profile}>
             <h2>Profile</h2>
             <span>
                 <img src={avatarIcon} alt="avatar"/>
             </span>
-            <div className={styles.container}>
+            <section className={styles.container}>
                 <div
                     className={isActive
                         ? styles.containerHeadline
@@ -37,8 +37,8 @@ const Profile = () => {
                         <button>Back To Home</button>
                     </Link>
                 </div>
-            </div>
-        </div>
+            </section>
+        </section>
     );
 };
 

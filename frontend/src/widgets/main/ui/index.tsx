@@ -7,7 +7,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useGetFilesQuery, useGetFoldersAncestorsQuery, useGetFoldersQuery} from "../../../shared/api/api.ts";
 import {SelectionBar} from "../../../features/selection-bar";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
-import {ItemTemplate} from "../../../features/item-template";
+import {ItemTemplate, setIsOwner} from "../../../features/item-template";
 import {ListItem} from "../../list-item";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {initialContextState, setContextMenu} from "../../../features/context-menu";
@@ -28,7 +28,7 @@ const Main = () => {
 
     const {data: userData} = useAppSelector(state => state.auth)
     const {type} = useAppSelector(state => state.contextMenu)
-    const {id: activeId, status} = useAppSelector(state => state.itemTemplate)
+    const {id: activeId, status, isOwner} = useAppSelector(state => state.itemTemplate)
     const {filter} = useAppSelector(state => state.popup)
 
     const {data: folders, isLoading: foldersLoading, isError} = useGetFoldersQuery(id)
@@ -90,7 +90,9 @@ const Main = () => {
         e.stopPropagation()
     }
 
-    const isOwner = userData?.id === foldersAncestors?.[0].owner || location.pathname === '/'
+    useEffect(() => {
+        dispatch(setIsOwner(userData?.id === foldersAncestors?.[0].owner || location.pathname === '/'))
+    }, [dispatch, foldersAncestors]);
 
     useEffect(() => {
         if (isError) {
@@ -100,7 +102,7 @@ const Main = () => {
 
     return (
         <>
-            <MainContainer isOwner={isOwner}>
+            <MainContainer>
                 {!foldersLoading && !filesLoading ?
                     <>
                         <section className={styles.storageHeadline}>
@@ -194,7 +196,6 @@ const Main = () => {
                                     const itemProps = {
                                         isGrid,
                                         item,
-                                        isOwner,
                                         index
                                     }
 
@@ -206,16 +207,12 @@ const Main = () => {
                                 })}
                             </section>
                             : <section className={styles.list}>
-                                <div style={{
-                                    padding: '20px',
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    borderBottom: '2px solid #583DA1'
-                                }}>
+                                <div className={styles.listHeadline}>
                                     <h4>Name</h4>
-                                    <div style={{display: 'flex', gap: '25px', marginRight: '30px'}}>
+                                    <div>
                                         <h4>Size</h4>
                                         <h4>Type</h4>
+                                        <h4>Date added</h4>
                                     </div>
                                 </div>
                                 {id &&
@@ -227,7 +224,6 @@ const Main = () => {
                                     const itemProps = {
                                         isGrid,
                                         item,
-                                        isOwner,
                                         index
                                     }
 
@@ -252,8 +248,7 @@ const Main = () => {
                         itemId: item.id,
                         url: item.url,
                         size: item.size,
-                        is_public: item.is_public,
-                        isOwner,
+                        is_public: item.is_public
                     }
 
                     return <SelectionBar key={item.id} selectionProps={selectionProps}/>

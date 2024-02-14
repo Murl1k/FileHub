@@ -75,6 +75,7 @@ const FilesPopup: FC<IPopupTransition> = ({transitionState}) => {
 
         const loading = toast.loading('Uploading the file...')
         await updateResult(data)
+
         toast.update(loading, {
             render: "The file is uploaded",
             type: "success",
@@ -82,7 +83,8 @@ const FilesPopup: FC<IPopupTransition> = ({transitionState}) => {
             autoClose: undefined,
             closeButton: true,
             closeOnClick: true
-        })
+        });
+
         handleCloseFilesPopup()
     }
 

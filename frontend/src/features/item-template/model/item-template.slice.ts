@@ -1,10 +1,15 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {IIsActive} from "./";
 
-const initialState: IIsActive = {
+interface IInitialState extends IIsActive {
+    isOwner: boolean
+}
+
+const initialState: IInitialState = {
     status: false,
     id: '',
-    isFolder: false
+    isFolder: false,
+    isOwner: true
 }
 
 export const itemTemplateSlice = createSlice({
@@ -15,6 +20,9 @@ export const itemTemplateSlice = createSlice({
             state.status = action.payload.status
             state.id = action.payload.id
             state.isFolder = action.payload.isFolder
+        },
+        setIsOwner: (state, action: PayloadAction<boolean>) => {
+            state.isOwner = action.payload
         }
     }
 })
@@ -25,4 +33,4 @@ export const initialTemplateState: IIsActive = {
     isFolder: false
 }
 
-export const {setIsActive} = itemTemplateSlice.actions
+export const {setIsActive, setIsOwner} = itemTemplateSlice.actions
