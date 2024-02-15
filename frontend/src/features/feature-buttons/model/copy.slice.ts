@@ -7,11 +7,11 @@ interface IInitialState {
 
 const initialState: IInitialState = {
     id: '',
-    isFolder: false
+    isFolder: false,
 }
 
-export const selectionBarSlice = createSlice({
-    name: "folders",
+export const copySlice = createSlice({
+    name: 'copy',
     initialState,
     reducers: {
         getItemId: (state, action: PayloadAction<{ id: string, isFolder: boolean }>) => {
@@ -21,4 +21,4 @@ export const selectionBarSlice = createSlice({
     }
 })
 
-export const {getItemId} = selectionBarSlice.actions
+export const {getItemId} = copySlice.actions

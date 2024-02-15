@@ -1,17 +1,17 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
-import {authSlice} from "../../../features/auth/model/auth.slice.ts";
+import {authSlice} from "../../../features/auth";
 import {api} from "../api.ts";
-import {selectionBarSlice} from "../../../features/selection-bar";
 import {itemTemplateSlice} from "../../../features/item-template";
 import {contextMenuSlice} from "../../../features/context-menu";
 import {popupSlice} from "../../../features/popup";
+import {copySlice} from "../../../features/feature-buttons";
 
 const rootReducer = combineReducers({
     auth: authSlice.reducer,
     contextMenu: contextMenuSlice.reducer,
     popup: popupSlice.reducer,
     itemTemplate: itemTemplateSlice.reducer,
-    selectionBar: selectionBarSlice.reducer,
+    copy: copySlice.reducer,
     [api.reducerPath]: api.reducer
 })
 

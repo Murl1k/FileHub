@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
 import {ChangeEvent, FC, FormEvent, KeyboardEvent, useRef, useState} from "react";
-import {CloseBtn} from "../../../close-btn";
+import {CloseButton} from "../../../close-button";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {IPopupTransition, setIsFolderRenameOpen} from "../../model";
 import {useRenameFolderMutation} from "../../../../shared/api/api.ts";
@@ -61,7 +61,7 @@ const RenamePopup: FC<IRenamePopup> = ({id, transitionState}) => {
             >
                 <div>
                     <h3>Rename a folder</h3>
-                    <CloseBtn onClick={handleCloseRename}/>
+                    <CloseButton onClick={handleCloseRename}/>
                 </div>
                 <div>
                     <input

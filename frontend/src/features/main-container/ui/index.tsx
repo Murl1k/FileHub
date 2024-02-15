@@ -2,7 +2,7 @@ import styles from "./styles.module.scss";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {FC, HTMLAttributes, KeyboardEvent, MouseEvent, useEffect} from "react";
 import {ContextMenuMain, setContextMenu} from "../../context-menu";
-import {getItemId} from "../../selection-bar";
+import {getItemId} from "../../feature-buttons";
 import {
     useCopyFileMutation,
     useCopyFolderMutation,
@@ -22,7 +22,7 @@ const MainContainer: FC<HTMLAttributes<HTMLDivElement>> = ({children}) => {
 
     const location = useLocation()
 
-    const {id: objectId, isFolder} = useAppSelector(state => state.selectionBar)
+    const {id: objectId, isFolder} = useAppSelector(state => state.copy)
     const {type} = useAppSelector(state => state.contextMenu)
     const isActive = useAppSelector(state => state.itemTemplate)
     const {filter, isFoldersOpen} = useAppSelector(state => state.popup)

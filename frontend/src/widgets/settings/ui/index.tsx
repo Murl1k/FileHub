@@ -5,18 +5,14 @@ import {UpdateEmail} from "../../../features/update";
 const Settings = () => {
     return (
         <div className={styles.settings}>
-            <div>
-                <p>If you want to change password: </p>
-                <Link to='/security/change-password'>
-                    <button>Change password</button>
-                </Link>
-            </div>
-            <div>
-                <p>If you want to change username: </p>
-                <Link to='/security/change-username/'>
-                    <button>Change username</button>
-                </Link>
-            </div>
+            <Link to='/security/change-password'>
+                <button>Change password</button>
+                <p>&gt;&gt;</p>
+            </Link>
+            <Link to='/security/change-username/'>
+                <button>Change username</button>
+                <p>&gt;&gt;</p>
+            </Link>
             <UpdateEmail/>
         </div>
     );

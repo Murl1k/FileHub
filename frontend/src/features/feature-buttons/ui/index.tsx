@@ -3,7 +3,7 @@ import {fetchDownloadFolderAsZip} from "../../../shared/api/folders/folders.acti
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useRemoveFileMutation, useRemoveFolderMutation} from "../../../shared/api/api.ts";
 import {initialTemplateState, setIsActive} from "../../item-template";
-import {getItemId} from "../../selection-bar";
+import {getItemId} from "../../feature-buttons";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {initialContextState, setContextMenu} from "../../context-menu";
 import {setIsFolderRenameOpen, setIsPrivacyOpen} from "../../popup";
@@ -34,7 +34,7 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
 
     const dispatch = useAppDispatch()
 
-    const {id: objectId} = useAppSelector(state => state.selectionBar)
+    const {id: objectId} = useAppSelector(state => state.copy)
     const {isFolder, isOwner} = useAppSelector(state => state.itemTemplate)
 
     const [updateRemoveFolder] = useRemoveFolderMutation()

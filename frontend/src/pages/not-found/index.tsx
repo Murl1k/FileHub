@@ -1,5 +1,6 @@
 import styles from './styles.module.scss'
 import {Link} from "react-router-dom";
+import {PrimaryButton} from "../../shared/UIKit/buttons";
 
 const NotFound = () => {
     return (
@@ -10,7 +11,7 @@ const NotFound = () => {
                 <p>Page not found</p>
             </div>
             <Link to='/'>
-                <button>Back To Home</button>
+                <PrimaryButton>Back To Home</PrimaryButton>
             </Link>
         </div>
     );

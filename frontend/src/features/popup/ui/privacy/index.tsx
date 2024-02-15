@@ -5,7 +5,7 @@ import {FC, MouseEvent, useRef} from "react";
 import {useUpdateFilePrivacyMutation, useUpdateFolderPrivacyMutation} from "../../../../shared/api/api.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
-import {CloseBtn} from "../../../close-btn";
+import {CloseButton} from "../../../close-button";
 import PopupTemplate from "../template";
 import {transitionStyles} from "../../index.ts";
 
@@ -51,7 +51,7 @@ const PrivacyPopup: FC<IPrivacyPopup> = ({id, title, is_public, transitionState}
             >
                 <div className={styles.privacyHeadline}>
                     <h3>Confirmation</h3>
-                    <CloseBtn onClick={() => dispatch(setIsPrivacyOpen(false))}/>
+                    <CloseButton onClick={() => dispatch(setIsPrivacyOpen(false))}/>
                 </div>
                 <div>
                     <svg height="24" width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

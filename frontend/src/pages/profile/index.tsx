@@ -4,10 +4,11 @@ import {Link} from "react-router-dom";
 import {useState} from "react";
 import {PersonalDetails} from "../../widgets/personal-details";
 import {Settings} from "../../widgets/settings";
+import {PrimaryButton} from "../../shared/UIKit/buttons";
 
 const Profile = () => {
 
-    const [isActive, setIsActive] = useState(true)
+    const [isActive, setIsActive] = useState(location.hash !== '#settings')
 
     return (
         <section className={styles.profile}>
@@ -21,20 +22,20 @@ const Profile = () => {
                         ? styles.containerHeadline
                         : `${styles.containerHeadline} ${styles.settingsActive}`}
                 >
-                    <p onClick={() => setIsActive(true)}>
+                    <Link to='' onClick={() => setIsActive(true)}>
                         Personal details
-                    </p>
-                    <p onClick={() => setIsActive(false)}>
+                    </Link>
+                    <Link to='#settings' onClick={() => setIsActive(false)}>
                         Settings
-                    </p>
+                    </Link>
                 </div>
-                {isActive ?
-                    <PersonalDetails/> :
-                    <Settings/>
+                {!isActive ?
+                    <Settings/> :
+                    <PersonalDetails/>
                 }
                 <div className={styles.backToHomeBtn}>
                     <Link to='/'>
-                        <button>Back To Home</button>
+                        <PrimaryButton>Back To Home</PrimaryButton>
                     </Link>
                 </div>
             </section>

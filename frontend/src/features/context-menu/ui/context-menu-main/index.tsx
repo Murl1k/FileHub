@@ -13,7 +13,7 @@ const ContextMenuMain = () => {
 
     const contextMenu = useAppSelector(state => state.contextMenu)
     const {isFoldersOpen} = useAppSelector(state => state.popup)
-    const {id} = useAppSelector(state => state.selectionBar)
+    const {id} = useAppSelector(state => state.copy)
 
     const contextMenuRef = useRef<HTMLDivElement>(null)
 

@@ -36,7 +36,7 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
     const {type} = useAppSelector(state => state.contextMenu)
     const {status, isOwner} = useAppSelector(state => state.itemTemplate)
     const {filter} = useAppSelector(state => state.popup)
-    const {id} = useAppSelector(state => state.selectionBar)
+    const {id} = useAppSelector(state => state.copy)
 
     const selectionBarRef = useRef<HTMLDivElement>(null)
 

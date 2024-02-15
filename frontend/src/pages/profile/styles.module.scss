@@ -42,8 +42,8 @@
   border-bottom: 1px solid $gray;
   user-select: none;
 
-  p {
-    cursor: pointer;
+  a {
+    color: black;
     font-weight: 600;
   }
 
@@ -71,11 +71,6 @@
   padding: 0 40px 40px 40px;
 
   button {
-    color: #fff;
-    font-weight: 600;
-    border: 1px solid $gray;
-    background: $primary;
-    border-radius: 6px;
     padding: 10px 40px;
   }
 }

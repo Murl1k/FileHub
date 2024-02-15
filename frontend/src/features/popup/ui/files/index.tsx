@@ -1,7 +1,7 @@
 import styles from './styles.module.scss'
 import {DeleteSvg} from '../../../../app/assets/images/'
 import {ChangeEvent, DragEventHandler, FC, useRef, useState} from "react";
-import {CloseBtn} from "../../../close-btn";
+import {CloseButton} from "../../../close-button";
 import {useAddFileMutation} from "../../../../shared/api/api.ts";
 import {useParams} from "react-router-dom";
 import {SizeCalculate} from "../../../../shared/lib/size-calculate.ts";
@@ -103,7 +103,7 @@ const FilesPopup: FC<IPopupTransition> = ({transitionState}) => {
             >
                 <div className={styles.popupHeadline}>
                     <h3>Upload your file</h3>
-                    <CloseBtn onClick={handleCloseFilesPopup}/>
+                    <CloseButton onClick={handleCloseFilesPopup}/>
                 </div>
                 <div style={{padding: '20px'}}>
                     <form

@@ -13,17 +13,13 @@ import {IUserData} from "./";
 
 interface IInitialState {
     data: IUserData | null
-    isLoading: boolean
-    error: string
-    status: string
+    status: "initial" | "loading" | "loaded" | "error"
     users_count: number
 }
 
 const initialState: IInitialState = {
     data: null,
-    isLoading: true,
-    error: '',
-    status: '',
+    status: 'initial',
     users_count: 0
 }
 
@@ -34,98 +30,87 @@ export const authSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(fetchRegister.pending, state => {
-                state.isLoading = true
+                state.status = "loading"
             })
             .addCase(fetchRegister.fulfilled, (state, action: PayloadAction<IUserData>) => {
-                state.isLoading = false
+                state.status = "loaded"
                 state.data = action.payload
             })
             .addCase(fetchRegister.rejected, state => {
-                state.error = 'error'
+                state.status = "error"
             })
             .addCase(fetchLogin.pending, state => {
-                state.isLoading = true
+                state.status = "loading"
             })
             .addCase(fetchLogin.fulfilled, state => {
-                state.isLoading = false
+                state.status = "loaded"
                 state.data = null
             })
             .addCase(fetchLogin.rejected, state => {
-                state.error = 'error'
+                state.status = "error"
             })
             .addCase(fetchLoginMe.pending, state => {
-                state.isLoading = true
-                state.status = 'loading'
+                state.status = "loading"
             })
             .addCase(fetchLoginMe.fulfilled, (state, action) => {
-                state.isLoading = false
                 state.data = action.payload
-                state.status = 'loaded'
+                state.status = "loaded"
             })
             .addCase(fetchLoginMe.rejected, state => {
-                state.isLoading = false
-                state.error = 'error'
-                state.status = 'error'
+                state.status = "error"
             })
             .addCase(fetchDeleteMyAccount.pending, state => {
-                state.isLoading = true
+                state.status = "loading"
             })
             .addCase(fetchDeleteMyAccount.fulfilled, state => {
-                state.isLoading = false
+                state.status = "loaded"
                 state.data = null
             })
             .addCase(fetchDeleteMyAccount.rejected, state => {
-                state.error = 'error'
+                state.status = "error"
             })
             .addCase(fetchUpdateMyAccount.pending, state => {
-                state.isLoading = true
+                state.status = "loading"
             })
             .addCase(fetchUpdateMyAccount.fulfilled, (state, action: PayloadAction<{ email: string }>) => {
                 if (!state.data) {
                     return
                 }
 
-                state.isLoading = false
+                state.status = "loaded"
                 state.data.email = action.payload.email
             })
             .addCase(fetchUpdateMyAccount.rejected, state => {
-                state.error = 'error'
+                state.status = "error"
             })
             .addCase(fetchLogout.pending, state => {
-                state.isLoading = true
+                state.status = "loading"
             })
             .addCase(fetchLogout.fulfilled, state => {
-                state.isLoading = false
+                state.status = "loaded"
                 state.data = null
 
                 localStorage.removeItem('token')
             })
             .addCase(fetchLogout.rejected, state => {
-                state.error = 'error'
+                state.status = "error"
             })
             .addCase(fetchSetUsername.pending, state => {
-                state.isLoading = true
+                state.status = "loading"
             })
             .addCase(fetchSetUsername.fulfilled, (state, action) => {
                 if (!state.data) {
                     return
                 }
 
-                state.isLoading = false
+                state.status = "loaded"
                 state.data.username = action.meta.arg.new_username
             })
             .addCase(fetchSetUsername.rejected, state => {
-                state.error = 'error'
-            })
-            .addCase(fetchGetUsersCount.pending, state => {
-                state.isLoading = true
+                state.status = "error"
             })
             .addCase(fetchGetUsersCount.fulfilled, (state, action: PayloadAction<{ users_count: number }>) => {
-                state.isLoading = false
                 state.users_count = action.payload.users_count
-            })
-            .addCase(fetchGetUsersCount.rejected, state => {
-                state.error = 'error'
             })
     }
 })

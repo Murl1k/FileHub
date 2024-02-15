@@ -4,33 +4,35 @@
   padding: 40px;
   display: grid;
   gap: 20px;
+  width: max-content;
 
-  div:not(:last-child) {
+  a {
     display: flex;
     align-items: center;
-    gap: 20px;
+    justify-content: space-between;
+    border-bottom: 1px solid $gray;
+    padding: 10px 0;
 
     button {
-      background-color: $primary;
-      color: #fff;
-      padding: 10px;
       border-radius: 12px;
       font-weight: 600;
     }
+
+    p {
+      color: black;
+    }
   }
 
-  label {
+  div {
     h4 {
       margin-bottom: 10px;
     }
 
     button {
       margin-left: 20px;
-      font-weight: 600;
-      background-color: $primary;
-      color: #fff;
       border-radius: 12px;
       padding: 10px;
+      box-shadow: 0 2px 2px #333232;
     }
   }
 }

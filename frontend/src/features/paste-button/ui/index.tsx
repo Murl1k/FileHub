@@ -16,7 +16,7 @@ const PasteButton = () => {
     const {id} = useParams() as { id: string }
 
     const {type} = useAppSelector(state => state.contextMenu)
-    const {isFolder, id: objectId} = useAppSelector(state => state.selectionBar)
+    const {isFolder, id: objectId} = useAppSelector(state => state.copy)
 
     const [copyFolder] = useCopyFolderMutation()
     const [copyFile] = useCopyFileMutation()

@@ -77,12 +77,10 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
     }
 
     const handleDoubleClick = () => {
-        if (item.title) {
-            if (isOwner || item.is_public) {
-                handleOpenFolder()
-            } else {
-                toast.error("You don't have permission to view this folder.")
-            }
+        if (isOwner || item.is_public) {
+            handleOpenFolder()
+        } else {
+            toast.error("You don't have permission to view this folder.")
         }
     }
 
@@ -120,7 +118,7 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
             <article
                 {...props}
                 onClick={handleSingleClick}
-                onDoubleClick={handleDoubleClick}
+                onDoubleClick={() => item.title && handleDoubleClick()}
                 onContextMenu={handleRightClick}
                 className={templateClassnames()}
                 style={!x ? {position: 'relative'} : {}}

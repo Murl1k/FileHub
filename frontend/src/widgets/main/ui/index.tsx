@@ -15,6 +15,7 @@ import {FilterPopup, initialFilterState, setFilter} from "../../../features/popu
 import {Transition} from "react-transition-group";
 import {NavigationButton} from "../../../features/navigation-button";
 import {Breadcrumbs, BreadcrumbsLoading} from "../../../shared/UIKit/breadcrumbs";
+import {EmptyCloud} from "../../empty-cloud";
 
 const Main = () => {
 
@@ -99,6 +100,8 @@ const Main = () => {
             navigate('/')
         }
     }, [isError, navigate]);
+
+    console.log(id)
 
     return (
         <>
@@ -189,7 +192,7 @@ const Main = () => {
                                 </button>
                             </div>
                         </section>
-                        {isGrid ?
+                        {!mergedData.length && !id ? <EmptyCloud/> : isGrid ?
                             <section className={styles.grid}>
                                 {id && <NavigationButton parentFolder={parentFolder}/>}
                                 {sortedMergedData.map((item, index) => {

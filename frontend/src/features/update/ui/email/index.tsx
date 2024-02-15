@@ -2,13 +2,14 @@ import Input from "../../../../shared/UIKit/input";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
 import {ChangeEvent, useState} from "react";
-import {fetchUpdateMyAccount} from "../../../auth/model/auth.action.ts";
+import {fetchUpdateMyAccount} from "../../../auth";
+import {PrimaryButton} from "../../../../shared/UIKit/buttons";
 
 const UpdateEmail = () => {
 
     const dispatch = useAppDispatch()
 
-    const {data} = useAppSelector(state => state.auth)
+    const {data, status} = useAppSelector(state => state.auth)
 
     const [email, setEmail] = useState('')
     const [isUpdating, setIsUpdating] = useState(false)
@@ -31,20 +32,23 @@ const UpdateEmail = () => {
     }
 
     const handleUpdateEmail = () => {
-        if (!isUpdating) {
+        if (!isUpdating && email !== data?.email) {
             setIsUpdating(true)
             updateAccount(email)
         }
     }
 
-    console.log(isUpdating)
-
     return (
-        <label htmlFor="email">
+        <div>
             <h4>Email</h4>
-            <Input id='email' type="text" placeholder={data?.email} value={email} onChange={handleEmailChange}/>
-            <button onClick={handleUpdateEmail}>Update email</button>
-        </label>
+            <Input
+                type="text"
+                placeholder={status === "loaded" ? data?.email ? data.email : 'Enter your e-mail' : ''}
+                value={email}
+                onChange={handleEmailChange}
+            />
+            <PrimaryButton onClick={handleUpdateEmail}>Update e-mail</PrimaryButton>
+        </div>
     );
 };
 
