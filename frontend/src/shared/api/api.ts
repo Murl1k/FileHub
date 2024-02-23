@@ -22,16 +22,7 @@ export const api = createApi({
                     const res = await axiosInstance.post('/cloud_storage/files/', data)
                     return res.data
                 } catch (err) {
-                    const responseData = err.response.data
-
-                    switch (true) {
-                        case responseData.file && responseData.file.length > 0:
-                            return toast.error(responseData.file[0])
-                        case responseData.detail && responseData.detail.length > 0:
-                            return toast.error(responseData.detail)
-                        default:
-                            return toast.error(responseData.file[0])
-                    }
+                    return toast.error(err.response.data.file[0])
                 }
             },
             invalidatesTags: ["File", "Folder"]

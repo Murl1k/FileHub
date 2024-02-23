@@ -1,7 +1,7 @@
 import styles from '../styles.module.scss'
 import {avatarIcon} from "../../../../app/assets/images";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {fetchLogin, fetchLoginMe, fetchRegister, IUser} from "../../";
 import {toast} from "react-toastify";
@@ -78,6 +78,7 @@ const Register = () => {
                 <PrimaryButton type='submit'>
                     Sign Up
                 </PrimaryButton>
+                <p>Don't have an account? <Link to='/auth/login'>Register now!</Link></p>
             </form>
         </div>
     );

@@ -24,7 +24,13 @@
       }
 
       path {
-        fill: #fff;
+        stroke: #fff;
+      }
+
+      div:hover {
+        path {
+          stroke: #e1cece;
+        }
       }
     }
 

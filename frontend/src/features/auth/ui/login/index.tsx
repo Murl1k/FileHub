@@ -1,7 +1,7 @@
 import styles from '../styles.module.scss'
 import {avatarIcon} from '../../../../app/assets/images'
 import {SubmitHandler, useForm} from "react-hook-form";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {fetchLogin, fetchLoginMe, IUser} from "../../";
 import {PrimaryButton} from "../../../../shared/UIKit/buttons";
@@ -60,6 +60,7 @@ const Login = () => {
                 <PrimaryButton type='submit'>
                     Sign In
                 </PrimaryButton>
+                <p>Already have an account? <Link to='/auth/register'>Log in.</Link></p>
             </form>
         </div>
     );

@@ -10,6 +10,7 @@ import NotFound from "../pages/not-found";
 import {DefaultLayout} from "../widgets/default-layout";
 import {PageLayout} from "../widgets/page-layout";
 import {NotAuth} from "../widgets/not-auth";
+import Introduction from "../pages/introduction";
 import {fetchLoginMe} from "../features/auth";
 import {useAppDispatch} from "../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../shared/lib/hooks/useAppSelector.ts";
@@ -41,6 +42,7 @@ const Router = () => {
                         </>
                     }
                 </Route>
+                <Route path='/introduction' element={<Introduction/>}/>
                 <Route path='/' element={<PageLayout/>}>
                     <Route path='/auth/register' element={<SignUp/>}/>
                     <Route path='/auth/login' element={<SignIn/>}/>

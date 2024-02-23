@@ -101,8 +101,6 @@ const Main = () => {
         }
     }, [isError, navigate]);
 
-    console.log(id)
-
     return (
         <>
             <MainContainer>

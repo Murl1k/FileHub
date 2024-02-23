@@ -1,0 +1,197 @@
+@import '../../app/assets/styles/vars';
+
+.introduction {
+  background-color: #fff;
+  height: 100vh;
+  overflow: auto;
+
+  button {
+    border-radius: 12px;
+  }
+
+  span {
+    color: $primary;
+  }
+
+  p {
+    color: #838696;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  position: sticky;
+  inset: 0;
+  z-index: 2;
+  background-color: #fff;
+
+  div {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  a {
+    &:first-child {
+      button {
+        font-weight: 600;
+        padding: 9px 17px;
+        border: 2px solid #0b0d0e;
+      }
+    }
+  }
+}
+
+.main {
+  max-width: 1127px;
+  margin: 0 auto;
+  padding-block: 40px;
+
+  h1 {
+    font-size: 56px;
+  }
+}
+
+.mainSection {
+  text-align: center;
+
+  div {
+    display: grid;
+    gap: 20px;
+  }
+
+  h1 {
+    line-height: 129%;
+  }
+
+  p {
+    font-size: 20px;
+    line-height: 160%;
+    color: #5c5f6e;
+  }
+
+  button {
+    padding: 13px 35px;
+  }
+}
+
+.infoSection {
+  margin-top: 40px;
+
+  h1 {
+    line-height: 114%;
+    margin-bottom: 40px;
+  }
+}
+
+.wrapper {
+  display: grid;
+  grid-template: auto / repeat(2, 1fr);
+  gap: 40px;
+
+  &Item {
+    background-color: #fff7ed;
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    border-radius: 24px;
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.02);
+
+    img {
+      height: 472px;
+      width: 472px;
+      object-fit: contain;
+    }
+
+    span, p {
+      padding-inline: 80px;
+    }
+
+    span {
+      margin-top: 60px;
+      font-weight: 600;
+      font-size: 42px;
+      line-height: 152%;
+    }
+
+    p {
+      font-size: 18px;
+    }
+
+    &:nth-child(2) {
+      background-color: #e0f7fa;
+    }
+  }
+}
+
+.howItWorks {
+  margin-top: 20px;
+  text-align: center;
+  padding: 20px;
+
+  h2 {
+    font-size: 48px;
+  }
+
+  > p {
+    font-size: 18px;
+    line-height: 178%;
+    margin: 0 auto;
+    width: 800px;
+  }
+}
+
+.instruction {
+  margin-top: 100px;
+  display: flex;
+
+  &Item {
+    display: grid;
+    gap: 20px;
+    justify-items: center;
+    position: relative;
+
+    h5 {
+      font-size: 24px;
+    }
+
+    p {
+      line-height: 150%;
+    }
+
+    &:first-child:after {
+      right: -104px !important;
+    }
+
+    &:not(:last-child):after {
+      content: '';
+      position: absolute;
+      border: 2px dashed #5c5f6e;
+      width: 186px;
+      height: 0;
+      right: -85px;
+      top: 40px;
+    }
+  }
+}
+
+.startSection {
+  margin-top: 160px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h4 {
+    font-size: 32px;
+  }
+
+  p {
+    line-height: 150%;
+  }
+
+  button {
+    padding-block: 12px;
+  }
+}

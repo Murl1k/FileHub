@@ -74,16 +74,27 @@ const FilesPopup: FC<IPopupTransition> = ({transitionState}) => {
         }
 
         const loading = toast.loading('Uploading the file...')
-        await updateResult(data)
+        const result = await updateResult(data)
 
-        toast.update(loading, {
-            render: "The file is uploaded",
-            type: "success",
-            isLoading: false,
-            autoClose: undefined,
-            closeButton: true,
-            closeOnClick: true
-        });
+        if ('error' in result) {
+            toast.update(loading, {
+                render: "You can't use other people's folders",
+                type: "error",
+                isLoading: false,
+                autoClose: undefined,
+                closeButton: true,
+                closeOnClick: true
+            });
+        } else {
+            toast.update(loading, {
+                render: "The file is uploaded",
+                type: "success",
+                isLoading: false,
+                autoClose: undefined,
+                closeButton: true,
+                closeOnClick: true
+            });
+        }
 
         handleCloseFilesPopup()
     }

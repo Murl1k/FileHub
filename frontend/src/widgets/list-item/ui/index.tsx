@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {FolderSvg} from "../../../app/assets/images";
+import {FolderSvg, SharedSvg} from "../../../app/assets/images";
 import {SizeCalculate} from "../../../shared/lib/size-calculate.ts";
 import {IMergedData} from "../../../shared/types";
 import {renderFileTypeIcon} from "../../../shared/lib/render-file-type-icon.tsx";
@@ -8,7 +8,7 @@ const ListItem: FC<{ item: IMergedData }> = ({item}) => {
     return (
         <>
             <div>
-                {item.title ? <FolderSvg/> : renderFileTypeIcon(item.name)}
+                {item.title ? item.is_public ? <SharedSvg/> : <FolderSvg/> : renderFileTypeIcon(item.name)}
                 <h4>{item.title ? item.title : item.name}</h4>
             </div>
             <div style={{marginRight: '35px'}}>

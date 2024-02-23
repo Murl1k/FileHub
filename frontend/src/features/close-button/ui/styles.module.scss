@@ -1,0 +1,21 @@
+@import '../../../app/assets/styles/vars';
+
+.closeButton {
+  cursor: pointer;
+  height: 25px;
+
+  svg {
+    width: 25px;
+    height: inherit;
+  }
+
+  path {
+    transition: stroke .2s ease-in-out;
+  }
+
+  &:hover {
+    path {
+      stroke: #777575;
+    }
+  }
+}
