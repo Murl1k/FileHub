@@ -1,0 +1,80 @@
+@import '../../../app/assets/styles/vars';
+@import '../../../app/assets/styles/mixins';
+
+.breadcrumbs {
+  margin-bottom: 20px;
+
+  ul {
+    display: flex;
+    position: relative;
+  }
+}
+
+.crumb {
+  color: #8B96A5;
+  display: flex;
+  align-items: center;
+  max-width: 150px;
+
+  &:last-child {
+    a {
+      color: #8B96A5;
+    }
+  }
+
+  &:not(:first-child)::before {
+    display: inline-block;
+    margin: 0 0.5rem;
+    content: ">";
+    color: #8B96A5;
+  }
+
+  &:last-child {
+    pointer-events: none;
+  }
+
+  a {
+    @include textOverflow;
+    display: block;
+    text-transform: capitalize;
+    color: #1c1c1c;
+    font-weight: 600;
+    font-size: 16px;
+    transition: color .2s ease-in-out;
+
+    &:hover {
+      color: $primary;
+    }
+  }
+}
+
+.openPopupCrumbs {
+  margin: auto 0;
+
+  button {
+    gap: 3px;
+    padding: 6px;
+
+    span {
+      height: 4px;
+      width: 4px;
+    }
+  }
+}
+
+.popupCrumbs {
+  @include menu;
+  top: 30px;
+  transition: opacity .2s ease-in-out;
+
+  div:not(:last-child) {
+    path {
+      fill: #808080;
+    }
+  }
+
+  p {
+    @include textOverflow;
+    width: 100px;
+  }
+}

@@ -1,6 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
-    fetchDeleteMyAccount,
     fetchGetUsersCount,
     fetchLogin,
     fetchLoginMe,
@@ -57,16 +56,6 @@ export const authSlice = createSlice({
                 state.status = "loaded"
             })
             .addCase(fetchLoginMe.rejected, state => {
-                state.status = "error"
-            })
-            .addCase(fetchDeleteMyAccount.pending, state => {
-                state.status = "loading"
-            })
-            .addCase(fetchDeleteMyAccount.fulfilled, state => {
-                state.status = "loaded"
-                state.data = null
-            })
-            .addCase(fetchDeleteMyAccount.rejected, state => {
                 state.status = "error"
             })
             .addCase(fetchUpdateMyAccount.pending, state => {

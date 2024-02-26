@@ -1,11 +1,11 @@
 import styles from '../styles.module.scss'
 import {FC, HTMLAttributes, MouseEvent, useRef} from 'react'
-import {IMergedData} from "../../../../shared/types";
-import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
 import {contextMenuPosition, initialContextState, setContextMenu} from "../../";
+import {initialTemplateState, setIsActive} from "../../../item-template";
+import {IMergedData} from "../../../../shared/types";
+import {useOutsideClick} from "../../../../shared/lib/hooks/useOutsideClick.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
-import {initialTemplateState, setIsActive} from "../../../item-template";
 
 interface IContextMenuItem extends HTMLAttributes<HTMLDivElement> {
     item: IMergedData

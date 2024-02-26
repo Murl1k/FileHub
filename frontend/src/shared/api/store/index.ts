@@ -1,9 +1,9 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
+import {api} from "../";
 import {authSlice} from "../../../features/auth";
-import {api} from "../api.ts";
 import {itemTemplateSlice} from "../../../features/item-template";
 import {contextMenuSlice} from "../../../features/context-menu";
-import {popupSlice} from "../../../features/popup";
+import {popupSlice} from "../../../features/popups";
 import {copySlice} from "../../../features/feature-buttons";
 
 const rootReducer = combineReducers({

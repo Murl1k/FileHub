@@ -1,7 +1,10 @@
 import styles from "./styles.module.scss";
-import {HeaderButton} from "../../../shared/UIKit/buttons";
 import {Link} from "react-router-dom";
-import {MouseEventHandler} from "react";
+import {Transition} from "react-transition-group";
+import {MouseEvent} from "react";
+import {AvatarSvg} from "../../../app/assets/images";
+import {initialTemplateState, setIsActive} from "../../../features/item-template";
+import {initialContextState, setContextMenu} from "../../../features/context-menu";
 import {
     FilesPopup,
     FolderPopup,
@@ -9,13 +12,10 @@ import {
     setIsFilesOpen,
     setIsFoldersOpen,
     setIsPrivacyOpen
-} from "../../../features/popup";
-import {UsersCount} from "../../users-count";
+} from "../../../features/popups";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
-import {initialContextState, setContextMenu} from "../../../features/context-menu";
-import {Transition} from "react-transition-group";
-import {AvatarSvg} from "../../../app/assets/images";
+import {HeaderButton} from "../../../shared/UIKit/buttons";
 
 const Header = () => {
 
@@ -25,34 +25,12 @@ const Header = () => {
     const {isOwner} = useAppSelector(state => state.itemTemplate)
     const {type} = useAppSelector(state => state.contextMenu)
 
-    const handleOpenFolder: MouseEventHandler<HTMLButtonElement> = (e) => {
-        e.stopPropagation()
-        dispatch(setIsFoldersOpen(!isFoldersOpen))
-
+    const handleCloseOtherStates = (isFolder: boolean) => {
         switch (true) {
-            case isFilesOpen:
+            case isFolder && isFilesOpen:
                 dispatch(setIsFilesOpen(false))
                 break
-            case isPrivacyOpen:
-                dispatch(setIsPrivacyOpen(false))
-                break
-            case filter.isOpen:
-                dispatch(setFilter({isOpen: false, sortBy: filter.sortBy}))
-                break
-            case type !== 'initial':
-                dispatch(setContextMenu(initialContextState))
-                break
-            default:
-                break
-        }
-    }
-
-    const handleOpenFiles: MouseEventHandler<HTMLButtonElement> = (e) => {
-        e.stopPropagation()
-        dispatch(setIsFilesOpen(!isFilesOpen))
-
-        switch (true) {
-            case isFoldersOpen:
+            case !isFolder && isFoldersOpen:
                 dispatch(setIsFoldersOpen(false))
                 break
             case isPrivacyOpen:
@@ -63,10 +41,25 @@ const Header = () => {
                 break
             case type !== 'initial':
                 dispatch(setContextMenu(initialContextState))
+                type === 'item' && dispatch(setIsActive(initialTemplateState))
                 break
             default:
                 break
         }
+    }
+
+    const handleOpenFolder = (e: MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation()
+        dispatch(setIsFoldersOpen(!isFoldersOpen))
+
+        handleCloseOtherStates(true)
+    }
+
+    const handleOpenFiles = (e: MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation()
+        dispatch(setIsFilesOpen(!isFilesOpen))
+
+        handleCloseOtherStates(false)
     }
 
     return (
@@ -114,14 +107,11 @@ const Header = () => {
                         <p>Add Files</p>
                     </div>
                 </div>
-                <div className={styles.info}>
-                    <UsersCount/>
-                    <Link to='/profile'>
-                        <HeaderButton>
-                            <AvatarSvg/>
-                        </HeaderButton>
-                    </Link>
-                </div>
+                <Link to='/profile'>
+                    <HeaderButton>
+                        <AvatarSvg/>
+                    </HeaderButton>
+                </Link>
             </header>
         </>
     );

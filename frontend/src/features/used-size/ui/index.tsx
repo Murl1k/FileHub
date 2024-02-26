@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
 import {SizeCalculate} from "../../../shared/lib/size-calculate.ts";
-import {useGetUsedSizeQuery} from "../../../shared/api/api.ts";
+import {useGetUsedSizeQuery} from "../../../shared/api";
 
 const UsedSize = () => {
 

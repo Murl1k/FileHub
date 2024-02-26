@@ -1,0 +1,42 @@
+@import '../../../../app/assets/styles/vars';
+
+.sortSwitcher {
+  display: flex;
+  align-items: center;
+  width: max-content;
+
+  > div {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+
+    p {
+      display: inline-block;
+      font-weight: 600;
+
+      &:first-child {
+        color: #8a8f98;
+        margin-right: 7px;
+      }
+
+      &:last-child {
+        text-transform: capitalize;
+        color: black;
+      }
+    }
+
+    svg {
+      transition: rotate .2s ease-in-out;
+    }
+  }
+
+  button, svg {
+    margin-left: 10px;
+  }
+
+  button {
+    color: $secondary;
+    font-weight: 600;
+  }
+}

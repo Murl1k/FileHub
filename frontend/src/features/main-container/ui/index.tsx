@@ -1,18 +1,13 @@
 import styles from "./styles.module.scss";
-import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {FC, HTMLAttributes, KeyboardEvent, MouseEvent, useEffect} from "react";
-import {ContextMenuMain, setContextMenu} from "../../context-menu";
-import {getItemId} from "../../feature-buttons";
-import {
-    useCopyFileMutation,
-    useCopyFolderMutation,
-    useGetFilesQuery,
-    useGetFoldersQuery
-} from "../../../shared/api/api.ts";
-import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {useLocation, useParams} from "react-router-dom";
+import {initialFilterState, setFilter, setIsFoldersOpen} from "../../popups";
+import {ContextMenuMain, setContextMenu} from "../../context-menu";
 import {initialTemplateState, setIsActive} from "../../item-template";
-import {initialFilterState, setFilter, setIsFoldersOpen} from "../../popup";
+import {getItemId} from "../../feature-buttons";
+import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
+import {useCopyFileMutation, useCopyFolderMutation, useGetFilesQuery, useGetFoldersQuery} from "../../../shared/api";
+import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 
 const MainContainer: FC<HTMLAttributes<HTMLDivElement>> = ({children}) => {
 

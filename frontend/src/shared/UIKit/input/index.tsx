@@ -1,5 +1,5 @@
-import {FC, InputHTMLAttributes} from "react";
 import styles from "./styles.module.scss"
+import {FC, InputHTMLAttributes} from "react";
 
 const Input: FC<InputHTMLAttributes<HTMLInputElement>> = ({...props}) => {
     return (

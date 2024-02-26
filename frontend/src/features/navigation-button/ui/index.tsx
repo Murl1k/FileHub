@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
-import {useNavigate} from "react-router-dom";
 import {FC} from "react";
+import {useNavigate} from "react-router-dom";
 import {OptionButton} from "../../../shared/UIKit/buttons";
 
 const NavigationButton: FC<{ parentFolder: string | undefined }> = ({parentFolder}) => {

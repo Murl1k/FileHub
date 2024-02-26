@@ -1,13 +1,13 @@
 import styles from "./styles.module.scss";
-import {AvatarSvg, FolderSvg, LogoutSvg} from '../../../app/assets/images/'
-import {Link, NavLink} from "react-router-dom";
-import {fetchLogout} from "../../../features/auth";
-import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {api} from "../../../shared/api/api.ts";
-import {toast} from "react-toastify";
 import {useState} from "react";
-import {OptionButton} from "../../../shared/UIKit/buttons";
+import {Link, NavLink} from "react-router-dom";
+import {toast} from "react-toastify";
+import {AvatarSvg, FolderSvg, LogoutSvg} from '../../../app/assets/images/'
+import {fetchLogout} from "../../../features/auth";
 import {UsedSize} from "../../../features/used-size";
+import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
+import {api} from "../../../shared/api";
+import {OptionButton} from "../../../shared/UIKit/buttons";
 
 const Menu = () => {
 

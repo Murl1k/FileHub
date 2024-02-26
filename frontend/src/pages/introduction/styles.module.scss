@@ -77,6 +77,11 @@
   }
 }
 
+.storageImg {
+  width: 1126px;
+  height: 751px;
+}
+
 .infoSection {
   margin-top: 40px;
 
@@ -171,7 +176,7 @@
       border: 2px dashed #5c5f6e;
       width: 186px;
       height: 0;
-      right: -85px;
+      right: -86px;
       top: 40px;
     }
   }
@@ -182,6 +187,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  div:first-child {
+    display: grid;
+    gap: 15px;
+  }
 
   h4 {
     font-size: 32px;

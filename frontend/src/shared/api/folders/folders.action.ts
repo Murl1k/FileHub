@@ -1,6 +1,6 @@
+import {toast} from "react-toastify";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import axiosInstance from "../axiosInstance.ts";
-import {toast} from "react-toastify";
 
 export const fetchDownloadFolderAsZip = createAsyncThunk(
     'folders/fetchDownloadFolderAsZip',

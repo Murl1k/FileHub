@@ -9,33 +9,12 @@
   height: $header-height;
 }
 
-.addBtn, .info {
+.addBtn {
   display: flex;
   align-items: center;
   gap: 10px;
-}
 
-.addBtn {
   p {
     font-weight: 600;
-  }
-}
-
-.info {
-  > button {
-    &:first-child {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 24px;
-      padding: 10px;
-      border: 1px solid #eaeff0;
-      margin-right: 10px;
-
-      p {
-        color: $primary;
-        font-weight: 600;
-      }
-    }
   }
 }

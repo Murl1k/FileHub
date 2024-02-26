@@ -1,35 +1,16 @@
 import styles from "./styles.module.scss";
-import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 import {FC, MouseEvent, useRef} from "react";
-import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
-import {FeatureButtons} from "../../feature-buttons";
-import {useOutsideClick} from "../../../shared/lib/hooks/useClickOutside.ts";
 import {PasteButton} from "../../paste-button";
-import {initialTemplateState, setIsActive} from "../../item-template";
+import {initialFilterState, setFilter} from "../../popups";
 import {initialContextState, setContextMenu} from "../../context-menu";
-import {initialFilterState, setFilter} from "../../popup";
+import {initialTemplateState, setIsActive} from "../../item-template";
+import {FeatureButtons} from "../../feature-buttons";
+import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
+import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
+import {useOutsideClick} from "../../../shared/lib/hooks/useOutsideClick.ts";
+import {IMergedData} from "../../../shared/types";
 
-interface ISelectionBar {
-    selectionProps: {
-        name: string
-        title: string
-        url: string
-        size: number
-        is_public: boolean
-        itemId: string
-    }
-}
-
-const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
-
-    const {
-        name,
-        title,
-        url,
-        size,
-        is_public,
-        itemId
-    } = selectionProps
+const SelectionBar: FC<{ item: IMergedData }> = ({item}) => {
 
     const dispatch = useAppDispatch()
 
@@ -44,15 +25,6 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
         !filter.isOpen ? dispatch(setIsActive(initialTemplateState)) : dispatch(setFilter(initialFilterState))
     }, status)
 
-    const featureButtonsProps = {
-        title,
-        url,
-        name,
-        size,
-        is_public,
-        id: itemId
-    }
-
     const handleClick = (e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation()
 
@@ -65,10 +37,10 @@ const SelectionBar: FC<ISelectionBar> = ({selectionProps}) => {
             ref={selectionBarRef}
             className={styles.selectionBar}
         >
-            <p>{title ? title : name}</p>
+            <p>{item.title ? item.title : item.name}</p>
             <div>
                 {isOwner && id && <PasteButton/>}
-                <FeatureButtons featureButtonsProps={featureButtonsProps}/>
+                <FeatureButtons item={item}/>
             </div>
         </section>
     );

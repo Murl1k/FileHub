@@ -1,6 +1,7 @@
 import styles from './styles.module.scss';
-import {PrimaryButton} from "../../shared/UIKit/buttons";
 import {Link} from "react-router-dom";
+import {UsersCount} from "../../features/users-count";
+import {PrimaryButton} from "../../shared/UIKit/buttons";
 
 const Introduction = () => {
     return (
@@ -29,7 +30,9 @@ const Introduction = () => {
                             <PrimaryButton>Get started</PrimaryButton>
                         </Link>
                     </div>
-                    <img src="/src/app/assets/images/storage.jpg" alt="main-section"/>
+                    <div className={styles.storageImg}>
+                        <img src="/src/app/assets/images/storage.jpg" alt="storage"/>
+                    </div>
                 </section>
                 <section className={styles.infoSection}>
                     <h1>Simplifying <span>File Management</span> Effortlessly.</h1>
@@ -130,12 +133,15 @@ const Introduction = () => {
                 </section>
                 <section className={styles.startSection}>
                     <div>
-                        <h4>Ready to get started?</h4>
-                        <p>Storing and sharing files in a cloud storage suitable for all operations.</p>
+                        <div>
+                            <h4>Ready to get started?</h4>
+                            <p>Storing and sharing files in a cloud storage suitable for all operations.</p>
+                        </div>
+                        <Link to='/auth/register'>
+                            <PrimaryButton>Create an account</PrimaryButton>
+                        </Link>
                     </div>
-                    <Link to='/auth/register'>
-                        <PrimaryButton>Create an account</PrimaryButton>
-                    </Link>
+                    <UsersCount/>
                 </section>
             </main>
         </div>

@@ -1,11 +1,11 @@
 import styles from '../styles.module.scss';
 import {MouseEvent, useRef} from "react";
-import {useOutsideClick} from "../../../../shared/lib/hooks/useClickOutside.ts";
+import {PasteButton} from "../../../paste-button";
+import {setIsFilesOpen, setIsFoldersOpen} from "../../../popups";
 import {contextMenuPosition, initialContextState, setContextMenu} from "../../";
+import {useOutsideClick} from "../../../../shared/lib/hooks/useOutsideClick.ts";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
-import {PasteButton} from "../../../paste-button";
-import {setIsFilesOpen, setIsFoldersOpen} from "../../../popup";
 
 const ContextMenuMain = () => {
 

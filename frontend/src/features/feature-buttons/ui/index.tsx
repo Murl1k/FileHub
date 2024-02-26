@@ -1,36 +1,17 @@
 import {FC, KeyboardEvent, MouseEvent, useEffect} from "react";
+import {toast} from "react-toastify";
+import {DeleteSvg, PrivateSvg} from "../../../app/assets/images"
+import {getItemId} from "../../feature-buttons";
+import {initialContextState, setContextMenu} from "../../context-menu";
+import {setIsFolderRenameOpen, setIsPrivacyOpen} from "../../popups";
+import {initialTemplateState, setIsActive} from "../../item-template";
+import {useRemoveFileMutation, useRemoveFolderMutation} from "../../../shared/api";
+import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
+import {IMergedData} from "../../../shared/types";
 import {fetchDownloadFolderAsZip} from "../../../shared/api/folders/folders.action.ts";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {useRemoveFileMutation, useRemoveFolderMutation} from "../../../shared/api/api.ts";
-import {initialTemplateState, setIsActive} from "../../item-template";
-import {getItemId} from "../../feature-buttons";
-import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
-import {initialContextState, setContextMenu} from "../../context-menu";
-import {setIsFolderRenameOpen, setIsPrivacyOpen} from "../../popup";
-import {DeleteSvg, PrivateSvg} from "../../../app/assets/images"
-import {toast} from "react-toastify";
 
-interface IFeatureButtons {
-    featureButtonsProps: {
-        id: string
-        title: string
-        url: string
-        name: string
-        size: number
-        is_public: boolean
-    }
-}
-
-const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
-
-    const {
-        id,
-        title,
-        url,
-        name,
-        size,
-        is_public
-    } = featureButtonsProps
+const FeatureButtons: FC<{ item: IMergedData }> = ({item}) => {
 
     const dispatch = useAppDispatch()
 
@@ -44,7 +25,7 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
         e.stopPropagation()
 
         dispatch(setContextMenu(initialContextState))
-        dispatch(setIsActive({id: id, isFolder: false, status: false}))
+        dispatch(setIsActive({id: item.id, isFolder: false, status: false}))
     }
 
     const handleOpenPrivacy = (e: MouseEvent<HTMLDivElement>) => {
@@ -60,8 +41,8 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
     const handleCopy = (e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation()
 
-        if (objectId !== id) {
-            dispatch(getItemId({id: id, isFolder: isFolder}))
+        if (objectId !== item.id) {
+            dispatch(getItemId({id: item.id, isFolder: isFolder}))
         }
 
         dispatch(setContextMenu(initialContextState))
@@ -71,9 +52,9 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
         try {
             e.stopPropagation()
 
-            if (!size) {
+            if (!item.size) {
                 toast.error('The folder is empty with no downloadable files.')
-            } else if (!(isOwner || is_public)) {
+            } else if (!(isOwner || item.is_public)) {
                 toast.error("You don't have permission to download this folder.")
             } else {
                 let blobData = ''
@@ -113,7 +94,7 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
                         })
 
                         document.body.removeChild(a)
-                        window.URL.revokeObjectURL(url)
+                        window.URL.revokeObjectURL(item.url)
                     }
                 }
 
@@ -126,10 +107,10 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
     const handleRemove = (e: MouseEvent<HTMLDivElement> | KeyboardEvent) => {
         e.stopPropagation()
 
-        if (title) {
-            updateRemoveFolder(id)
+        if (item.title) {
+            updateRemoveFolder(item.id)
         } else {
-            updateRemoveFile(id)
+            updateRemoveFile(item.id)
         }
 
         dispatch(setIsActive(initialTemplateState))
@@ -157,7 +138,7 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
                             <PrivateSvg/>
                             <p>Change privacy</p>
                         </div>
-                        {title && <div onClick={handleOpenFolderRename}>
+                        {item.title && <div onClick={handleOpenFolderRename}>
                             <svg height="30" width="30" style={{color: '#808080'}} xmlns="http://www.w3.org/2000/svg"
                                  viewBox="0 0 24 24">
                                 <path
@@ -184,7 +165,7 @@ const FeatureButtons: FC<IFeatureButtons> = ({featureButtonsProps}) => {
                         </div>
                     </>
                 }
-                <div onClick={(e) => handleDownload(e, id, url, title ? title : name)}>
+                <div onClick={(e) => handleDownload(e, item.id, item.url, item.title ? item.title : item.name)}>
                     <svg width="30" height="30" fill="#808080" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
                          id="download-alt"
                          className="icon glyph">

@@ -1,12 +1,7 @@
-import {
-    useCopyFileMutation,
-    useCopyFolderMutation,
-    useGetFilesQuery,
-    useGetFoldersQuery
-} from "../../../shared/api/api.ts";
-import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {useParams} from "react-router-dom";
 import {initialContextState, setContextMenu} from "../../context-menu";
+import {useCopyFileMutation, useCopyFolderMutation, useGetFilesQuery, useGetFoldersQuery} from "../../../shared/api";
+import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
 
 const PasteButton = () => {

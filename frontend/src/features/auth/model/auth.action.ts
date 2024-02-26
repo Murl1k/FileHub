@@ -61,18 +61,6 @@ export const fetchUpdateMyAccount = createAsyncThunk(
     }
 )
 
-export const fetchDeleteMyAccount = createAsyncThunk(
-    'auth/fetchDeleteMyAccount',
-    async (current_password: string) => {
-        try {
-            const res = await axiosInstance.delete('/users/me/', current_password)
-            return res.data
-        } catch (err) {
-            return toast.error(err.message)
-        }
-    }
-)
-
 export const fetchLogout = createAsyncThunk(
     'auth/fetchLogout',
     async () => {

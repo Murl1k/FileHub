@@ -1,10 +1,10 @@
 import styles from '../styles.module.scss'
-import {avatarIcon} from "../../../../app/assets/images";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {Link, useNavigate} from "react-router-dom";
-import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
-import {fetchLogin, fetchLoginMe, fetchRegister, IUser} from "../../";
 import {toast} from "react-toastify";
+import {fetchLogin, fetchLoginMe, fetchRegister, IUser} from "../../";
+import {avatarIcon} from "../../../../app/assets/images";
+import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {PrimaryButton} from "../../../../shared/UIKit/buttons";
 
 interface IRegister extends IUser {
@@ -78,7 +78,7 @@ const Register = () => {
                 <PrimaryButton type='submit'>
                     Sign Up
                 </PrimaryButton>
-                <p>Don't have an account? <Link to='/auth/login'>Register now!</Link></p>
+                <p>Already have an account? <Link to='/auth/login'>Log in.</Link></p>
             </form>
         </div>
     );

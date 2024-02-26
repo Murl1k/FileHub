@@ -1,8 +1,8 @@
+import {ChangeEvent, useState} from "react";
+import {fetchUpdateMyAccount} from "../../../auth";
 import Input from "../../../../shared/UIKit/input";
 import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../../../../shared/lib/hooks/useAppSelector.ts";
-import {ChangeEvent, useState} from "react";
-import {fetchUpdateMyAccount} from "../../../auth";
 import {PrimaryButton} from "../../../../shared/UIKit/buttons";
 
 const UpdateEmail = () => {

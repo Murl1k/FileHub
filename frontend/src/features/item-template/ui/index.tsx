@@ -1,17 +1,17 @@
 import styles from "./styles.module.scss";
 import {FC, HTMLAttributes, MouseEvent} from "react";
 import {useNavigate} from "react-router-dom";
+import {Transition} from "react-transition-group";
+import {toast} from "react-toastify";
+import {FolderSvg} from "../../../app/assets/images";
+import {setIsActive} from "../";
 import {ContextMenuItem, initialContextState, setContextMenu} from "../../context-menu";
+import {initialFilterState, PrivacyPopup, RenamePopup, setFilter, setIsFoldersOpen} from "../../popups";
+import {FeatureButtons} from "../../feature-buttons";
 import {IMergedData} from "../../../shared/types";
 import {useAppSelector} from "../../../shared/lib/hooks/useAppSelector.ts";
-import {setIsActive} from "../";
 import {useAppDispatch} from "../../../shared/lib/hooks/useAppDispatch.ts";
-import {initialFilterState, PrivacyPopup, RenamePopup, setFilter, setIsFoldersOpen} from "../../popup";
-import {Transition} from "react-transition-group";
 import {OptionButton} from "../../../shared/UIKit/buttons";
-import {toast} from "react-toastify";
-import {FeatureButtons} from "../../feature-buttons";
-import {FolderSvg} from "../../../app/assets/images";
 
 interface IItemTemplate extends HTMLAttributes<HTMLDivElement> {
     itemProps: {
@@ -104,15 +104,6 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
             : condition ? `${styles.listItem} ${styles.activeList}` : styles.listItem;
     };
 
-    const featureButtonsProps = {
-        id: item.id,
-        title: item.title,
-        name: item.name,
-        url: item.url,
-        size: item.size,
-        is_public: item.is_public
-    }
-
     return (
         <>
             <article
@@ -144,7 +135,7 @@ const ItemTemplate: FC<IItemTemplate> = ({children, itemProps, ...props}) => {
                                 </div>
                             </section>
                         }
-                        <FeatureButtons featureButtonsProps={featureButtonsProps}/>
+                        <FeatureButtons item={item}/>
                     </ContextMenuItem>
                 }
             </article>

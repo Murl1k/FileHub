@@ -1,8 +1,8 @@
 import styles from '../styles.module.scss'
-import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 import {useNavigate} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {fetchSetPassword, IChangePassword} from "../../../auth";
+import {useAppDispatch} from "../../../../shared/lib/hooks/useAppDispatch.ts";
 
 const UpdatePassword = () => {
 
