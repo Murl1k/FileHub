@@ -31,10 +31,16 @@ File sharing platform made with django rest framework and react
 - docker
 - docker-compose
 
-**Frontend (not ready yet):**
+**Frontend:**
 - vite
 - react
-- redux
+- redux toolkit
+- rtk query
+- sass
+- react-transition-group
+- react-toastify
+- react-hook-form
+- axios
 
 
 ## Features
