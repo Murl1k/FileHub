@@ -1,0 +1,19 @@
+@import '../../../app/assets/styles/vars';
+@import '../../../app/assets/styles/mixins';
+
+.contextMenu {
+  @include menu;
+
+  section {
+    &:not(.open, :last-child) {
+      display: grid;
+      gap: 5px;
+    }
+
+    &:first-child {
+      path {
+        fill: #808080;
+      }
+    }
+  }
+}

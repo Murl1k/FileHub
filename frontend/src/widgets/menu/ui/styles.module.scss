@@ -1,0 +1,107 @@
+@import '../../../app/assets/styles/vars';
+
+.sidebar {
+  height: 100vh;
+  width: $nav-width;
+  background-color: #12131a;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 40px 13px;
+  transition: width .2s ease-in-out, padding .2s ease-in-out;
+
+  > div:first-child {
+    display: grid;
+    justify-items: flex-start;
+
+    div {
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+      position: relative;
+      left: 5px;
+      transition: left .2s ease-in-out;
+      margin-bottom: 40px;
+    }
+  }
+
+  ul {
+    display: grid;
+    gap: 10px;
+
+    li {
+      path {
+        fill: #808080;
+      }
+    }
+
+    a, .logoutBtn {
+      padding: 20px;
+      border-radius: 24px;
+      display: block;
+      width: 70px;
+      height: 70px;
+      transition: background-color 80ms ease-in-out, width .2s ease-in-out;
+      position: relative;
+
+      path {
+        transition: fill 80ms ease-in;
+      }
+
+      p {
+        position: absolute;
+        translate: -40px;
+        transition: opacity .2s ease-in-out, translate .2s ease-in-out;
+        opacity: 0;
+        left: 70px;
+        top: 39%;
+        width: 110px;
+      }
+
+      &:hover {
+        background-color: $primary;
+
+        path {
+          fill: #fff
+        }
+      }
+    }
+  }
+}
+
+
+.sidebarActive {
+  $nav-width: 280px !global;
+  width: $nav-width;
+  padding: 40px;
+
+  > div:first-child {
+    div {
+      left: 0;
+    }
+  }
+
+  ul {
+    a, .logoutBtn {
+      width: 200px;
+    }
+
+    p {
+      opacity: 1 !important;
+      translate: 0 !important;
+    }
+  }
+}
+
+.active {
+  background: $primary;
+
+  path {
+    fill: #fff !important;
+  }
+}
+
+.logoutBtn {
+  cursor: pointer;
+}

@@ -1,0 +1,15 @@
+@import '../../../../app/assets/styles/vars';
+
+.popup {
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  display: grid;
+  top: 0;
+  left: 0;
+  place-items: center;
+  backdrop-filter: blur(2px);
+  z-index: 9;
+  cursor: auto;
+  transition: opacity .2s ease-in-out;
+}

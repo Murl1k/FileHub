@@ -1,0 +1,85 @@
+@import '../../../app/assets/styles/vars';
+@import '../../../app/assets/styles/mixins';
+
+.storageHeadline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  > div:first-child {
+    position: relative;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template: auto / repeat(4, 1fr);
+  gap: 20px;
+}
+
+.list {
+  display: grid;
+  gap: 10px;
+}
+
+.listHeadline {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid $primary;
+
+  div {
+    display: flex;
+    margin-right: 35px;
+
+    h4 {
+      &:not(:last-child) {
+        width: 80px;
+      }
+
+      &:last-child {
+        width: 140px;
+      }
+    }
+  }
+}
+
+.listContainer, .listNavigation {
+  border-bottom: 2px solid $primary;
+
+}
+
+.listNavigation {
+  > div {
+    padding: 10px;
+    margin-bottom: 10px;
+    background: transparent;
+
+    &:hover {
+      background-color: #fff;
+      box-shadow: none;
+    }
+
+    div {
+      &:first-child {
+        padding: 0;
+
+        button {
+          height: 60px;
+          width: 60px;
+          padding: 6px;
+
+          span {
+            height: 12px;
+            width: 12px;
+          }
+        }
+      }
+
+      &:last-child {
+        display: none;
+      }
+    }
+  }
+}

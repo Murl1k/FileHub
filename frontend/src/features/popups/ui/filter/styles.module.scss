@@ -1,0 +1,25 @@
+@import '../../../../app/assets/styles/vars';
+@import '../../../../app/assets/styles/mixins';
+
+.sort {
+  width: 155px;
+  translate: 0 -20px;
+  transition: translate .2s ease-in-out, opacity .2s ease-in-out;
+  @include menu;
+
+  section {
+    div {
+      &:first-child, &:nth-child(2) {
+        path {
+          fill: #808080;
+        }
+
+        &:hover {
+          path {
+            fill: $primary;
+          }
+        }
+      }
+    }
+  }
+}

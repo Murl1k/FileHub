@@ -1,0 +1,52 @@
+@import '../../../app/assets/styles/vars';
+@import '../../../app/assets/styles/mixins';
+
+.selectionBar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: #fff;
+  border-top: 1px solid $gray;
+  height: $selection-bar-height;
+
+  > p {
+    @include textOverflow;
+    font-weight: 600;
+    width: 600px;
+  }
+
+  div {
+    display: flex;
+
+    p {
+      display: none;
+    }
+
+    img, svg {
+      cursor: pointer;
+    }
+
+    div:not(:last-child), section:not(:last-child) {
+      margin-right: 20px;
+    }
+
+    section {
+      display: flex;
+    }
+
+    div {
+      path {
+        transition: fill .2s ease-in-out;
+      }
+
+      &:hover {
+        path {
+          fill: $primary;
+        }
+      }
+    }
+  }
+}

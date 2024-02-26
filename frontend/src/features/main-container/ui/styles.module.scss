@@ -1,0 +1,13 @@
+@import '../../../app/assets/styles/vars';
+
+.container {
+  width: 100%;
+  height: calc(100vh - $header-height);
+  padding: 40px;
+  transition: width .3s ease-in-out;
+  scrollbar-gutter: stable;
+
+  &.active {
+    height: calc(100vh - $header-height - $selection-bar-height);
+  }
+}

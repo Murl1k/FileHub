@@ -1,0 +1,51 @@
+@import '../../../app/assets/styles/vars';
+
+.navigate {
+  background-color: #fff;
+  border-radius: 24px;
+  display: grid;
+  cursor: pointer;
+  transition: box-shadow .2s ease-in-out, background-color .2s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 0 5px 2px gray;
+    background-color: #efefef;
+
+    div:last-child {
+      background-color: #e0e0e0;
+    }
+  }
+
+  div {
+    &:first-child {
+      padding: 35px 70px;
+      border-radius: 24px 24px 0 0;
+      margin: 0 auto;
+    }
+
+    &:last-child {
+      padding: 20px;
+      height: 58px;
+      width: 100%;
+      border-radius: 0 0 24px 24px;
+      background-color: #f0f0f0;
+      transition: background-color .2s ease-in-out;
+    }
+  }
+
+  button {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+
+    span {
+      height: 20px;
+      width: 20px;
+      margin: 0 auto;
+    }
+
+    &:hover {
+      background-color: #3f3e3e;
+    }
+  }
+}

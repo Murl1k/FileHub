@@ -1,0 +1,121 @@
+@import '../../../../app/assets/styles/vars';
+@import '../../../../app/assets/styles/mixins';
+
+.container {
+  position: relative;
+  bottom: $header-height;
+  width: 600px;
+  border: 1px solid $gray;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: $box-shadow;
+  transition: opacity .2s ease-in-out;
+}
+
+.popupHeadline {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid $gray;
+  box-shadow: 0 1px 5px #dce1e4;
+}
+
+.uploadFiles {
+  display: grid;
+  place-items: center;
+  padding: 40px;
+  border: 3px dashed $gray;
+  border-radius: 6px;
+  transition: background .1s ease-in-out, border .1s ease-in-out;
+
+  path {
+    transition: fill .1s ease-in-out;
+  }
+
+  &.drag {
+    border: 3px dashed #0d90be;
+    background: #bce7ff;
+
+    path {
+      fill: #0d90be;
+    }
+  }
+
+  svg {
+    margin-bottom: 10px;
+  }
+}
+
+.browse {
+  display: flex;
+  align-items: center;
+
+  p {
+    color: #808080;
+  }
+
+  label {
+    color: $secondary;
+    margin-top: 2px;
+    border-bottom: 1px solid $secondary;
+    cursor: pointer;
+    transition: color .2s ease-in-out, border-bottom-color .2s ease-in-out;
+
+    &:hover {
+      color: #73a6da;
+      border-bottom-color: #73a6da;
+    }
+  }
+
+  input {
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
+}
+
+.file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #dce1e4;
+  border-radius: 6px;
+  padding: 10px;
+  background-color: #fafbfd;
+  box-shadow: -1px 2px 5px 1px #dce1e4;
+
+  div {
+    display: grid;
+    gap: 10px;
+
+    p {
+      &:first-child {
+        @include textOverflow;
+        width: 220px;
+      }
+
+      &:last-child {
+        color: #c7c6c6;
+      }
+    }
+  }
+
+  path {
+    transition: fill .2s ease-in-out;
+  }
+
+  button:hover {
+    path {
+      fill: #9b9b9b;
+    }
+  }
+}
+
+.btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 30px;
+  margin-top: 20px;
+}

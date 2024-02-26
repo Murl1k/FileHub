@@ -1,0 +1,13 @@
+@import "../../../app/assets/styles/vars";
+
+.input {
+  border: 1px solid $gray;
+  border-radius: 6px;
+  padding: 8px;
+  transition: border-color .2s ease-in-out, box-shadow .2s ease-in-out;
+
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 5px 1px #7e60ce;
+  }
+}

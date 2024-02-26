@@ -49,11 +49,15 @@ class FileCopySerializer(serializers.ModelSerializer, ValidateFolderSerializerMi
         fields = ('folder', )
         model = File
 
-
 class FolderSerializer(serializers.ModelSerializer):
+    owner = serializers.SerializerMethodField()
+
     class Meta:
-        fields = ('id', 'created_at', 'updated_at', 'title', 'size', 'parent_folder', 'is_public')
+        fields = ('id', 'owner', 'created_at', 'updated_at', 'title', 'size', 'parent_folder', 'is_public')
         model = Folder
+
+    def get_owner(self, instance):
+        return instance.storage.owner_id
 
 
 class FolderCreateEditSerializer(serializers.ModelSerializer, ValidateFolderSerializerMixin):
@@ -83,3 +87,9 @@ class FolderCopySerializer(serializers.ModelSerializer, ValidateFolderSerializer
 
     def validate_parent_folder(self, value):
         return self.validate_folder(value)
+
+
+class CloudStorageSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('used_size', )
+        model = CloudStorage

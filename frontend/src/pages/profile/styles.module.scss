@@ -1,0 +1,76 @@
+@import '../../app/assets/styles/vars';
+
+.profile {
+  padding: 40px;
+  width: 100%;
+
+  h2 {
+    &:first-child {
+      margin-bottom: 20px;
+    }
+  }
+
+  span {
+    margin: 0 auto 40px auto;
+    border: 1px solid $secondary;
+    background: #fff;
+    border-radius: 50%;
+    padding: 20px;
+    height: 150px;
+    width: 150px;
+    display: grid;
+    place-items: center;
+
+    img {
+      height: 50px;
+      width: 50px;
+    }
+  }
+}
+
+.container {
+  background-color: #fff;
+  border-radius: 12px;
+  border: 1px solid $gray;
+}
+
+.containerHeadline {
+  position: relative;
+  display: flex;
+  gap: 20px;
+  padding: 10px 40px;
+  border-bottom: 1px solid $gray;
+  user-select: none;
+
+  a {
+    color: black;
+    font-weight: 600;
+  }
+
+  &:before {
+    transition: transform .2s ease-in-out, width .2s ease-in-out;
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    width: 114px;
+    height: 2px;
+    background-color: $secondary;
+  }
+}
+
+.settingsActive {
+  &:before {
+    transform: translateX(134px);
+    width: 57px;
+  }
+}
+
+.backToHomeBtn {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 40px 40px 40px;
+
+  button {
+    padding: 10px 40px;
+  }
+}

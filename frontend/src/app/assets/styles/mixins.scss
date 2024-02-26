@@ -1,0 +1,59 @@
+@mixin menu {
+  background-color: $gray;
+  border: 1px solid $gray;
+  border-radius: 12px;
+  position: absolute;
+  z-index: 8;
+  display: grid !important;
+  gap: 0 !important;
+  box-shadow: $box-shadow;
+  cursor: auto;
+
+  section {
+    padding: 10px;
+
+    div {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 8px !important;
+      transition: background-color .2s ease-in-out;
+      padding: 4px;
+
+      p {
+        text-transform: capitalize;
+        font-weight: 600;
+        font-size: 14px;
+        color: #8a8989;
+        transition: color .2s ease-in-out;
+      }
+
+      path {
+        transition: fill .2s ease-in-out;
+      }
+
+      &:hover {
+        background-color: #e8e8e8;
+
+        p {
+          color: #969696;
+        }
+
+        path {
+          fill: $primary;
+        }
+      }
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #c9c9c9;
+    }
+  }
+}
+
+@mixin textOverflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

@@ -1,0 +1,134 @@
+@import '../../../app/assets/styles/vars';
+@import '../../../app/assets/styles/mixins';
+
+.contextMenuBtn {
+  button {
+    position: absolute;
+    gap: 4px;
+    height: max-content;
+
+    span {
+      width: 4px;
+      height: 4px;
+    }
+  }
+}
+
+.active {
+  box-shadow: 0 0 5px 2px $primary;
+
+  &:has(section) div:nth-child(3) {
+    button {
+      background-color: #e0e0e0;
+    }
+  }
+
+  &List {
+    @extend .active;
+    background-color: #fff;
+  }
+}
+
+.gridItem, .gridItem > div:nth-child(2) {
+  transition: background-color .2s ease-in-out, box-shadow .2s ease-in-out;
+}
+
+.gridItem, .listItem {
+  user-select: none;
+
+  > div:not(:last-child) {
+    svg {
+      height: 40px;
+      width: 40px;
+    }
+  }
+}
+
+.gridItem {
+  background-color: #fff;
+  border-radius: 24px;
+  display: grid;
+  align-content: space-between;
+  cursor: pointer;
+  color: black;
+
+  &:not(.active):hover {
+    background-color: $gray;
+    box-shadow: 0 0 5px 2px gray;
+
+    div:nth-child(2) {
+      background-color: #e0e0e0;
+    }
+  }
+
+  h4 {
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 14px;
+    color: #8a8989;
+  }
+
+  > div:nth-child(3) {
+    button {
+      display: grid;
+      right: 15px !important;
+      top: -210px;
+    }
+  }
+
+  > div:first-child {
+    border-radius: 12px 12px 0 0;
+  }
+}
+
+.listItem {
+  color: black;
+  cursor: pointer;
+  padding: 20px;
+  margin-bottom: 10px;
+  transition: background-color .2s ease-in-out, box-shadow .2s ease-in-out;
+  border-radius: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  > div {
+    display: flex;
+    align-items: center;
+
+    > svg {
+      margin-right: 20px;
+    }
+
+    > h4 {
+      @include textOverflow;
+      width: 400px;
+    }
+
+    &:first-child, &:nth-child(2) {
+      > h5:first-child, p {
+        width: 80px;
+      }
+
+      > h5:last-child {
+        width: 140px;
+      }
+    }
+  }
+
+  p {
+    color: $secondary;
+    font-weight: 600;
+  }
+
+  div:nth-child(3) {
+    right: 40px;
+    margin-right: 20px;
+  }
+
+  &:not(.activeList):hover {
+    background-color: #fff;
+  }
+}

@@ -107,7 +107,7 @@ class Folder(MPTTModel, ShortUUIDModel, TimeStampedModel):
 
         folder = self.parent_folder
         super().delete(*args, **kwargs)
-        update_folders_size_task.delay(folder.id)
+        update_folders_size_task.delay(folder)
 
     def __count_child_folders_size(self) -> int:
         """Counts size of child folders"""
@@ -160,7 +160,7 @@ class File(TimeStampedModel, ShortUUIDModel):
 
         # updating storage size after file delete
         self.storage.update_used_size()
-        update_folders_size_task.delay(folder=self.folder.id)
+        update_folders_size_task.delay(folder=self.folder)
 
     def save(self, *args, **kwargs):
         from .tasks import update_folders_size_task

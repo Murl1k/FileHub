@@ -1,0 +1,22 @@
+@import '../../../app/assets/styles/vars';
+
+.usersCount {
+  display: flex;
+  gap: 40px;
+  border: 1px solid $gray;
+  padding: 50px 60px;
+  border-radius: 12px;
+
+  p, span {
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 32px;
+  }
+
+  span {
+    font-size: 50px;
+    line-height: 70px;
+  }
+}

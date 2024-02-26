@@ -1,0 +1,74 @@
+@import '../../../../app/assets/styles/vars';
+
+.privacy {
+  cursor: auto;
+  background-color: #fff;
+  border-radius: 8px;
+  transition: opacity .2s ease-in-out;
+  display: grid;
+  box-shadow: $box-shadow;
+
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+
+    &:first-child {
+      justify-content: space-between;
+      border-radius: 8px 8px 0 0;
+      background-color: $primary;
+
+      h3 {
+        color: #fff;
+      }
+
+      path {
+        stroke: #fff;
+      }
+
+      div:hover {
+        path {
+          stroke: #e1cece;
+        }
+      }
+    }
+
+    &:nth-child(2) {
+      border-bottom: 1px solid $gray;
+      padding: 20px;
+    }
+
+    &:last-child {
+      justify-content: flex-end;
+    }
+  }
+
+  p {
+    width: 350px;
+  }
+
+  button {
+    padding: 10px 30px;
+    color: #fff;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color .2s ease-in-out;
+
+    &:first-child {
+      background-color: #ff313a;
+
+      &:hover {
+        background-color: #e3141d;
+      }
+    }
+
+    &:last-child {
+      background-color: #37c180;
+
+      &:hover {
+        background-color: #23a267;
+      }
+    }
+  }
+}
