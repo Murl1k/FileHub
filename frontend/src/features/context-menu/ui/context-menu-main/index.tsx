@@ -37,8 +37,6 @@ const ContextMenuMain = () => {
         }
     }
 
-    console.log(contextMenu)
-
     return (
         <div
             className={styles.contextMenu}
